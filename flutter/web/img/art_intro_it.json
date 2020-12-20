@@ -1,0 +1,42 @@
+{
+    "name": "Intro Bitcoin IT",
+    "file": "art_intro_it.jpg",
+    "height": 430,
+    "width": 800,
+    "privkey_qr": {
+        "visible": true,
+        "top": 110,
+        "left": 580,
+        "width": 200,
+        "height": 200,
+        "size": 200,
+        "rotation": 0
+    },
+    "privkey": {
+        "visible": true,
+        "top": 370,
+        "left": 570,
+        "width": 400,
+        "height": 20,
+        "size": 10,
+        "rotation": -90
+    },
+    "address_qr": {
+        "visible": true,
+        "top": 40,
+        "left": 20,
+        "width": 180,
+        "height": 180,
+        "size": 180,
+        "rotation": 0
+    },
+    "address": {
+        "visible": true,
+        "top": 370,
+        "left": 240,
+        "width": 300,
+        "height": 20,
+        "size": 15,
+        "rotation": -90
+    }
+}
