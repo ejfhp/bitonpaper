@@ -1,0 +1,25 @@
+steps:
+  # Build Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '--tag=gcr.io/$PROJECT_ID/${_DEPL_SERVICE}:$SHORT_SHA', '-f', './go/k8s/Dockerfile', '.']
+
+  # Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/${_DEPL_SERVICE}:$SHORT_SHA']
+  # Deploy container image to Cloud Run
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - 'run'
+  - 'deploy'
+  - '${_DEPL_SERVICE}'
+  - '--allow-unauthenticated'
+  - '--image'
+  - 'gcr.io/$PROJECT_ID/${_DEPL_SERVICE}:$SHORT_SHA'
+  - '--region'
+  - 'europe-north1'
+  - '--platform'
+  - 'managed'
+substitutions:
+  _DEPL_SERVICE: bitonpaper
+images:
+ - 'gcr.io/$PROJECT_ID/${_DEPL_SERVICE}:$SHORT_SHA'
