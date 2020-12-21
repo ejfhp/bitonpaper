@@ -63,7 +63,24 @@ class ArtsMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     BitOnPaperState appState = Menu.of(context).state;
     List<Widget> artsList = new List<Widget>.empty(growable: true);
-    DrawerHeader header = DrawerHeader(child: Text("Paper Arts"));
+    DrawerHeader header = DrawerHeader(
+      child: Text(
+        "Paper Arts",
+        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.amber[600],
+        image: const DecorationImage(
+          image: NetworkImage('./icons/bop.png'),
+          fit: BoxFit.cover,
+        ),
+        border: Border.all(
+          color: Colors.black,
+          width: 4,
+        ),
+      ),
+    );
     artsList.add(header);
     var arts = appState.arts;
     var selected = appState.selected;
@@ -80,6 +97,8 @@ class ArtsMenu extends StatelessWidget {
         title: t,
         onTap: () {
           appState.setSelected(key);
+          //Close the drawer when user selects.
+          Navigator.pop(context);
         },
       );
       artsList.add(tI);
@@ -119,7 +138,10 @@ class WalletSheet extends StatelessWidget {
         papers.add(p);
       });
     }
-    return Column(children: papers);
+    return Container(
+      child:Column(children: papers),
+      alignment: Alignment.topCenter,
+      );
   }
 }
 
@@ -172,17 +194,17 @@ class Paper extends StatelessWidget {
     return Padding(
         padding: EdgeInsets.all(5),
         child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(width: 1, color: Colors.black45),
-          ),
-          child: SizedBox(
-            width: this.art.width,
-            height: this.art.height,
-            child: Stack(
-              fit: StackFit.expand,
-              clipBehavior: Clip.hardEdge,
-              children: els,
-            ))));
+            decoration: BoxDecoration(
+              border: Border.all(width: 1, color: Colors.black45),
+            ),
+            child: SizedBox(
+                width: this.art.width,
+                height: this.art.height,
+                child: Stack(
+                  fit: StackFit.expand,
+                  clipBehavior: Clip.hardEdge,
+                  children: els,
+                ))));
   }
 }
 
