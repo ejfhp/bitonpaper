@@ -139,9 +139,9 @@ class WalletSheet extends StatelessWidget {
       });
     }
     return Container(
-      child:Column(children: papers),
+      child: Column(children: papers),
       alignment: Alignment.topCenter,
-      );
+    );
   }
 }
 
@@ -153,18 +153,42 @@ class Paper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.all(5),
+        child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(width: 1, color: Colors.black45),
+            ),
+            height: 500,
+            width: 500,
+            child: LayoutBuilder(builder: (context, constraint) {
+              return getPaperElementList(art, wallet, constraint);
+            })));
+  }
+
+  Widget getPaperElementList(
+      Art art, Wallet wallet, BoxConstraints constraint) {
     List<Widget> els = List<Widget>.empty(growable: true);
-    els.add(Positioned.fill(
-      child: Image.network(this.art.url),
-    ));
+    double ratio = constraint.maxWidth/art.width;
+    els.add(getPaperElement(
+        child: Image.network(this.art.url),
+        height: art.height,
+        width: art.width,
+        top: 0,
+        left: 0,
+        scale: ratio,
+        rotation: 0));
     if (art.pk.visible) {
       els.add(getPaperElement(
-          art.pk,
-          Text(
-            wallet.privateKey,
-            style: TextStyle(fontSize: art.pk.size),
-            textAlign: TextAlign.left,
-          )));
+          child: Text(wallet.privateKey,
+              style: TextStyle(fontSize: art.pk.size*ratio),
+              textAlign: TextAlign.left),
+          height: art.pk.height,
+          width: art.pk.width,
+          top: art.pk.top,
+          left: art.pk.left,
+          scale: ratio,
+          rotation: art.pk.rotation));
     }
     if (art.pkQr.visible) {
       QrImage qr = QrImage(
@@ -172,16 +196,26 @@ class Paper extends StatelessWidget {
         version: QrVersions.auto,
         size: art.pkQr.size,
       );
-      els.add(getPaperElement(art.pkQr, qr));
+      els.add(getPaperElement(
+          child: qr,
+          height: art.pkQr.height,
+          width: art.pkQr.width,
+          top: art.pkQr.top,
+          left: art.pkQr.left,
+          scale: ratio,
+          rotation: art.pkQr.rotation));
     }
     if (art.ad.visible) {
       els.add(getPaperElement(
-          art.ad,
-          Text(
-            wallet.publicAddress,
-            style: TextStyle(fontSize: art.ad.size),
-            textAlign: TextAlign.left,
-          )));
+          child: Text(wallet.publicAddress,
+              style: TextStyle(fontSize: art.ad.size*ratio),
+              textAlign: TextAlign.left),
+          height: art.ad.height,
+          width: art.ad.width,
+          top: art.ad.top,
+          left: art.ad.left,
+          scale: ratio,
+          rotation: art.ad.rotation));
     }
     if (art.adQr.visible) {
       QrImage qr = QrImage(
@@ -189,37 +223,39 @@ class Paper extends StatelessWidget {
         version: QrVersions.auto,
         size: art.adQr.size,
       );
-      els.add(getPaperElement(art.adQr, qr));
+      els.add(getPaperElement(
+          child: qr,
+          height: art.adQr.height,
+          width: art.adQr.width,
+          top: art.adQr.top,
+          left: art.adQr.left,
+          scale: ratio,
+          rotation: art.adQr.rotation));
     }
-    return Padding(
-        padding: EdgeInsets.all(5),
-        child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(width: 1, color: Colors.black45),
-            ),
-            child: SizedBox(
-                width: this.art.width,
-                height: this.art.height,
-                child: Stack(
-                  fit: StackFit.expand,
-                  clipBehavior: Clip.hardEdge,
-                  children: els,
-                ))));
+    return Stack(
+        fit: StackFit.expand, clipBehavior: Clip.hardEdge, children: els);
   }
-}
 
-Widget getPaperElement(ArtElement el, Widget child) {
-  double angle = (el.rotation / 180) * math.pi;
-  return Positioned(
-    child: Transform.rotate(
-      origin: Offset(0, 0),
-      alignment: Alignment.centerLeft,
-      angle: angle,
-      child: child,
-    ),
-    top: el.top,
-    left: el.left,
-    width: el.width,
-    height: el.height,
-  );
+  Widget getPaperElement(
+      {double top,
+      double left,
+      double width,
+      double height,
+      double rotation,
+      Widget child,
+      double scale}) {
+    double angle = (rotation / 180) * math.pi;
+    return Positioned(
+      child: Transform.rotate(
+        origin: Offset(0, 0),
+        alignment: Alignment.centerLeft,
+        angle: angle,
+        child: child,
+      ),
+      top: top*scale,
+      left: left*scale,
+      width: width*scale,
+      height: height*scale,
+    );
+  }
 }
