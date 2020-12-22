@@ -153,14 +153,19 @@ class Paper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var dsize = MediaQuery.of(context).size;
+    double prop = dsize.width/art.width;
+    if (prop > 1) {
+      prop = 1;
+    }
     return Padding(
-        padding: EdgeInsets.all(5),
+      padding: EdgeInsets.fromLTRB(3, 10, 3, 0),
         child: Container(
             decoration: BoxDecoration(
               border: Border.all(width: 1, color: Colors.black45),
             ),
-            height: 500,
-            width: 500,
+            height: art.height*prop,
+            width: art.width*prop,
             child: LayoutBuilder(builder: (context, constraint) {
               return getPaperElementList(art, wallet, constraint);
             })));
