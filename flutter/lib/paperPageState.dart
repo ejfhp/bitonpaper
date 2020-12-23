@@ -1,14 +1,14 @@
 import 'art.dart';
 import 'wallet.dart';
-import 'main.dart';
+import 'paperPage.dart';
 import 'package:flutter/material.dart';
 
-class BitOnPaperState extends State<BitOnPaper> {
+class PaperPageState extends State<PaperPage> {
   Map<String, Art> arts = Map<String, Art>();
   List<Wallet> wallets = List<Wallet>.empty(growable: true);
   String selected = "bitcoin";
 
-  BitOnPaperState() {
+  PaperPageState() {
     int initialWallets = 2;
     getArts(this, "./img");
     for (int i = 0; i < initialWallets; i++) {
@@ -19,7 +19,7 @@ class BitOnPaperState extends State<BitOnPaper> {
 
   @override
   Widget build(BuildContext context) {
-    return BitOnPaperUI(this);
+    return PaperPageUI(this);
   }
 
   void setSelected(String sel) {

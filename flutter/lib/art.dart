@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-import 'state.dart';
+import 'paperPageState.dart';
 
 class Art {
   String name;
@@ -28,7 +28,7 @@ class ArtElement {
   bool visible;
 }
 
-Future<void> getArts(BitOnPaperState state, String baseUrl) async {
+Future<void> getArts(PaperPageState state, String baseUrl) async {
   var response = await http.get(baseUrl + "/arts.json");
   if (response.statusCode == 200) {
     List<dynamic> artList =
@@ -42,7 +42,7 @@ Future<void> getArts(BitOnPaperState state, String baseUrl) async {
   }
 }
 
-Future<void> getArt(BitOnPaperState state, String baseUrl,  String confFile) async {
+Future<void> getArt(PaperPageState state, String baseUrl,  String confFile) async {
   var response = await http.get(baseUrl + "/" + confFile);
   if (response.statusCode == 200) {
     Map<String, dynamic> artList =
