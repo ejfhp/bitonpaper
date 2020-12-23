@@ -125,11 +125,11 @@ class WalletSheet extends StatelessWidget {
       });
     }
     return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints viewportConstraints) {
+        builder: (context, constraints) {
       return SingleChildScrollView(
           child: ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: viewportConstraints.maxHeight,
+                minHeight: constraints.maxHeight,
               ),
               child: Container(
                 child: Column(children: papers),
