@@ -45,7 +45,7 @@ class PaperPageUI extends StatelessWidget {
 
 class Menu extends InheritedWidget {
   final PaperPageState state;
-  Menu({Key key, Widget child, this.state}) : super(key: key, child: child);
+  Menu({Widget child, this.state}) : super(child: child);
 
   @override
   bool updateShouldNotify(covariant Menu oldWidget) {
@@ -70,19 +70,19 @@ class ArtsMenu extends StatelessWidget {
     artsList.add(header);
     var arts = appState.arts;
     var selected = appState.selected;
-    arts.forEach((key, value) {
+    arts.forEach((k, v) {
       Widget t;
-      if (key == selected) {
-        t = Text(key, style: TextStyle(fontWeight: FontWeight.bold));
+      if (k == selected) {
+        t = Text(k, style: TextStyle(fontWeight: FontWeight.bold));
       } else {
-        t = Text(key);
+        t = Text(k);
       }
-      var i = Image.network(value.url);
+      var i = Image.network(v.url);
       ListTile tI = ListTile(
         leading: i,
         title: t,
         onTap: () {
-          appState.setSelected(key);
+          appState.setSelected(k);
           //Close the drawer when user selects.
           Navigator.pop(context);
         },
@@ -124,8 +124,7 @@ class WalletSheet extends StatelessWidget {
         papers.add(p);
       });
     }
-    return LayoutBuilder(
-        builder: (context, constraints) {
+    return LayoutBuilder(builder: (context, constraints) {
       return SingleChildScrollView(
           child: ConstrainedBox(
               constraints: BoxConstraints(
@@ -152,21 +151,29 @@ class Paper extends StatelessWidget {
     if (prop > 1) {
       prop = 1;
     }
-    return Padding(
-        padding: EdgeInsets.fromLTRB(3, 10, 3, 0),
-        child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(width: 1, color: Colors.black45),
-            ),
-            height: art.height * prop,
-            width: art.width * prop,
-            child: LayoutBuilder(builder: (context, constraint) {
-              return getPaperElementList(art, wallet, constraint);
-            })));
+    return Column(children: [
+      Padding(
+          padding: EdgeInsets.fromLTRB(3, 10, 3, 0),
+          child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: Colors.black45),
+              ),
+              height: art.height * prop,
+              width: art.width * prop,
+              child: LayoutBuilder(builder: (context, constraint) {
+                return getPaperElementList(
+                    art: art, wallet: wallet, constraint: constraint);
+              }))),
+      FlatButton(
+          onPressed: () {
+            Sheet.of(context).state.toPDF();
+          },
+          child: Text("PNG"))
+    ]);
   }
 
   Widget getPaperElementList(
-      Art art, Wallet wallet, BoxConstraints constraint) {
+      {Art art, Wallet wallet, BoxConstraints constraint}) {
     List<Widget> els = List<Widget>.empty(growable: true);
     double ratio = constraint.maxWidth / art.width;
     els.add(getPaperElement(
