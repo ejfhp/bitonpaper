@@ -1,6 +1,7 @@
 package io.flutter.plugins;
 
 import io.flutter.plugin.common.PluginRegistry;
+import net.nfet.flutter.printing.PrintingPlugin;
 
 /**
  * Generated file. Do not edit.
@@ -10,6 +11,7 @@ public final class GeneratedPluginRegistrant {
     if (alreadyRegisteredWith(registry)) {
       return;
     }
+    PrintingPlugin.registerWith(registry.registrarFor("net.nfet.flutter.printing.PrintingPlugin"));
   }
 
   private static boolean alreadyRegisteredWith(PluginRegistry registry) {

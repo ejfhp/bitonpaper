@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  printing: ^3.7.2
   dartsv: 
     git: https://github.com/ejfhp/dartsv.git
   http: any
