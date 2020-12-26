@@ -117,24 +117,27 @@ class WalletSheet extends StatelessWidget {
     PaperPageState appState = Sheet.of(context).state;
     var art = appState.getSelectedArt();
     var wallets = appState.wallets;
-    List<Paper> papers = List<Paper>.empty(growable: true);
-    if (art != null && wallets != null) {
-      wallets.forEach((w) {
-        Paper p = Paper(wallet: w, art: art);
-        papers.add(p);
-      });
+    if (art == null || wallets == null) {
+      return Text("No DATA");
     }
-    return LayoutBuilder(builder: (context, constraints) {
-      return SingleChildScrollView(
-          child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight,
-              ),
-              child: Container(
-                child: Column(children: papers),
-                alignment: Alignment.topCenter,
-              )));
-    });
+    Wallet w = wallets.first;
+    Paper p = Paper(wallet: w, art: art);
+    // return LayoutBuilder(builder: (context, constraints) {
+    return SingleChildScrollView(
+      // child: ConstrainedBox(
+      // constraints: BoxConstraints(),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(width: 1, color: Colors.black45),
+        ),
+        padding: EdgeInsets.all(20),
+        child: p,
+        alignment: Alignment.center,
+      ),
+      // )
+    );
+    // }
+    // );
   }
 }
 
@@ -147,23 +150,17 @@ class Paper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var dsize = MediaQuery.of(context).size;
-    double prop = dsize.width / art.width;
-    if (prop > 1) {
-      prop = 1;
+    double scale = dsize.width / art.width;
+    if (scale > 1) {
+      scale = 1;
     }
     return Column(children: [
-      Padding(
-          padding: EdgeInsets.fromLTRB(3, 10, 3, 0),
-          child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.black45),
-              ),
-              height: art.height * prop,
-              width: art.width * prop,
-              child: LayoutBuilder(builder: (context, constraint) {
-                return getPaperElementList(
-                    art: art, wallet: wallet, constraint: constraint);
-              }))),
+      Container(
+          height: art.height * scale,
+          width: art.width * scale,
+          child: LayoutBuilder(builder: (context, constraint) {
+            return getPaper(art: art, wallet: wallet, constraint: constraint);
+          })),
       FlatButton(
           onPressed: () {
             Sheet.of(context).state.toPDF();
@@ -172,12 +169,17 @@ class Paper extends StatelessWidget {
     ]);
   }
 
-  Widget getPaperElementList(
-      {Art art, Wallet wallet, BoxConstraints constraint}) {
+  Widget getPaper({Art art, Wallet wallet, BoxConstraints constraint}) {
     List<Widget> els = List<Widget>.empty(growable: true);
     double ratio = constraint.maxWidth / art.width;
     els.add(getPaperElement(
-        child: Image.network(this.art.url),
+        child: Container(
+          child:
+              Image.network(this.art.url, height: art.height, width: art.width),
+          decoration: BoxDecoration(
+            border: Border.all(width: 1, color: Colors.black45),
+          ),
+        ),
         height: art.height,
         width: art.width,
         top: 0,
@@ -201,6 +203,8 @@ class Paper extends StatelessWidget {
         data: wallet.privateKey,
         version: QrVersions.auto,
         size: art.pkQr.size,
+        padding: EdgeInsets.all(0),
+        gapless: true,
       );
       els.add(getPaperElement(
           child: qr,
@@ -228,6 +232,8 @@ class Paper extends StatelessWidget {
         data: wallet.publicAddress,
         version: QrVersions.auto,
         size: art.adQr.size,
+        padding: EdgeInsets.all(0),
+        gapless: true,
       );
       els.add(getPaperElement(
           child: qr,
@@ -239,7 +245,10 @@ class Paper extends StatelessWidget {
           rotation: art.adQr.rotation));
     }
     return Stack(
-        fit: StackFit.expand, clipBehavior: Clip.hardEdge, children: els);
+      fit: StackFit.passthrough,
+      clipBehavior: Clip.hardEdge,
+      children: els,
+    );
   }
 
   Widget getPaperElement(
