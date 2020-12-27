@@ -28,7 +28,7 @@ class ArtElement {
   bool visible;
 }
 
-Future<void> getArts(PaperPageState state, String baseUrl) async {
+Future<void> retrieveArts(PaperPageState state, String baseUrl) async {
   var response = await http.get(baseUrl + "/arts.json");
   if (response.statusCode == 200) {
     List<dynamic> artList =
