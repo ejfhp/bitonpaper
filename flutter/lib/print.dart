@@ -132,21 +132,3 @@ pw.Widget getPDFWalletElement(
   );
 }
 
-// Future<Uint8List> createImageFromText(context) async {
-//   im.Image image = im.Image.rgb(40, 100);
-//   // im.fill(image, im.getColor(0, 0, 0));
-//   // im.drawString(image, im.arial_14, 0, 0, 'A');
-//   // im.drawLine(image, 0, 0, 320, 240, im.getColor(255, 0, 0, 255), thickness: 3);
-//   im.gaussianBlur(image, 10);
-//   Uint8List bytes = image.getBytes();
-
-//   print("Bytes len: " + bytes.length.toString());
-//   MemoryImage memImg = MemoryImage(bytes);
-//   print("Memory Image: " + memImg.toString());
-//   await precacheImage(memImg, context, onError: (o, e) {
-//     print("Precache error: " + o.toString());
-//     print(e);
-//     print(o);
-//     });
-//   return bytes;
-// }
