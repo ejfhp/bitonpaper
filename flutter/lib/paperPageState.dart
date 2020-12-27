@@ -1,13 +1,12 @@
 import 'dart:typed_data';
-import 'dart:math' as math;
+import 'package:bitonpaper/walletPainter.dart';
+
 import 'art.dart';
 import 'wallet.dart';
 import 'paperPage.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:pdf/pdf.dart' as pdf;
-import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
+import 'walletPainter.dart';
 
 class PaperPageState extends State<PaperPage> {
   Map<String, Art> _arts = Map<String, Art>();
@@ -43,6 +42,9 @@ class PaperPageState extends State<PaperPage> {
       Wallet w = Wallet();
       this._wallets.add(w);
       this._qrs[w.privateKey] = await _buildQrImage(w.privateKey, art.pkQr.size);
+      // WalletPainter wp = WalletPainter();
+      // ByteData bd = await wp.toImageData(100);
+      // this._qrs[w.privateKey] = Uint8List.sublistView(bd);
       this._qrs[w.publicAddress] = await _buildQrImage(w.publicAddress, art.adQr.size);
     }
     setState(() {});
