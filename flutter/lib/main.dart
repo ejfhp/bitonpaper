@@ -10,14 +10,16 @@ void main() {
   var app = MaterialApp(
     theme: ThemeData(
       primarySwatch: Colors.blueGrey,
-      accentColor: Colors.cyanAccent,
-      canvasColor: Colors.blueGrey[100],
+      brightness: Brightness.light,
+      accentColor: Colors.cyan[600],
+      canvasColor: Colors.blueGrey[50],
+      fontFamily: "Roboto",
     ),
-    routes: <String, WidgetBuilder> {
-      '/intro': (BuildContext context) => initialPage,
+    routes: <String, WidgetBuilder>{
+      '/': (BuildContext context) => initialPage,
       '/wallet': (BuildContext context) => BOP(),
     },
-    home: initialPage,
+    initialRoute: '/',
   );
   runApp(app);
 }

@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'BOPState.dart';
 import 'wallet.dart';
@@ -29,8 +28,9 @@ class WalletSheet extends StatelessWidget {
     if (art == null || w == null) {
       return Text("No DATA");
     }
+    var pageSize = MediaQuery.of(context).size;
     Paper p = Paper(
-        wallet: w, art: appState.getSelectedArt());
+        wallet: w, art: appState.getSelectedArt(), maxWidth: pageSize.width,);
     return SingleChildScrollView(
       child: Container(
         decoration: BoxDecoration(
@@ -39,6 +39,7 @@ class WalletSheet extends StatelessWidget {
         padding: EdgeInsets.all(20),
         child: p,
         alignment: Alignment.center,
+        height: pageSize.height - 73, //- (header + bottom bar)
       ),
     );
   }
@@ -47,13 +48,13 @@ class WalletSheet extends StatelessWidget {
 class Paper extends StatelessWidget {
   final Wallet wallet;
   final Art art;
+  final double maxWidth;
 
-  Paper({this.wallet, this.art});
+  Paper({this.wallet, this.art, this.maxWidth});
 
   @override
   Widget build(BuildContext context) {
-    var dsize = MediaQuery.of(context).size;
-    double scale = dsize.width / art.width;
+    double scale = this.maxWidth / art.width;
     if (scale > 1) {
       scale = 1;
     }

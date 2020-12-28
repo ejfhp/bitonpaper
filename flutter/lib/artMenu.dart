@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'BOPState.dart';
 import 'art.dart';
 
-
 class MenuInh extends InheritedWidget {
   final BOPState state;
   MenuInh({Widget child, this.state}) : super(child: child);
@@ -22,13 +21,21 @@ class Menu extends StatelessWidget {
     BOPState appState = MenuInh.of(context).state;
     List<Widget> artsList = new List<Widget>.empty(growable: true);
     DrawerHeader header = DrawerHeader(
-        child: Image.network(
-      './icons/bop_twol.png',
-      fit: BoxFit.contain,
-      height: 40,
-    ),
-    padding: EdgeInsets.fromLTRB(3, 50, 3, 50),
-    );
+        child: Container(
+      color: Colors.blueGrey,
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+      alignment: Alignment.bottomLeft,
+      child: Text(
+        "Arts",
+        textAlign: TextAlign.left,
+        style: TextStyle(
+          fontFamily: "Roboto",
+          fontSize: 50,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 2,
+        ),
+      ),
+    ));
 
     artsList.add(header);
     Map<String, Art> arts = appState.getArts();
@@ -52,11 +59,9 @@ class Menu extends StatelessWidget {
       );
       artsList.add(tI);
     });
-    ListView list = ListView(
-      children: artsList);
+    ListView list = ListView(children: artsList);
     return Drawer(
       child: list,
     );
   }
 }
-

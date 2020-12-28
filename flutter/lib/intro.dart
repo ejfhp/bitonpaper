@@ -29,55 +29,74 @@ class Intro extends StatelessWidget {
 
   Widget buildIntro(BuildContext context, BoxConstraints constraints) {
     String presentationTxt =
-        "BitcoinOnPaper (BOP) is a web application to build Paper wallets for Bitcoin.";
-    String built4SVTxt =
-        "BOP has been built for Bitcoin (BSV) and the main scope is to be able to print Bitcoin addresses and private keys on paper.";
-    String paperwalletTxt =
-        "Paper wallets (or Bitcoin on paper) can be given as gifts.";
-    String walletTxt =
-        "Paper wallets can be used to store Bitcoin but be careful because they can be lost or become unreadable.";
+        '''
+        BitcoinOnPaper (BOP) is a web application to build Paper wallets for Bitcoin.
+        Paper wallets can be used for fun (as gifts or coupons) or to store Bitcoin.
+        ''';
+    String runTxt =
+        '''
+        It runs locally on the browser and nothing is sent over the Internet nor recorded.
+        For the paranoic like me: open the app and then unplug the network cable, when done close the browser and restart.
+        ''';
     String riskTxt =
-        "Be aware that BOP is a free application without any kind of guarantee. It could have malfunctioning. Use it at your own risk. All the code is available here: https://github.com/ejfhp/bitonpaper";
+        '''
+        Be aware that BOP is a free application without any kind of guarantee. 
+        It could have malfunctioning. 
+        Paper wallets can be lost or become unreadable.
+        Use it at your own risk. 
+        Built with dartsv: https://github.com/twostack/dartsv
+        All the code is available here: https://github.com/ejfhp/bitonpaper
+        ''';
+    String analyticsTxt =
+        '''
+        This website uses cookies (Google Analytics) only to analyse our traffic. No other information is shared with any kind if third party service.
+        ''';
     double pad = 20;
-    double ratio = constraints.maxWidth / 400;
+    double ratio = constraints.maxWidth / 600;
     if (ratio > 1) {
       ratio = 1;
     }
-    double colw = 368 * ratio;
+    double colw = 600 * ratio;
     Widget main = Column(
       children: [
         Container(
           child: Image.network(
             "./icons/bop_twol.png",
+            width: 300,
             fit: BoxFit.contain,
           ),
           constraints: BoxConstraints(maxWidth: colw),
           padding: EdgeInsets.fromLTRB(10, 50, 10, 100),
         ),
-        textContainer(presentationTxt, pad, colw),
-        textContainer(built4SVTxt, pad, colw),
-        textContainer(paperwalletTxt, pad, colw),
-        textContainer(walletTxt, pad, colw),
-        textContainer(riskTxt, pad, colw),
+        textContainer(presentationTxt, pad, colw, 14),
+        textContainer(runTxt, pad, colw, 14),
+        textContainer(riskTxt, pad, colw, 14),
+        textContainer(analyticsTxt, pad, colw, 10),
         Container(
             child: RaisedButton(
           onPressed: () {
             Navigator.pushNamed(context, "/wallet");
           },
-          textColor: Colors.blueGrey[800],
+          color: Colors.blueGrey,
+          textColor: Colors.blueGrey[50],
           padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
           child: const Text('Continue', style: TextStyle(fontSize: 20)),
-        )),
+        ),
+        padding: EdgeInsets.fromLTRB(10, 50, 10, 50),),
       ],
     );
     return main;
   }
 
-  Widget textContainer(String text, double pad, colw) {
+  Widget textContainer(String text, double pad, double colw, double fs) {
     return Container(
       child: Text(
         text,
         textAlign: TextAlign.center,
+        style: TextStyle(
+          fontFamily: "Roboto",
+          fontSize: fs,
+        ),
       ),
       constraints: BoxConstraints(maxWidth: colw),
       padding: EdgeInsets.all(pad),
