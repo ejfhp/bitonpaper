@@ -26,7 +26,9 @@ class Menu extends StatelessWidget {
       './icons/bop_twol.png',
       fit: BoxFit.contain,
       height: 40,
-    ));
+    ),
+    padding: EdgeInsets.fromLTRB(3, 50, 3, 50),
+    );
 
     artsList.add(header);
     Map<String, Art> arts = appState.getArts();
@@ -50,7 +52,8 @@ class Menu extends StatelessWidget {
       );
       artsList.add(tI);
     });
-    ListView list = ListView(children: artsList);
+    ListView list = ListView(
+      children: artsList);
     return Drawer(
       child: list,
     );

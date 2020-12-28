@@ -7,24 +7,16 @@ import 'package:pdf/pdf.dart' as pdf;
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
-
-
 Future<void> toPDF(
     {Art art, Map<String, Uint8List> qrs, List<Wallet> wallets}) async {
   try {
     final doc = pw.Document();
     pdf.PdfPageFormat ppf = pdf.PdfPageFormat.a4;
-    print("Avaiable Width: " + ppf.availableWidth.toString());
-    print("Avaiable Height: " + ppf.availableHeight.toString());
     List<pw.Widget> parts = List<pw.Widget>.empty(growable: true);
     for (int i = 0; i < wallets.length; i++) {
       Wallet w = wallets[i];
       pw.Widget part = await makePDFWallet(
-          art: art,
-          wallet: w,
-          maxWidth: ppf.availableWidth,
-          qrAd: qrs[w.publicAddress],
-          qrPk: qrs[w.privateKey]);
+          art: art, wallet: w, maxWidth: ppf.availableWidth);
       parts.add(part);
     }
     doc.addPage(
@@ -41,12 +33,11 @@ Future<void> toPDF(
   }
 }
 
-Future<pw.Widget> makePDFWallet(
-    {Art art,
-    Wallet wallet,
-    double maxWidth,
-    Uint8List qrPk,
-    Uint8List qrAd}) async {
+Future<pw.Widget> makePDFWallet({
+  Art art,
+  Wallet wallet,
+  double maxWidth,
+}) async {
   List<pw.Widget> els = List<pw.Widget>.empty(growable: true);
 
   double scale = (maxWidth - 0.5) / art.width;
@@ -55,11 +46,14 @@ Future<pw.Widget> makePDFWallet(
   NetworkImage artImage = NetworkImage(art.url);
   final artImageProvider = await flutterImageProvider(artImage);
 
-  ImageProvider pkQrImage = MemoryImage(qrPk);
+  ImageProvider pkQrImage = MemoryImage(wallet.pkQr);
   final pkQrImageProvider = await flutterImageProvider(pkQrImage);
-
-  ImageProvider adQrImage = MemoryImage(qrAd);
+  ImageProvider adQrImage = MemoryImage(wallet.adQr);
   final adQrImageProvider = await flutterImageProvider(adQrImage);
+  ImageProvider pkImage = MemoryImage(wallet.pkImg);
+  final pkImageProvider = await flutterImageProvider(pkImage);
+  ImageProvider adImage = MemoryImage(wallet.adImg);
+  final adImageProvider = await flutterImageProvider(adImage);
   els.add(pw.Image.provider(
     artImageProvider,
     height: art.height * scale,
@@ -68,47 +62,31 @@ Future<pw.Widget> makePDFWallet(
   ));
   if (art.pk.visible) {
     els.add(getPDFWalletElement(
-        child: pw.Text(wallet.privateKey,
-            style: pw.TextStyle(fontSize: art.pk.size * scale),
-            textAlign: pw.TextAlign.left),
-        top: art.pk.top * scale,
-        left: art.pk.left * scale,
-        rotation: -1 * art.pk.rotation));
+      image: pkImageProvider,
+      ael: art.pk,
+      scale: scale,
+    ));
   }
   if (art.pkQr.visible) {
     els.add(getPDFWalletElement(
-        child: pw.Image.provider(
-          pkQrImageProvider,
-          height: art.pkQr.height * scale,
-          width: art.pkQr.width * scale,
-          fit: pw.BoxFit.fitWidth,
-        ),
-        top: art.pkQr.top * scale,
-        left: art.pkQr.left * scale,
-        rotation: art.pkQr.rotation));
+      image: pkQrImageProvider,
+      ael: art.pkQr,
+      scale: scale,
+    ));
   }
   if (art.ad.visible) {
     els.add(getPDFWalletElement(
-        child: pw.Text(
-          wallet.publicAddress,
-          style: pw.TextStyle(fontSize: art.ad.size * scale),
-          textAlign: pw.TextAlign.left,
-        ),
-        top: art.ad.top * scale,
-        left: art.ad.left * scale,
-        rotation: -1 * art.ad.rotation));
+      image: adImageProvider,
+      ael: art.ad,
+      scale: scale,
+    ));
   }
   if (art.adQr.visible) {
     els.add(getPDFWalletElement(
-        child: pw.Image.provider(
-          adQrImageProvider,
-          height: art.adQr.height * scale,
-          width: art.adQr.width * scale,
-          fit: pw.BoxFit.fitWidth,
-        ),
-        top: art.adQr.top * scale,
-        left: art.adQr.left * scale,
-        rotation: art.adQr.rotation));
+      image: adQrImageProvider,
+      ael: art.adQr,
+      scale: scale,
+    ));
   }
   return pw.Stack(
     children: els,
@@ -118,17 +96,21 @@ Future<pw.Widget> makePDFWallet(
 }
 
 pw.Widget getPDFWalletElement(
-    {double top, double left, double rotation, pw.Widget child}) {
-  double angle = (rotation / 180) * math.pi;
+    {ArtElement ael, double scale, pw.ImageProvider image}) {
+  double angle = (-1 * ael.rotation / 180) * math.pi;
   return pw.Positioned(
     child: pw.Transform.rotate(
       origin: pdf.PdfPoint(0, 0),
       alignment: pw.Alignment.centerLeft,
       angle: angle,
-      child: child,
+      child: pw.Image.provider(
+        image,
+        height: ael.height * scale,
+        width: ael.width * scale,
+        fit: pw.BoxFit.fitWidth,
+      ),
     ),
-    top: top,
-    left: left,
+    top: ael.top * scale,
+    left: ael.left * scale,
   );
 }
-
