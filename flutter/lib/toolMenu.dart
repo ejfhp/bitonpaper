@@ -20,8 +20,21 @@ class ToolMenuInh extends InheritedWidget {
 class ToolMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     DrawerHeader header = DrawerHeader(
-        child: Text("Print to PDF"),
-    );
+        child: Container(
+      color: Colors.blueGrey,
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+      alignment: Alignment.bottomRight,
+      child: Text(
+        "Tools",
+        textAlign: TextAlign.right,
+        style: TextStyle(
+          fontFamily: "Roboto",
+          fontSize: 50,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 2,
+        ),
+      ),
+    ));
 
     Column commands = Column(
       children: [

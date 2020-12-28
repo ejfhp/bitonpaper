@@ -36,6 +36,7 @@ class BOPUI extends StatelessWidget {
     return Scaffold(
       appBar: topBar,
       bottomNavigationBar: bottomBar,
+      backgroundColor: Colors.white,
       drawer: MenuInh(child: Menu(), state: state),
       endDrawer: ToolMenuInh(child: ToolMenu(), state:state),
       body: Sheet(child: WalletSheet(), state: state),
