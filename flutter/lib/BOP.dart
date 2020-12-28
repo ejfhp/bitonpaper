@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'paperPageState.dart';
-import 'paperPageMenu.dart';
-import 'paperPageToolMenu.dart';
-import 'paperPageSheet.dart';
+import 'BOPState.dart';
+import 'artMenu.dart';
+import 'toolMenu.dart';
+import 'artSheet.dart';
 
 //Main StatefulWidget
-class PaperPage extends StatefulWidget {
+class BOP extends StatefulWidget {
   @override
-  PaperPageState createState() => PaperPageState();
+  BOPState createState() => BOPState();
 }
 
 //Main StatelessWidget
-class PaperPageUI extends StatelessWidget {
-  final PaperPageState state;
+class BOPUI extends StatelessWidget {
+  final BOPState state;
 
-  PaperPageUI(this.state);
+  BOPUI(this.state);
 
   @override
   Widget build(BuildContext context) {

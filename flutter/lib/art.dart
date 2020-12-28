@@ -1,6 +1,8 @@
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import 'dart:convert' as convert;
-import 'paperPageState.dart';
+import 'dart:ui' as ui;
+import 'BOPState.dart';
 
 class Art {
   String name;
@@ -19,16 +21,18 @@ class Art {
 }
 
 class ArtElement {
-  double top;
-  double left;
-  double height;
-  double width;
-  double size;
-  double rotation;
-  bool visible;
+  double top = 0;
+  double left = 0;
+  double height = 0;
+  double width = 0;
+  double size = 0;
+  double rotation = 0;
+  bool visible = true;
+  ui.Color fgcolor = Colors.black;
+  ui.Color bgcolor = Colors.transparent;
 }
 
-Future<void> retrieveArts(PaperPageState state, String baseUrl) async {
+Future<void> retrieveArts(BOPState state, String baseUrl) async {
   var response = await http.get(baseUrl + "/arts.json");
   if (response.statusCode == 200) {
     List<dynamic> artList =
@@ -42,7 +46,7 @@ Future<void> retrieveArts(PaperPageState state, String baseUrl) async {
   }
 }
 
-Future<void> getArt(PaperPageState state, String baseUrl,  String confFile) async {
+Future<void> getArt(BOPState state, String baseUrl, String confFile) async {
   var response = await http.get(baseUrl + "/" + confFile);
   if (response.statusCode == 200) {
     Map<String, dynamic> artList =
@@ -109,6 +113,12 @@ ArtElement readElement(dynamic val) {
         break;
       case "visible":
         ae.visible = val as bool;
+        break;
+      case "fgcolor":
+        ae.fgcolor = ui.Color(int.parse("0x" + val));
+        break;
+      case "bgcolor":
+        ae.bgcolor = ui.Color(int.parse("0x" + val));
         break;
       default:
     }

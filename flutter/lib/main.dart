@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'paperPage.dart';
+import 'BOP.dart';
 import 'introPage.dart';
 
 const appTitle = "BitOnPaper - Bitcoin On Paper";
@@ -13,7 +13,7 @@ void main() {
     ),
     routes: <String, WidgetBuilder> {
       '/intro': (BuildContext context) => IntroPage(),
-      '/wallet': (BuildContext context) => PaperPage(),
+      '/wallet': (BuildContext context) => BOP(),
     },
     home: initialPage,
   );

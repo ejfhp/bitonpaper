@@ -1,12 +1,12 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'paperPageState.dart';
+import 'BOPState.dart';
 import 'wallet.dart';
 import 'art.dart';
 import 'dart:math' as math;
 
 class Sheet extends InheritedWidget {
-  final PaperPageState state;
+  final BOPState state;
 
   Sheet({Key key, Widget child, this.state}) : super(key: key, child: child);
 
@@ -23,16 +23,14 @@ class Sheet extends InheritedWidget {
 class WalletSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    PaperPageState appState = Sheet.of(context).state;
+    BOPState appState = Sheet.of(context).state;
     var art = appState.getSelectedArt();
     var w = appState.getWallet();
-    var qrPk = appState.getQrPk();
-    var qrAd = appState.getQrAd();
-    if (art == null || w == null || qrPk == null || qrAd == null) {
+    if (art == null || w == null) {
       return Text("No DATA");
     }
     Paper p = Paper(
-        wallet: w, art: appState.getSelectedArt(), pkQr: qrPk, adQr: qrAd);
+        wallet: w, art: appState.getSelectedArt());
     return SingleChildScrollView(
       child: Container(
         decoration: BoxDecoration(
@@ -49,9 +47,8 @@ class WalletSheet extends StatelessWidget {
 class Paper extends StatelessWidget {
   final Wallet wallet;
   final Art art;
-  final Uint8List pkQr;
-  final Uint8List adQr;
-  Paper({this.wallet, this.art, this.adQr, this.pkQr});
+
+  Paper({this.wallet, this.art});
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +65,7 @@ class Paper extends StatelessWidget {
             return getPaper(
                 art: art,
                 wallet: wallet,
-                constraint: constraint,
-                adQr: this.adQr,
-                pkQr: this.pkQr);
+                constraint: constraint);
           })),
     ]);
   }
@@ -78,12 +73,12 @@ class Paper extends StatelessWidget {
   Widget getPaper(
       {Art art,
       Wallet wallet,
-      Uint8List pkQr,
-      Uint8List adQr,
       BoxConstraints constraint}) {
     List<Widget> els = List<Widget>.empty(growable: true);
-    ImageProvider pkQrImage = MemoryImage(pkQr);
-    ImageProvider adQrImage = MemoryImage(adQr);
+    ImageProvider pkQrImage = MemoryImage(wallet.pkQr);
+    ImageProvider adQrImage = MemoryImage(wallet.adQr);
+    ImageProvider pkImage = MemoryImage(wallet.pkImg);
+    ImageProvider adImage = MemoryImage(wallet.adImg);
     double ratio = constraint.maxWidth / art.width;
     els.add(getPaperElement(
         child: Container(
@@ -101,9 +96,7 @@ class Paper extends StatelessWidget {
         rotation: 0));
     if (art.pk.visible) {
       els.add(getPaperElement(
-          child: Text(wallet.privateKey,
-              style: TextStyle(fontSize: art.pk.size * ratio),
-              textAlign: TextAlign.left),
+          child: Image(image: pkImage),
           height: art.pk.height,
           width: art.pk.width,
           top: art.pk.top,
@@ -123,10 +116,7 @@ class Paper extends StatelessWidget {
     }
     if (art.ad.visible) {
       els.add(getPaperElement(
-          child: Text(wallet.publicAddress,
-              style: TextStyle(
-                  fontSize: art.ad.size * ratio, fontFamily: "Roboto"),
-              textAlign: TextAlign.left),
+          child: Image(image: adImage),
           height: art.ad.height,
           width: art.ad.width,
           top: art.ad.top,
