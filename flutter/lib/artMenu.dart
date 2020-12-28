@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'paperPageState.dart';
+import 'BOPState.dart';
 import 'art.dart';
 
 
 class MenuInh extends InheritedWidget {
-  final PaperPageState state;
+  final BOPState state;
   MenuInh({Widget child, this.state}) : super(child: child);
 
   @override
@@ -19,7 +19,7 @@ class MenuInh extends InheritedWidget {
 
 class Menu extends StatelessWidget {
   Widget build(BuildContext context) {
-    PaperPageState appState = MenuInh.of(context).state;
+    BOPState appState = MenuInh.of(context).state;
     List<Widget> artsList = new List<Widget>.empty(growable: true);
     DrawerHeader header = DrawerHeader(
         child: Image.network(

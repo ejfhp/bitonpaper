@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'paperPageState.dart';
+import 'BOPState.dart';
 import 'print.dart';
 
 
 class ToolMenuInh extends InheritedWidget {
-  final PaperPageState state;
+  final BOPState state;
   ToolMenuInh({Widget child, this.state}) : super(child: child);
 
   @override
@@ -35,9 +35,9 @@ class ToolMenu extends StatelessWidget {
   }
 
   Future<void> printWallets(context) async {
-    PaperPageState appState = ToolMenuInh.of(context).state;
+    BOPState appState = ToolMenuInh.of(context).state;
     // appState.refreshWallet(3);
-    await toPDF(art: appState.getSelectedArt(), wallets: appState.getWallets(), qrs: appState.getQrs());
+    await toPDF(art: appState.getSelectedArt(), wallets: appState.getWallets());
   }
 }
 
