@@ -21,6 +21,6 @@ steps:
   - 'managed'
 substitutions:
   _DEPL_SERVICE: bitonpaper
-  _DEPL_VERSION: dev
+  _DEPL_VERSION: main
 images:
  - 'gcr.io/$PROJECT_ID/${_DEPL_SERVICE}-${_DEPL_VERSION}:$SHORT_SHA'
