@@ -26,11 +26,14 @@ class WalletSheet extends StatelessWidget {
     var art = appState.getSelectedArt();
     var w = appState.getWallet();
     if (art == null || w == null) {
-      return Text("No DATA");
+      return Text("Loading...");
     }
     var pageSize = MediaQuery.of(context).size;
     Paper p = Paper(
-        wallet: w, art: appState.getSelectedArt(), maxWidth: pageSize.width,);
+      wallet: w,
+      art: appState.getSelectedArt(),
+      maxWidth: pageSize.width,
+    );
     return SingleChildScrollView(
       child: Container(
         decoration: BoxDecoration(
@@ -39,7 +42,7 @@ class WalletSheet extends StatelessWidget {
         padding: EdgeInsets.all(20),
         child: p,
         alignment: Alignment.center,
-        height: pageSize.height - 73, //- (header + bottom bar)
+        height: pageSize.height - 68, //- (header + bottom bar)
       ),
     );
   }
@@ -63,18 +66,12 @@ class Paper extends StatelessWidget {
           height: art.height * scale,
           width: art.width * scale,
           child: LayoutBuilder(builder: (context, constraint) {
-            return getPaper(
-                art: art,
-                wallet: wallet,
-                constraint: constraint);
+            return getPaper(art: art, wallet: wallet, constraint: constraint);
           })),
     ]);
   }
 
-  Widget getPaper(
-      {Art art,
-      Wallet wallet,
-      BoxConstraints constraint}) {
+  Widget getPaper({Art art, Wallet wallet, BoxConstraints constraint}) {
     List<Widget> els = List<Widget>.empty(growable: true);
     ImageProvider pkQrImage = MemoryImage(wallet.pkQr);
     ImageProvider adQrImage = MemoryImage(wallet.adQr);
@@ -83,8 +80,7 @@ class Paper extends StatelessWidget {
     double ratio = constraint.maxWidth / art.width;
     els.add(getPaperElement(
         child: Container(
-          child:
-              Image.network(this.art.url, height: art.height, width: art.width),
+          child: Image.network(this.art.url, height: art.height, width: art.width),
           decoration: BoxDecoration(
             border: Border.all(width: 1, color: Colors.black45),
           ),
@@ -143,13 +139,7 @@ class Paper extends StatelessWidget {
   }
 
   Widget getPaperElement(
-      {double top,
-      double left,
-      double width,
-      double height,
-      double rotation,
-      Widget child,
-      double scale}) {
+      {double top, double left, double width, double height, double rotation, Widget child, double scale}) {
     double angle = (rotation / 180) * math.pi;
     return Positioned(
       child: Transform.rotate(

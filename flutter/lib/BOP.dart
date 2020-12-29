@@ -21,8 +21,9 @@ class BOPUI extends StatelessWidget {
     BottomAppBar bottomBar = BottomAppBar(
         color: Colors.blueGrey,
         child: Text(
-          "Works only on Bitcoin (SV). Use at your own risk. See the running code on Github.",
+          "Use at your own risk.",
           textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 10, color: Colors.blueGrey[200], fontFamily: "Roboto"),
         ));
     AppBar topBar = AppBar(
         title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -38,7 +39,7 @@ class BOPUI extends StatelessWidget {
       bottomNavigationBar: bottomBar,
       backgroundColor: Colors.white,
       drawer: MenuInh(child: Menu(), state: state),
-      endDrawer: ToolMenuInh(child: ToolMenu(), state:state),
+      endDrawer: ToolMenuInh(child: ToolMenu(), state: state),
       body: Sheet(child: WalletSheet(), state: state),
     );
   }
