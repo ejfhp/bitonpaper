@@ -28,31 +28,7 @@ class Intro extends StatelessWidget {
   }
 
   Widget buildIntro(BuildContext context, BoxConstraints constraints) {
-    String presentationTxt =
-        '''
-        BitcoinOnPaper (BOP) is a web application to build Paper wallets for Bitcoin.
-        Paper wallets can be used for fun (as gifts or coupons) or to store Bitcoin.
-        ''';
-    String runTxt =
-        '''
-        It runs locally on the browser and nothing is sent over the Internet nor recorded.
-        For the paranoic like me: open the app and then unplug the network cable, when done close the browser and restart.
-        ''';
-    String riskTxt =
-        '''
-        Be aware that BOP is a free application without any kind of guarantee. 
-        It could have malfunctioning. 
-        Paper wallets can be lost or become unreadable.
-        Use it at your own risk. 
-        Built with dartsv: https://github.com/twostack/dartsv
-        All the code is available here: https://github.com/ejfhp/bitonpaper
-        ''';
-    String analyticsTxt =
-        '''
-        This website uses cookies (Google Analytics) only to analyse our traffic. No other information is shared with any kind if third party service.
-        ''';
-    double pad = 20;
-    double ratio = constraints.maxWidth / 600;
+    double ratio = constraints.maxWidth / 500;
     if (ratio > 1) {
       ratio = 1;
     }
@@ -68,21 +44,22 @@ class Intro extends StatelessWidget {
           constraints: BoxConstraints(maxWidth: colw),
           padding: EdgeInsets.fromLTRB(10, 50, 10, 100),
         ),
-        textContainer(presentationTxt, pad, colw, 14),
-        textContainer(runTxt, pad, colw, 14),
-        textContainer(riskTxt, pad, colw, 14),
-        textContainer(analyticsTxt, pad, colw, 10),
         Container(
-            child: RaisedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, "/wallet");
-          },
-          color: Colors.blueGrey,
-          textColor: Colors.blueGrey[50],
-          padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-          child: const Text('Continue', style: TextStyle(fontSize: 20)),
+          width: colw,
+          child: presentationText(context),
         ),
-        padding: EdgeInsets.fromLTRB(10, 50, 10, 50),),
+        Container(
+          child: RaisedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, "/wallet");
+            },
+            color: Colors.blueGrey,
+            textColor: Colors.blueGrey[50],
+            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+            child: const Text('Continue', style: TextStyle(fontSize: 20)),
+          ),
+          padding: EdgeInsets.fromLTRB(10, 50, 10, 50),
+        ),
       ],
     );
     return main;
@@ -92,7 +69,7 @@ class Intro extends StatelessWidget {
     return Container(
       child: Text(
         text,
-        textAlign: TextAlign.center,
+        textAlign: TextAlign.left,
         style: TextStyle(
           fontFamily: "Roboto",
           fontSize: fs,
@@ -102,4 +79,63 @@ class Intro extends StatelessWidget {
       padding: EdgeInsets.all(pad),
     );
   }
+
+  Widget presentationText(context) {
+    return RichText(
+      text: TextSpan(style: TextStyle(fontSize: 12, fontFamily: "Roboto", color: Colors.black87), children: <TextSpan>[
+        TextSpan(children: <TextSpan>[
+          TextSpan(text: 'BOP ', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber, fontSize: 16)),
+          TextSpan(text: 'let you build Paper Wallets for '),
+          TextSpan(text: 'Bitcoin (BSV)', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber)),
+          TextSpan(text: '.\n'),
+        ]),
+        TextSpan(children: <TextSpan>[
+          TextSpan(text: 'Everything runs locally in your browser and nothing is sent over the Internet.\n'),
+          TextSpan(text: '\n'),
+        ]),
+        TextSpan(children: <TextSpan>[
+          TextSpan(text: '1 - ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+          TextSpan(text: 'Click Continue ath the bottom of this page.\n'),
+          TextSpan(text: '2 - ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+          TextSpan(text: 'Unplug the network.'),
+          TextSpan(text: '\u20F0\n', style: TextStyle(color: Colors.red)),
+          TextSpan(text: '3 - ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+          TextSpan(text: 'Select an art from the right menu.\n'),
+          TextSpan(text: '4 - ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+          TextSpan(text: 'Export as many wallet as you want from the right menu.\n'),
+          TextSpan(text: '5 - ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+          TextSpan(text: 'When done close the browser and restart your computer.'),
+          TextSpan(text: '\u20F0\n', style: TextStyle(color: Colors.red)),
+        ]),
+        TextSpan(children: <TextSpan>[
+          TextSpan(
+              text: '\u20F0 only for the paranoic about security\n',
+              style: TextStyle(fontStyle: FontStyle.italic, fontSize: 9, color: Colors.red)),
+          TextSpan(text: '\n'),
+        ]),
+        TextSpan(children: <TextSpan>[
+          TextSpan(text: 'Be aware that '),
+          TextSpan(text: 'BOP ', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber, fontSize: 16)),
+          TextSpan(text: 'is a free application '),
+          TextSpan(text: 'without ', style: TextStyle(fontWeight: FontWeight.bold)),
+          TextSpan(text: 'any kind of '),
+          TextSpan(text: 'guarantee', style: TextStyle(fontWeight: FontWeight.bold)),
+          TextSpan(text: '. It could have malfunctioning. Paper wallets can be lost or become unreadable. '),
+          TextSpan(text: 'Use it at your own risk.\n', style: TextStyle(fontWeight: FontWeight.bold)),
+          TextSpan(text: '\n'),
+        ]),
+        TextSpan(children: <TextSpan>[
+          TextSpan(
+              text:
+                  'Built with dartsv: https://github.com/twostack/dartsv. All the code is available here: https://github.com/ejfhp/bitonpaper.',
+              style: TextStyle(fontSize: 12)),
+          TextSpan(text: '\n'),
+        ]),
+      ]),
+    );
+  }
 }
+
+String analyticsTxt =
+    '''This website uses cookies (Google Analytics) only to analyse our traffic. No other information is shared with any kind if third party service.
+        ''';
