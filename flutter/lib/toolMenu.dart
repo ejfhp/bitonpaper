@@ -46,37 +46,38 @@ class ToolMenu extends StatelessWidget {
 
   Future<void> printWallets(context) async {
     BOPState appState = ToolMenuInh.of(context).state;
-    // appState.refreshWallet(3);
-    await toPDF(art: appState.getSelectedArt(), wallets: appState.getWallets());
+    await appState.refreshWallet(3);
+    await PDFGenerator.toPDF(art: appState.getSelectedArt(), wallets: appState.getWallets());
   }
 
   Widget printBox(context) {
     return Container(
+        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
         child: Column(
-      children: [
-        TextField(
-          maxLength: 3,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: "num wallet",
-          ),
-        ),
-        // Row(
-        //   children: [
-        //     TextField(
-        //       decoration: InputDecoration(
-        //         border: OutlineInputBorder(),
-        //         labelText: "num wallet",
-        //       ),
-        //     ),
-        //   ],
-        // ),
-        FlatButton(
-            onPressed: () {
-              printWallets(context);
-            },
-            child: Text("Export to PDF"))
-      ],
-    ));
+          children: [
+            TextField(
+              maxLength: 3,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "num wallet",
+              ),
+            ),
+            // Row(
+            //   children: [
+            //     TextField(
+            //       decoration: InputDecoration(
+            //         border: OutlineInputBorder(),
+            //         labelText: "num wallet",
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            FlatButton(
+                onPressed: () {
+                  printWallets(context);
+                },
+                child: Text("Export to PDF"))
+          ],
+        ));
   }
 }
