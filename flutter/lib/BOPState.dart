@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:bitonpaper/print.dart';
 import 'package:bitonpaper/walletPainter.dart';
 
 import 'art.dart';
@@ -12,9 +13,11 @@ class BOPState extends State<BOP> {
   Map<String, Uint8List> _qrs = Map<String, Uint8List>();
   String _defaultArt = "bitcoin";
   String _selected;
+  TextEditingController numWalletFieldController;
 
   BOPState() {
     this._selected = this._defaultArt;
+    this.numWalletFieldController = TextEditingController.fromValue(TextEditingValue(text: "3"));
     retrieveArts(this, "./img");
   }
 
@@ -28,7 +31,7 @@ class BOPState extends State<BOP> {
     refreshWallet(1);
   }
 
-  void refreshWallet(int numWallets) async {
+  Future<void> refreshWallet(int numWallets) async {
     Art art = this.getSelectedArt();
     if (art == null) {
       return;
@@ -38,37 +41,20 @@ class BOPState extends State<BOP> {
     for (int i = 0; i < numWallets; i++) {
       Wallet w = Wallet();
       w.adImg = await Rasterizer.toImg(
-          text: w.publicAddress,
-          width: art.ad.width,
-          height: art.ad.height,
-          fontSize: art.ad.size,
-          fgColor: art.pkQr.fgcolor,
-          bgColor: art.pkQr.bgcolor);
+          text: w.publicAddress, width: art.ad.width, height: art.ad.height, fontSize: art.ad.size, fgColor: art.pkQr.fgcolor, bgColor: art.pkQr.bgcolor);
       w.pkImg = await Rasterizer.toImg(
-          text: w.privateKey,
-          width: art.pk.width,
-          height: art.pk.height,
-          fontSize: art.pk.size,
-          fgColor: art.pkQr.fgcolor,
-          bgColor: art.pkQr.bgcolor);
-      w.pkQr = await Rasterizer.toQrCodeImg(
-          text: w.privateKey,
-          size: art.pkQr.size,
-          fgColor: art.pkQr.fgcolor,
-          bgColor: art.pkQr.bgcolor);
-      w.adQr = await Rasterizer.toQrCodeImg(
-          text: w.publicAddress,
-          size: art.pkQr.size,
-          fgColor: art.pkQr.fgcolor,
-          bgColor: art.pkQr.bgcolor);
+          text: w.privateKey, width: art.pk.width, height: art.pk.height, fontSize: art.pk.size, fgColor: art.pkQr.fgcolor, bgColor: art.pkQr.bgcolor);
+      w.pkQr = await Rasterizer.toQrCodeImg(text: w.privateKey, size: art.pkQr.size, fgColor: art.pkQr.fgcolor, bgColor: art.pkQr.bgcolor);
+      w.adQr = await Rasterizer.toQrCodeImg(text: w.publicAddress, size: art.pkQr.size, fgColor: art.pkQr.fgcolor, bgColor: art.pkQr.bgcolor);
       this._wallets.add(w);
-      // this._qrs[w.privateKey] = await _buildQrImage(w.privateKey, art.pkQr.size);
-      // // WalletPainter wp = WalletPainter();
-      // // ByteData bd = await wp.toImageData(width: 400, height: 80, text: w.privateKey, fontFamily: "Roboto", fontSize: 12, fontColor: Colors.white, bgColor: Colors.black);
-      // this._qrs[w.privateKey] = Uint8List.sublistView(bd);
-      // this._qrs[w.publicAddress] = await _buildQrImage(w.publicAddress, art.adQr.size);
     }
     setState(() {});
+  }
+
+  Future<void> printWallets() async {
+    int numWallets = int.parse(numWalletFieldController.text);
+    await refreshWallet(numWallets);
+    await PDFGenerator.toPDF(art: this.getSelectedArt(), wallets: _wallets);
   }
 
   Map<String, Art> getArts() {
