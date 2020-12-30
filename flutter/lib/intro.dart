@@ -11,11 +11,12 @@ class Intro extends StatelessWidget {
     BottomAppBar bottomBar = BottomAppBar(
         color: Colors.blueGrey,
         child: Text(
-          "Works only on Bitcoin (SV). Use at your own risk.",
+          "",
           textAlign: TextAlign.center,
         ));
     return Scaffold(
         bottomNavigationBar: bottomBar,
+        backgroundColor: Colors.blueGrey[200],
         body: LayoutBuilder(builder: (context, constraints) {
           return SingleChildScrollView(
               child: ConstrainedBox(
@@ -57,9 +58,8 @@ class Intro extends StatelessWidget {
               Navigator.pushNamed(context, "/wallet");
             },
             color: Colors.blueGrey,
-            textColor: Colors.blueGrey[50],
             padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-            child: const Text('Continue', style: TextStyle(fontSize: 20)),
+            child: const Text('Continue', style: TextStyle(fontSize: 20, color: Colors.amber)),
           ),
           padding: EdgeInsets.fromLTRB(10, 50, 10, 50),
         ),

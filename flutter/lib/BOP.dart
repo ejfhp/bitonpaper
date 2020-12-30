@@ -26,13 +26,14 @@ class BOPUI extends StatelessWidget {
           style: TextStyle(fontSize: 10, color: Colors.blueGrey[200], fontFamily: "Roboto"),
         ));
     AppBar topBar = AppBar(
+        iconTheme: IconThemeData(color: Colors.amber),
         title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Image.network(
-        "./icons/bop_long.png",
-        fit: BoxFit.contain,
-        height: 40,
-      )
-    ]));
+          Image.network(
+            "./icons/bop_long.png",
+            fit: BoxFit.contain,
+            height: 40,
+          ),
+        ]));
 
     return Scaffold(
       appBar: topBar,

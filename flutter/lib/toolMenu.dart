@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'BOPState.dart';
 import 'print.dart';
 
-
 class ToolMenuInh extends InheritedWidget {
   final BOPState state;
   ToolMenuInh({Widget child, this.state}) : super(child: child);
@@ -19,6 +18,7 @@ class ToolMenuInh extends InheritedWidget {
 
 class ToolMenu extends StatelessWidget {
   Widget build(BuildContext context) {
+    List<Widget> toolsList = new List<Widget>.empty(growable: true);
     DrawerHeader header = DrawerHeader(
         child: Container(
       color: Colors.blueGrey,
@@ -35,13 +35,10 @@ class ToolMenu extends StatelessWidget {
         ),
       ),
     ));
+    toolsList.add(header);
+    toolsList.add(printBox(context));
+    ListView commands = ListView(children: toolsList);
 
-    Column commands = Column(
-      children: [
-        header,
-        FlatButton(onPressed: () {printWallets(context); }, child: Text("Export to PDF"))
-      ]
-    );
     return Drawer(
       child: commands,
     );
@@ -52,5 +49,34 @@ class ToolMenu extends StatelessWidget {
     // appState.refreshWallet(3);
     await toPDF(art: appState.getSelectedArt(), wallets: appState.getWallets());
   }
-}
 
+  Widget printBox(context) {
+    return Container(
+        child: Column(
+      children: [
+        TextField(
+          maxLength: 3,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: "num wallet",
+          ),
+        ),
+        // Row(
+        //   children: [
+        //     TextField(
+        //       decoration: InputDecoration(
+        //         border: OutlineInputBorder(),
+        //         labelText: "num wallet",
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        FlatButton(
+            onPressed: () {
+              printWallets(context);
+            },
+            child: Text("Export to PDF"))
+      ],
+    ));
+  }
+}
