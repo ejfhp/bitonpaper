@@ -1,46 +1,54 @@
-import 'dart:typed_data';
 import 'dart:math' as math;
 import 'art.dart';
 import 'wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart' as pdf;
-import 'package:pdf/widgets.dart' as pw;
+import 'package:pdf/widgets.dart' as pdfw;
 import 'package:printing/printing.dart';
 
 class PDFGenerator {
-  static Future<void> toPDF({Art art, List<Wallet> wallets}) async {
-    try {
-      final doc = pw.Document();
-      pdf.PdfPageFormat ppf = pdf.PdfPageFormat.a4;
-      List<pw.Widget> parts = List<pw.Widget>.empty(growable: true);
-      for (int i = 0; i < wallets.length; i++) {
-        Wallet w = wallets[i];
-        pw.Widget part = await makePDFWallet(art: art, wallet: w, maxWidth: ppf.availableWidth);
-        parts.add(part);
+  static Future<void> toPDF({Art art, List<Wallet> wallets, int walletspp}) async {
+    final doc = pdfw.Document();
+    pdf.PdfPageFormat ppf = pdf.PdfPageFormat.a4;
+    double wMaxH = ppf.availableHeight / walletspp;
+    int numPages = (wallets.length / walletspp).ceil();
+    print("Wallet per page: " + walletspp.toString());
+    print("Num pages: " + numPages.toString());
+    print("Wallet max Height: " + wMaxH.toString());
+    print("Wallets length: " + wallets.length.toString());
+    int wi = 0;
+    int wl = wallets.length;
+    for (int p = 0; p < numPages; p++) {
+      List<pdfw.Widget> wp = List<pdfw.Widget>.empty(growable: true);
+      for (int pp = 0; pp < walletspp && wi < wl; pp++) {
+        pdfw.Widget w = await makePDFWallet(art: art, wallet: wallets[wi++], maxWidth: ppf.availableWidth, maxHeight: wMaxH);
+        wp.add(w);
       }
       doc.addPage(
-        pw.Page(
+        pdfw.Page(
           pageFormat: ppf,
           build: (context) {
-            return pw.Column(children: parts);
+            return pdfw.Column(children: wp);
           },
         ),
       );
-      await Printing.layoutPdf(onLayout: (format) async => doc.save());
-    } catch (e) {
-      print(e);
     }
+    await Printing.layoutPdf(onLayout: (format) async => doc.save());
   }
 
-  Future<pw.Widget> makePDFWallet({
+  static Future<pdfw.Widget> makePDFWallet({
     Art art,
     Wallet wallet,
     double maxWidth,
+    double maxHeight,
   }) async {
-    List<pw.Widget> els = List<pw.Widget>.empty(growable: true);
+    List<pdfw.Widget> els = List<pdfw.Widget>.empty(growable: true);
 
-    double scale = (maxWidth - 0.5) / art.width;
-    print("Scale: " + scale.toString());
+    double scaleW = (maxWidth - 0.5) / art.width;
+    double scaleH = (maxHeight - 0.5) / art.height;
+    print("ScaleW: " + scaleW.toString());
+    print("ScaleH: " + scaleH.toString());
+    double scale = math.min(scaleW, scaleH);
 
     NetworkImage artImage = NetworkImage(art.url);
     final artImageProvider = await flutterImageProvider(artImage);
@@ -53,11 +61,11 @@ class PDFGenerator {
     final pkImageProvider = await flutterImageProvider(pkImage);
     ImageProvider adImage = MemoryImage(wallet.adImg);
     final adImageProvider = await flutterImageProvider(adImage);
-    els.add(pw.Image.provider(
+    els.add(pdfw.Image.provider(
       artImageProvider,
       height: art.height * scale,
       width: art.width * scale,
-      fit: pw.BoxFit.fitWidth,
+      fit: pdfw.BoxFit.fitWidth,
     ));
     if (art.pk.visible) {
       els.add(getPDFWalletElement(
@@ -87,25 +95,25 @@ class PDFGenerator {
         scale: scale,
       ));
     }
-    return pw.Stack(
+    return pdfw.Stack(
       children: els,
-      fit: pw.StackFit.expand,
+      fit: pdfw.StackFit.expand,
     );
     // return els.last;
   }
 
-  pw.Widget getPDFWalletElement({ArtElement ael, double scale, pw.ImageProvider image}) {
+  static pdfw.Widget getPDFWalletElement({ArtElement ael, double scale, pdfw.ImageProvider image}) {
     double angle = (-1 * ael.rotation / 180) * math.pi;
-    return pw.Positioned(
-      child: pw.Transform.rotate(
+    return pdfw.Positioned(
+      child: pdfw.Transform.rotate(
         origin: pdf.PdfPoint(0, 0),
-        alignment: pw.Alignment.centerLeft,
+        alignment: pdfw.Alignment.centerLeft,
         angle: angle,
-        child: pw.Image.provider(
+        child: pdfw.Image.provider(
           image,
           height: ael.height * scale,
           width: ael.width * scale,
-          fit: pw.BoxFit.fitWidth,
+          fit: pdfw.BoxFit.fitWidth,
         ),
       ),
       top: ael.top * scale,

@@ -18,6 +18,7 @@ class ToolMenuInh extends InheritedWidget {
 
 class ToolMenu extends StatelessWidget {
   Widget build(BuildContext context) {
+    BOPState state = ToolMenuInh.of(context).state;
     List<Widget> toolsList = new List<Widget>.empty(growable: true);
     DrawerHeader header = DrawerHeader(
         child: Container(
@@ -36,7 +37,7 @@ class ToolMenu extends StatelessWidget {
       ),
     ));
     toolsList.add(header);
-    toolsList.add(printBox(context));
+    toolsList.add(printBox(context: context, state: state));
     ListView commands = ListView(children: toolsList);
 
     return Drawer(
@@ -44,39 +45,38 @@ class ToolMenu extends StatelessWidget {
     );
   }
 
-  Future<void> printWallets(context) async {
-    BOPState appState = ToolMenuInh.of(context).state;
-    await appState.refreshWallet(3);
-    await PDFGenerator.toPDF(art: appState.getSelectedArt(), wallets: appState.getWallets());
-  }
-
-  Widget printBox(context) {
+  Widget printBox({BuildContext context, BOPState state}) {
     return Container(
         padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
         child: Column(
           children: [
             TextField(
+              controller: state.numWalletsController,
               maxLength: 3,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "num wallet",
               ),
             ),
-            // Row(
-            //   children: [
-            //     TextField(
-            //       decoration: InputDecoration(
-            //         border: OutlineInputBorder(),
-            //         labelText: "num wallet",
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            FlatButton(
+            TextField(
+              controller: state.walletsPerPageController,
+              maxLength: 3,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "wallet per page",
+              ),
+            ),
+            Container(
+              child: RaisedButton(
                 onPressed: () {
-                  printWallets(context);
+                  state.printWallets();
                 },
-                child: Text("Export to PDF"))
+                color: Colors.blueGrey,
+                padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                child: const Text('Print', style: TextStyle(fontSize: 20, color: Colors.amber)),
+              ),
+              padding: EdgeInsets.fromLTRB(10, 50, 10, 50),
+            ),
           ],
         ));
   }
