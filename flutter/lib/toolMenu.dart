@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'BOPState.dart';
-import 'print.dart';
 
 class ToolMenuInh extends InheritedWidget {
   final BOPState state;
@@ -51,19 +51,21 @@ class ToolMenu extends StatelessWidget {
         child: Column(
           children: [
             TextField(
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               controller: state.numWalletsController,
-              maxLength: 3,
+              maxLength: 2,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: "num wallet",
+                labelText: "wallets (max 10)",
               ),
             ),
             TextField(
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               controller: state.walletsPerPageController,
-              maxLength: 3,
+              maxLength: 1,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: "wallet per page",
+                labelText: "wallets per page",
               ),
             ),
             Container(

@@ -10,8 +10,9 @@ class PDFGenerator {
   static Future<void> toPDF({Art art, List<Wallet> wallets, int walletspp}) async {
     final doc = pdfw.Document();
     pdf.PdfPageFormat ppf = pdf.PdfPageFormat.a4;
-    double wMaxH = ppf.availableHeight / walletspp;
+    double wMaxH = (ppf.availableHeight / walletspp) - (1 * walletspp);
     int numPages = (wallets.length / walletspp).ceil();
+    print("Page available height: " + ppf.availableHeight.toString());
     print("Wallet per page: " + walletspp.toString());
     print("Num pages: " + numPages.toString());
     print("Wallet max Height: " + wMaxH.toString());
@@ -43,11 +44,9 @@ class PDFGenerator {
     double maxHeight,
   }) async {
     List<pdfw.Widget> els = List<pdfw.Widget>.empty(growable: true);
-
-    double scaleW = (maxWidth - 0.5) / art.width;
-    double scaleH = (maxHeight - 0.5) / art.height;
-    print("ScaleW: " + scaleW.toString());
-    print("ScaleH: " + scaleH.toString());
+    double distancing = 4;
+    double scaleW = maxWidth / art.width;
+    double scaleH = maxHeight / art.height;
     double scale = math.min(scaleW, scaleH);
 
     NetworkImage artImage = NetworkImage(art.url);
@@ -95,11 +94,15 @@ class PDFGenerator {
         scale: scale,
       ));
     }
-    return pdfw.Stack(
-      children: els,
-      fit: pdfw.StackFit.expand,
-    );
-    // return els.last;
+    return pdfw.Container(
+        decoration: pdfw.BoxDecoration(
+          border: pdfw.Border.all(width: 1, color: pdf.PdfColors.grey400),
+        ),
+        padding: pdfw.EdgeInsets.all(distancing),
+        child: pdfw.Stack(
+          children: els,
+          fit: pdfw.StackFit.expand,
+        ));
   }
 
   static pdfw.Widget getPDFWalletElement({ArtElement ael, double scale, pdfw.ImageProvider image}) {

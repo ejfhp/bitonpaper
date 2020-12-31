@@ -18,8 +18,8 @@ class BOPState extends State<BOP> {
 
   BOPState() {
     this._selected = this._defaultArt;
-    this.numWalletsController = TextEditingController.fromValue(TextEditingValue(text: "2"));
-    this.walletsPerPageController = TextEditingController.fromValue(TextEditingValue(text: "2"));
+    this.numWalletsController = TextEditingController();
+    this.walletsPerPageController = TextEditingController();
     retrieveArts(this, "./img");
   }
 
@@ -30,16 +30,23 @@ class BOPState extends State<BOP> {
 
   void setSelected(String sel) {
     _selected = sel;
-    refreshWallet(1);
+    refreshWallet();
   }
 
-  Future<void> refreshWallet(int numWallets) async {
+  Future<void> refreshWallet() async {
     Art art = this.getSelectedArt();
     if (art == null) {
       return;
     }
     this._wallets.clear();
     this._qrs.clear();
+    await addWallet(1);
+    setState(() {});
+  }
+
+  Future<void> addWallet(int numWallets) async {
+    print("addWallet: " + numWallets.toString());
+    Art art = this.getSelectedArt();
     for (int i = 0; i < numWallets; i++) {
       Wallet w = Wallet();
       w.adImg = await Rasterizer.toImg(
@@ -50,15 +57,26 @@ class BOPState extends State<BOP> {
       w.adQr = await Rasterizer.toQrCodeImg(text: w.publicAddress, size: art.pkQr.size, fgColor: art.pkQr.fgcolor, bgColor: art.pkQr.bgcolor);
       this._wallets.add(w);
     }
-    setState(() {});
   }
 
   Future<void> printWallets() async {
-    int numWallets = int.parse(numWalletsController.text);
-    int walletsPP = int.parse(walletsPerPageController.text);
-    print("Num wallets to print:" + numWallets.toString());
-    print("Num wallets per page:" + walletsPP.toString());
-    await refreshWallet(numWallets);
+    String numWTxt = numWalletsController.text;
+    String wPpTxt = walletsPerPageController.text;
+    if (numWTxt.isEmpty || wPpTxt.isEmpty) {
+      return;
+    }
+    int numWallets = int.parse(numWTxt);
+    int walletsPP = int.parse(wPpTxt);
+    if (numWallets < 1 || numWallets > 10) {
+      numWalletsController.text = "2";
+      return;
+    }
+    if (walletsPP < 1) {
+      walletsPerPageController.text = "2";
+      return;
+    }
+    int missing = numWallets - this._wallets.length;
+    await addWallet(missing);
     await PDFGenerator.toPDF(art: this.getSelectedArt(), wallets: _wallets, walletspp: walletsPP);
   }
 
@@ -86,7 +104,7 @@ class BOPState extends State<BOP> {
       _arts.putIfAbsent(name, () => art);
     });
     if (name == _defaultArt) {
-      this.refreshWallet(1);
+      this.refreshWallet();
     }
   }
 }
