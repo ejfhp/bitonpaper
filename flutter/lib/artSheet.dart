@@ -26,7 +26,10 @@ class WalletSheet extends StatelessWidget {
     var art = appState.getSelectedArt();
     var w = appState.getWallet();
     if (art == null || w == null) {
-      return Text("Loading...");
+      return Container(
+        alignment: Alignment.center,
+        child: Text("Loading..."),
+      );
     }
     var pageSize = MediaQuery.of(context).size;
     Paper p = Paper(
@@ -138,8 +141,7 @@ class Paper extends StatelessWidget {
     );
   }
 
-  Widget getPaperElement(
-      {double top, double left, double width, double height, double rotation, Widget child, double scale}) {
+  Widget getPaperElement({double top, double left, double width, double height, double rotation, Widget child, double scale}) {
     double angle = (rotation / 180) * math.pi;
     return Positioned(
       child: Transform.rotate(
