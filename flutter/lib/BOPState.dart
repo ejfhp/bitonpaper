@@ -50,11 +50,11 @@ class BOPState extends State<BOP> {
     for (int i = 0; i < numWallets; i++) {
       Wallet w = Wallet();
       w.adImg = await Rasterizer.toImg(
-          text: w.publicAddress, width: art.ad.width, height: art.ad.height, fontSize: art.ad.size, fgColor: art.pkQr.fgcolor, bgColor: art.pkQr.bgcolor);
+          text: w.publicAddress, width: art.ad.width, height: art.ad.height, fontSize: art.ad.size, fgColor: art.ad.fgcolor, bgColor: art.ad.bgcolor);
       w.pkImg = await Rasterizer.toImg(
-          text: w.privateKey, width: art.pk.width, height: art.pk.height, fontSize: art.pk.size, fgColor: art.pkQr.fgcolor, bgColor: art.pkQr.bgcolor);
+          text: w.privateKey, width: art.pk.width, height: art.pk.height, fontSize: art.pk.size, fgColor: art.pk.fgcolor, bgColor: art.pk.bgcolor);
       w.pkQr = await Rasterizer.toQrCodeImg(text: w.privateKey, size: art.pkQr.size, fgColor: art.pkQr.fgcolor, bgColor: art.pkQr.bgcolor);
-      w.adQr = await Rasterizer.toQrCodeImg(text: w.publicAddress, size: art.pkQr.size, fgColor: art.pkQr.fgcolor, bgColor: art.pkQr.bgcolor);
+      w.adQr = await Rasterizer.toQrCodeImg(text: w.publicAddress, size: art.adQr.size, fgColor: art.adQr.fgcolor, bgColor: art.adQr.bgcolor);
       this._wallets.add(w);
     }
   }

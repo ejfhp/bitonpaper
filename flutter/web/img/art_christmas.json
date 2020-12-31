@@ -10,15 +10,19 @@
         "width": 200,
         "height": 200,
         "size": 200,
+        "fgcolor": "FFFFFFFF",
+        "bgcolor": "00FFFFFF",
         "rotation": 0
     },
     "privkey": {
         "visible": true,
-        "top": 370,
-        "left": 570,
+        "top": 410,
+        "left": 555,
         "width": 400,
-        "height": 20,
-        "size": 10,
+        "height": 12,
+        "size": 12,
+        "fgcolor": "FF000000",
+        "bgcolor": "00FFFFFF",
         "rotation": -90
     },
     "address_qr": {
@@ -28,15 +32,19 @@
         "width": 180,
         "height": 180,
         "size": 180,
+        "fgcolor": "FFFFFFFF",
+        "bgcolor": "00FFFFFF",
         "rotation": 0
     },
     "address": {
         "visible": true,
-        "top": 370,
+        "top": 410,
         "left": 240,
-        "width": 300,
-        "height": 20,
-        "size": 15,
+        "width": 400,
+        "height": 12,
+        "size": 12,
+        "fgcolor": "FF000000",
+        "bgcolor": "00FFFFFF",
         "rotation": -90
     }
 }
