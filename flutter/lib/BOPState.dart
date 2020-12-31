@@ -13,11 +13,13 @@ class BOPState extends State<BOP> {
   Map<String, Uint8List> _qrs = Map<String, Uint8List>();
   String _defaultArt = "bitcoin";
   String _selected;
-  TextEditingController numWalletFieldController;
+  TextEditingController numWalletsController;
+  TextEditingController walletsPerPageController;
 
   BOPState() {
     this._selected = this._defaultArt;
-    this.numWalletFieldController = TextEditingController.fromValue(TextEditingValue(text: "3"));
+    this.numWalletsController = TextEditingController.fromValue(TextEditingValue(text: "2"));
+    this.walletsPerPageController = TextEditingController.fromValue(TextEditingValue(text: "2"));
     retrieveArts(this, "./img");
   }
 
@@ -52,9 +54,12 @@ class BOPState extends State<BOP> {
   }
 
   Future<void> printWallets() async {
-    int numWallets = int.parse(numWalletFieldController.text);
+    int numWallets = int.parse(numWalletsController.text);
+    int walletsPP = int.parse(walletsPerPageController.text);
+    print("Num wallets to print:" + numWallets.toString());
+    print("Num wallets per page:" + walletsPP.toString());
     await refreshWallet(numWallets);
-    await PDFGenerator.toPDF(art: this.getSelectedArt(), wallets: _wallets);
+    await PDFGenerator.toPDF(art: this.getSelectedArt(), wallets: _wallets, walletspp: walletsPP);
   }
 
   Map<String, Art> getArts() {
