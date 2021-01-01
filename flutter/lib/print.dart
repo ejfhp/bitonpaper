@@ -10,7 +10,8 @@ class PDFGenerator {
   static Future<void> toPDF({Art art, List<Wallet> wallets, int walletspp}) async {
     final doc = pdfw.Document();
     pdf.PdfPageFormat ppf = pdf.PdfPageFormat.a4;
-    double wMaxH = (ppf.availableHeight / walletspp) - (1 * walletspp);
+
+    double wMaxH = (ppf.availableHeight / walletspp);
     int numPages = (wallets.length / walletspp).ceil();
     print("Page available height: " + ppf.availableHeight.toString());
     print("Wallet per page: " + walletspp.toString());
@@ -47,7 +48,8 @@ class PDFGenerator {
     double distancing = 4;
     double scaleW = maxWidth / art.width;
     double scaleH = maxHeight / art.height;
-    double scale = math.min(scaleW, scaleH);
+    double scale = math.min(scaleW, scaleH) * 0.9;
+    // print("Scales: W:" + scaleW.toString() + " H:" + scaleH.toString() + " S:" + scale.toString());
 
     NetworkImage artImage = NetworkImage(art.url);
     final artImageProvider = await flutterImageProvider(artImage);

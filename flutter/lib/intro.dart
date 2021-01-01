@@ -24,6 +24,7 @@ class Intro extends StatelessWidget {
                     minHeight: constraints.maxHeight,
                   ),
                   child: Container(
+                    color: Colors.blueGrey,
                     child: buildIntro(context, constraints),
                     alignment: Alignment.topCenter,
                   )));
@@ -59,7 +60,7 @@ class Intro extends StatelessWidget {
             },
             color: Colors.blueGrey,
             padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-            child: const Text('Continue', style: TextStyle(fontSize: 20, color: Colors.amber)),
+            child: const Text('Continue', style: TextStyle(fontSize: 30, color: Colors.amber)),
           ),
           padding: EdgeInsets.fromLTRB(10, 50, 10, 50),
         ),
@@ -70,7 +71,7 @@ class Intro extends StatelessWidget {
 
   Widget presentationText(context) {
     return RichText(
-      text: TextSpan(style: TextStyle(fontSize: 12, fontFamily: "Roboto", color: Colors.black87), children: <TextSpan>[
+      text: TextSpan(style: TextStyle(fontSize: 12, fontFamily: "Roboto", color: Colors.white), children: <TextSpan>[
         TextSpan(children: <TextSpan>[
           TextSpan(text: 'BOP ', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber, fontSize: 18)),
           TextSpan(text: 'let you build Paper Wallets for '),
@@ -86,17 +87,15 @@ class Intro extends StatelessWidget {
           TextSpan(text: 'Click Continue ath the bottom of this page.\n'),
           TextSpan(text: '2 - ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
           TextSpan(text: 'Unplug the network. '),
-          TextSpan(text: '\u20F0\n', style: TextStyle(color: Colors.red)),
+          TextSpan(text: '\u20F0\n', style: TextStyle(color: Colors.black)),
           TextSpan(text: '3 - ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
           TextSpan(text: 'Select an art from the right menu.\n'),
           TextSpan(text: '4 - ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
           TextSpan(text: 'Export as many wallet as you want from the right menu.\n'),
           TextSpan(text: '5 - ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
           TextSpan(text: 'When done close the browser and restart your computer. '),
-          TextSpan(text: '\u20F0\n', style: TextStyle(color: Colors.red)),
-          TextSpan(
-              text: ' \u20F0 for the paranoid about security\n',
-              style: TextStyle(fontStyle: FontStyle.italic, fontSize: 10, color: Colors.red)),
+          TextSpan(text: '\u20F0\n', style: TextStyle(color: Colors.black)),
+          TextSpan(text: ' \u20F0 for the paranoid about security\n', style: TextStyle(fontStyle: FontStyle.italic, fontSize: 10, color: Colors.black)),
           TextSpan(text: '\n'),
         ]),
         TextSpan(children: <TextSpan>[
@@ -118,14 +117,24 @@ class Intro extends StatelessWidget {
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 launch('https://github.com/ejfhp/bitonpaper');
-                print('https://github.com/ejfhp/bitonpaper');
+              },
+          ),
+        ]),
+        TextSpan(text: '\n'),
+        TextSpan(text: '\n'),
+        TextSpan(children: <TextSpan>[
+          TextSpan(text: 'Follow me on Twitter: '),
+          TextSpan(
+            text: "https://twitter.com/boprun.",
+            style: TextStyle(fontStyle: FontStyle.italic, decoration: TextDecoration.underline),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launch('https://twitter.com/boprun');
               },
           ),
         ]),
         TextSpan(children: <TextSpan>[
-          TextSpan(
-              text:
-                  '\n\nThis website uses only Google Analytics cookies. No information is shared with any other third party service.\n'),
+          TextSpan(text: '\n\nThis website uses only Google Analytics cookies. No information is shared with any other third party service.\n'),
           TextSpan(text: '\n'),
         ]),
       ]),

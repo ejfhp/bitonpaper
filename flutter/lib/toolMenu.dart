@@ -29,6 +29,7 @@ class ToolMenu extends StatelessWidget {
         "Tools",
         textAlign: TextAlign.right,
         style: TextStyle(
+          color: Colors.amber,
           fontFamily: "Roboto",
           fontSize: 50,
           fontWeight: FontWeight.bold,
@@ -67,6 +68,9 @@ class ToolMenu extends StatelessWidget {
                 border: OutlineInputBorder(),
                 labelText: "wallets per page",
               ),
+            ),
+            RichText(
+              text: TextSpan(text: "Wallets generation takes a while...", style: TextStyle(color: Colors.black54)),
             ),
             Container(
               child: RaisedButton(
