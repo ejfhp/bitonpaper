@@ -29,6 +29,7 @@ class Menu extends StatelessWidget {
         "Arts",
         textAlign: TextAlign.left,
         style: TextStyle(
+          color: Colors.amber,
           fontFamily: "Roboto",
           fontSize: 50,
           fontWeight: FontWeight.bold,

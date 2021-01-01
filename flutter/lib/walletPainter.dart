@@ -18,16 +18,8 @@ class TextImage extends CustomPainter {
     ui.Paint p = ui.Paint();
     p.color = this.bgColor;
     canvas.drawRect(ui.Rect.fromLTRB(0, 0, size.width, size.height), p);
-    TextSpan span = new TextSpan(
-        style: new TextStyle(
-            color: this.fontColor,
-            fontSize: this.fontSize,
-            fontFamily: this.fontFamily),
-        text: this.text);
-    TextPainter tp = new TextPainter(
-        text: span,
-        textAlign: TextAlign.left,
-        textDirection: TextDirection.ltr);
+    TextSpan span = new TextSpan(style: new TextStyle(color: this.fontColor, fontSize: this.fontSize, fontFamily: this.fontFamily), text: this.text);
+    TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.left, textDirection: TextDirection.ltr);
     tp.layout();
     tp.paint(canvas, new Offset(0, 0));
   }
@@ -39,12 +31,7 @@ class TextImage extends CustomPainter {
 }
 
 class Rasterizer {
-
-  static Future<Uint8List> toQrCodeImg(
-      {String text,
-      double size,
-      ui.Color fgColor = Colors.black,
-      ui.Color bgColor = Colors.white}) async {
+  static Future<Uint8List> toQrCodeImg({String text, double size, ui.Color fgColor = Colors.black, ui.Color bgColor = Colors.white}) async {
     QrPainter qr = QrPainter(
       data: text,
       color: fgColor,
@@ -55,7 +42,7 @@ class Rasterizer {
     ByteData qrBytes = await qr.toImageData(size);
     return Uint8List.sublistView(qrBytes);
   }
-  
+
   static Future<Uint8List> toImg(
       {String text,
       double width,
@@ -64,7 +51,7 @@ class Rasterizer {
       String fontFamily = "Roboto",
       ui.Color fgColor = Colors.black,
       ui.Color bgColor = Colors.transparent}) async {
-        TextImage txtImage = TextImage();
+    TextImage txtImage = TextImage();
     txtImage.text = text;
     txtImage.fontSize = fontSize;
     txtImage.fontFamily = fontFamily;
