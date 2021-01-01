@@ -44,9 +44,9 @@ class Menu extends StatelessWidget {
     arts.forEach((k, v) {
       Widget t;
       if (k == selected.name) {
-        t = Text(k, style: TextStyle(fontWeight: FontWeight.bold));
+        t = Text(k, style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Roboto", color: Colors.black54));
       } else {
-        t = Text(k);
+        t = Text(k, style: TextStyle(fontFamily: "Roboto", color: Colors.black54));
       }
       var i = Image.network(v.url);
       ListTile tI = ListTile(

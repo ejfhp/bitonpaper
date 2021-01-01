@@ -11,7 +11,7 @@ class BOPState extends State<BOP> {
   Map<String, Art> _arts = Map<String, Art>();
   List<Wallet> _wallets = List<Wallet>.empty(growable: true);
   Map<String, Uint8List> _qrs = Map<String, Uint8List>();
-  String _defaultArt = "bitcoin";
+  String _defaultArt = "Bitcoin";
   String _selected;
   TextEditingController numWalletsController;
   TextEditingController walletsPerPageController;
