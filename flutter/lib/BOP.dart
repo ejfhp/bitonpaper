@@ -40,10 +40,10 @@ class BOPUI extends StatelessWidget {
               child: Container(
                 height: this.state.headerHeight,
                 color: Colors.blueGrey,
-                padding: EdgeInsets.all(0),
+                padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
                 child: Image.network(
                   "./icons/bop_long.png",
-                  fit: BoxFit.none,
+                  fit: BoxFit.contain,
                 ),
               ))),
     );
