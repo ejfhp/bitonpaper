@@ -3,12 +3,12 @@ import 'dart:typed_data';
 import 'art.dart';
 import 'wallet.dart';
 import 'package:flutter/material.dart';
+import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart' as pdf;
 import 'package:pdf/widgets.dart' as pdfw;
-import 'package:printing/printing.dart';
 
 class PDFGenerator {
-  static Future<void> toPDF({Art art, List<Wallet> wallets, int walletspp}) async {
+  static Future<Uint8List> toPDF({Art art, List<Wallet> wallets, int walletspp}) async {
     print("toPDF: " + DateTime.now().toUtc().toIso8601String());
     final doc = pdfw.Document();
     pdf.PdfPageFormat ppf = pdf.PdfPageFormat.a4;
@@ -38,9 +38,7 @@ class PDFGenerator {
       );
     }
     print("doc.save: " + DateTime.now().toUtc().toIso8601String());
-    Uint8List printedPdf = doc.save();
-    await Printing.layoutPdf(onLayout: (format) async => printedPdf);
-    print("printing: " + DateTime.now().toUtc().toIso8601String());
+    return doc.save();
   }
 
   static Future<pdfw.Widget> makePDFWallet({

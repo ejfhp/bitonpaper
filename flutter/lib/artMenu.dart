@@ -59,7 +59,7 @@ class ArtMenu extends StatelessWidget {
         onTap: () {
           appState.setSelected(k);
           //Close the drawer when user selects.
-          Navigator.pop(context);
+          // Navigator.pop(context);
         },
       );
       artsList.add(tI);
