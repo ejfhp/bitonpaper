@@ -4,25 +4,25 @@ import 'wallet.dart';
 import 'art.dart';
 import 'dart:math' as math;
 
-class Sheet extends InheritedWidget {
+class PaperSheetInh extends InheritedWidget {
   final BOPState state;
 
-  Sheet({Key key, Widget child, this.state}) : super(key: key, child: child);
+  PaperSheetInh({Key key, Widget child, this.state}) : super(key: key, child: child);
 
   @override
-  bool updateShouldNotify(covariant Sheet oldWidget) {
+  bool updateShouldNotify(covariant PaperSheetInh oldWidget) {
     return oldWidget.state.getSelectedArt() != state.getSelectedArt();
   }
 
-  static Sheet of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<Sheet>();
+  static PaperSheetInh of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<PaperSheetInh>();
   }
 }
 
-class WalletSheet extends StatelessWidget {
+class PaperSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    BOPState appState = Sheet.of(context).state;
+    BOPState appState = PaperSheetInh.of(context).state;
     var art = appState.getSelectedArt();
     var w = appState.getWallet();
     if (art == null || w == null) {
@@ -40,12 +40,13 @@ class WalletSheet extends StatelessWidget {
     return SingleChildScrollView(
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(width: 1, color: Colors.black45),
+          border: Border.all(width: 0, color: Colors.black45),
         ),
         padding: EdgeInsets.all(20),
         child: p,
         alignment: Alignment.center,
-        height: pageSize.height - 68, //- (header + bottom bar)
+        // height: pageSize.height - 68, //- (header + bottom bar)
+        height: 5000, //- (header + bottom bar)
       ),
     );
   }

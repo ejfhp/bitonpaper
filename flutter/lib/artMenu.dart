@@ -2,43 +2,47 @@ import 'package:flutter/material.dart';
 import 'BOPState.dart';
 import 'art.dart';
 
-class MenuInh extends InheritedWidget {
+class ArtMenuInh extends InheritedWidget {
   final BOPState state;
-  MenuInh({Widget child, this.state}) : super(child: child);
+  ArtMenuInh({Widget child, this.state}) : super(child: child);
 
   @override
-  bool updateShouldNotify(covariant MenuInh oldWidget) {
+  bool updateShouldNotify(covariant ArtMenuInh oldWidget) {
     return oldWidget.state.getSelectedArt() != state.getSelectedArt();
   }
 
-  static MenuInh of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<MenuInh>();
+  static ArtMenuInh of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<ArtMenuInh>();
   }
 }
 
-class Menu extends StatelessWidget {
+class ArtMenu extends StatelessWidget {
   Widget build(BuildContext context) {
-    BOPState appState = MenuInh.of(context).state;
+    BOPState appState = ArtMenuInh.of(context).state;
     List<Widget> artsList = new List<Widget>.empty(growable: true);
-    DrawerHeader header = DrawerHeader(
-        child: Container(
-      color: Colors.blueGrey,
-      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-      alignment: Alignment.bottomLeft,
-      child: Text(
-        "Arts",
-        textAlign: TextAlign.left,
-        style: TextStyle(
-          color: Colors.amber,
-          fontFamily: "Roboto",
-          fontSize: 50,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 2,
-        ),
-      ),
-    ));
+    Container headerContainer = Container(
+        height: appState.headerHeight,
+        child: DrawerHeader(
+            padding: EdgeInsets.zero,
+            margin: EdgeInsets.zero,
+            child: Container(
+              color: Colors.blueGrey,
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                "Arts",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  color: Colors.amber,
+                  fontFamily: "Roboto",
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                ),
+              ),
+            )));
 
-    artsList.add(header);
+    artsList.add(headerContainer);
     Map<String, Art> arts = appState.getArts();
     Art selected = appState.getSelectedArt();
     arts.forEach((k, v) {
@@ -60,8 +64,12 @@ class Menu extends StatelessWidget {
       );
       artsList.add(tI);
     });
-    ListView list = ListView(children: artsList);
+    ListView list = ListView(
+      children: artsList,
+      padding: EdgeInsets.zero,
+    );
     return Drawer(
+      elevation: 0,
       child: list,
     );
   }

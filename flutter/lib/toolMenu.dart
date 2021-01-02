@@ -20,28 +20,35 @@ class ToolMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     BOPState state = ToolMenuInh.of(context).state;
     List<Widget> toolsList = new List<Widget>.empty(growable: true);
-    DrawerHeader header = DrawerHeader(
-        child: Container(
-      color: Colors.blueGrey,
-      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-      alignment: Alignment.bottomRight,
-      child: Text(
-        "Tools",
-        textAlign: TextAlign.right,
-        style: TextStyle(
-          color: Colors.amber,
-          fontFamily: "Roboto",
-          fontSize: 50,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 2,
-        ),
-      ),
-    ));
-    toolsList.add(header);
+    Container containerHeader = Container(
+      height: state.headerHeight,
+      padding: EdgeInsets.all(0),
+      child: DrawerHeader(
+          padding: EdgeInsets.zero,
+          margin: EdgeInsets.zero,
+          child: Container(
+            color: Colors.blueGrey,
+            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+            alignment: Alignment.bottomRight,
+            child: Text(
+              "Tools",
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: Colors.amber,
+                fontFamily: "Roboto",
+                fontSize: 50,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2,
+              ),
+            ),
+          )),
+    );
+    toolsList.add(containerHeader);
     toolsList.add(printBox(context: context, state: state));
     ListView commands = ListView(children: toolsList);
 
     return Drawer(
+      elevation: 0,
       child: commands,
     );
   }
