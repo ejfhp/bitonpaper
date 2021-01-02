@@ -8,18 +8,21 @@ import 'BOP.dart';
 import 'package:flutter/material.dart';
 
 class BOPState extends State<BOP> {
-  Map<String, Art> _arts = Map<String, Art>();
-  List<Wallet> _wallets = List<Wallet>.empty(growable: true);
-  Map<String, Uint8List> _qrs = Map<String, Uint8List>();
+  final double artWidth = 250;
+  final double toolWidth = 250;
+  final double paperWidth = 840;
+  final double headerHeight = 108;
+
+  final Map<String, Art> _arts = Map<String, Art>();
+  final List<Wallet> _wallets = List<Wallet>.empty(growable: true);
+  final Map<String, Uint8List> _qrs = Map<String, Uint8List>();
+  final TextEditingController numWalletsController = TextEditingController();
+  final TextEditingController walletsPerPageController = TextEditingController();
   String _defaultArt = "Bitcoin";
   String _selected;
-  TextEditingController numWalletsController;
-  TextEditingController walletsPerPageController;
 
   BOPState() {
     this._selected = this._defaultArt;
-    this.numWalletsController = TextEditingController();
-    this.walletsPerPageController = TextEditingController();
     retrieveArts(this, "./img");
   }
 
