@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
 import 'art.dart';
 import 'wallet.dart';
 import 'package:flutter/material.dart';
@@ -8,16 +9,17 @@ import 'package:printing/printing.dart';
 
 class PDFGenerator {
   static Future<void> toPDF({Art art, List<Wallet> wallets, int walletspp}) async {
+    print("toPDF: " + DateTime.now().toUtc().toIso8601String());
     final doc = pdfw.Document();
     pdf.PdfPageFormat ppf = pdf.PdfPageFormat.a4;
 
     double wMaxH = (ppf.availableHeight / walletspp);
     int numPages = (wallets.length / walletspp).ceil();
-    print("Page available height: " + ppf.availableHeight.toString());
-    print("Wallet per page: " + walletspp.toString());
-    print("Num pages: " + numPages.toString());
-    print("Wallet max Height: " + wMaxH.toString());
-    print("Wallets length: " + wallets.length.toString());
+    // print("Page available height: " + ppf.availableHeight.toString());
+    // print("Wallet per page: " + walletspp.toString());
+    // print("Num pages: " + numPages.toString());
+    // print("Wallet max Height: " + wMaxH.toString());
+    // print("Wallets length: " + wallets.length.toString());
     int wi = 0;
     int wl = wallets.length;
     for (int p = 0; p < numPages; p++) {
@@ -35,7 +37,10 @@ class PDFGenerator {
         ),
       );
     }
-    await Printing.layoutPdf(onLayout: (format) async => doc.save());
+    print("doc.save: " + DateTime.now().toUtc().toIso8601String());
+    Uint8List printedPdf = doc.save();
+    await Printing.layoutPdf(onLayout: (format) async => printedPdf);
+    print("printing: " + DateTime.now().toUtc().toIso8601String());
   }
 
   static Future<pdfw.Widget> makePDFWallet({

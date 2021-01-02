@@ -8,7 +8,7 @@ class ToolMenuInh extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant ToolMenuInh oldWidget) {
-    return oldWidget.state.getSelectedArt() != state.getSelectedArt();
+    return oldWidget.state.printing != state.printing;
   }
 
   static ToolMenuInh of(BuildContext context) {
@@ -76,12 +76,11 @@ class ToolMenu extends StatelessWidget {
                 labelText: "wallets per page",
               ),
             ),
-            RichText(
-              text: TextSpan(text: "Wallets generation takes a while...", style: TextStyle(color: Colors.black54)),
-            ),
+            if (state.printing) RichText(text: TextSpan(text: "Be patient, wallets generation takes a while...", style: TextStyle(color: Colors.black54))),
             Container(
               child: RaisedButton(
                 onPressed: () {
+                  FocusScope.of(context).requestFocus(new FocusNode());
                   state.printWallets();
                 },
                 color: Colors.blueGrey,
