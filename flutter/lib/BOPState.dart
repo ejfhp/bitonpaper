@@ -20,6 +20,7 @@ class BOPState extends State<BOP> {
   final TextEditingController walletsPerPageController = TextEditingController();
   String _defaultArt = "Bitcoin";
   String _selected;
+  bool printing = false;
 
   BOPState() {
     this._selected = this._defaultArt;
@@ -34,6 +35,12 @@ class BOPState extends State<BOP> {
   void setSelected(String sel) {
     _selected = sel;
     refreshWallet();
+  }
+
+  void setPrinting(bool printing) {
+    setState(() {
+      this.printing = printing;
+    });
   }
 
   Future<void> refreshWallet() async {
@@ -63,6 +70,7 @@ class BOPState extends State<BOP> {
   }
 
   Future<void> printWallets() async {
+    this.setPrinting(true);
     String numWTxt = numWalletsController.text;
     String wPpTxt = walletsPerPageController.text;
     if (numWTxt.isEmpty || wPpTxt.isEmpty) {
@@ -81,6 +89,7 @@ class BOPState extends State<BOP> {
     int missing = numWallets - this._wallets.length;
     await addWallet(missing);
     await PDFGenerator.toPDF(art: this.getSelectedArt(), wallets: _wallets, walletspp: walletsPP);
+    this.setPrinting(false);
   }
 
   Map<String, Art> getArts() {
