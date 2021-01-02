@@ -1,6 +1,8 @@
 import 'dart:typed_data';
+import 'package:printing/printing.dart';
 import 'package:bitonpaper/print.dart';
 import 'package:bitonpaper/walletPainter.dart';
+import 'dart:html' as html;
 
 import 'art.dart';
 import 'wallet.dart';
@@ -20,7 +22,8 @@ class BOPState extends State<BOP> {
   final TextEditingController walletsPerPageController = TextEditingController();
   String _defaultArt = "Bitcoin";
   String _selected;
-  bool printing = false;
+  bool _printing = false;
+  Uint8List lastGeneratedPDF;
 
   BOPState() {
     this._selected = this._defaultArt;
@@ -32,15 +35,14 @@ class BOPState extends State<BOP> {
     return BOPUI(this);
   }
 
-  void setSelected(String sel) {
+  Future<void> setSelected(String sel) async {
     _selected = sel;
-    refreshWallet();
+    await refreshWallet();
   }
 
   void setPrinting(bool printing) {
-    setState(() {
-      this.printing = printing;
-    });
+    this._printing = printing;
+    setState(() {});
   }
 
   Future<void> refreshWallet() async {
@@ -48,6 +50,7 @@ class BOPState extends State<BOP> {
     if (art == null) {
       return;
     }
+
     this._wallets.clear();
     this._qrs.clear();
     await addWallet(1);
@@ -88,8 +91,23 @@ class BOPState extends State<BOP> {
     }
     int missing = numWallets - this._wallets.length;
     await addWallet(missing);
-    await PDFGenerator.toPDF(art: this.getSelectedArt(), wallets: _wallets, walletspp: walletsPP);
+    this.lastGeneratedPDF = await PDFGenerator.toPDF(art: this.getSelectedArt(), wallets: _wallets, walletspp: walletsPP);
+
+    await Printing.layoutPdf(onLayout: (format) async => this.lastGeneratedPDF);
     this.setPrinting(false);
+  }
+
+  Future<void> savePDF() async {
+    final blob = html.Blob([this.lastGeneratedPDF], "application/pdf");
+    final url = html.Url.createObjectUrlFromBlob(blob);
+    final anchor = html.document.createElement('a') as html.AnchorElement
+      ..href = url
+      ..style.display = 'none'
+      ..download = 'wallets.pdf';
+    html.document.body.children.add(anchor);
+    anchor.click();
+    html.document.body.children.remove(anchor);
+    html.Url.revokeObjectUrl(url);
   }
 
   Map<String, Art> getArts() {
@@ -109,6 +127,10 @@ class BOPState extends State<BOP> {
 
   List<Wallet> getWallets() {
     return this._wallets;
+  }
+
+  bool isPrinting() {
+    return this._printing;
   }
 
   void addArt(String name, Art art) async {
