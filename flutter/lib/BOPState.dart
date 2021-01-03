@@ -12,8 +12,7 @@ import 'package:flutter/material.dart';
 class BOPState extends State<BOP> {
   final Map<String, Art> _arts = Map<String, Art>();
   final List<Wallet> _wallets = List<Wallet>.empty(growable: true);
-  final Map<String, Uint8List> _qrs = Map<String, Uint8List>();
-  final TextEditingController numWalletsController = TextEditingController();
+  final TextEditingController numWalletsController = TextEditingController.fromValue(TextEditingValue(text: "2"));
   final TextEditingController walletsPerPageController = TextEditingController();
   String _defaultArt = "Bitcoin";
   String _selected;
@@ -23,6 +22,7 @@ class BOPState extends State<BOP> {
   BOPState() {
     this._selected = this._defaultArt;
     retrieveArts(this, "./img");
+    regenerateWallets();
   }
 
   @override
@@ -30,66 +30,67 @@ class BOPState extends State<BOP> {
     return BOPUI(this);
   }
 
-  Future<void> setSelected(String sel) async {
+  Future<void> selectArt(String sel) async {
+    print("selectArt" + sel);
     _selected = sel;
-    await refreshWallet();
+    await regenerateWalletsImg();
   }
 
-  void setPrinting(bool printing) {
+  void setPrintingInProgress(bool printing) {
     this._printing = printing;
     setState(() {});
   }
 
-  Future<void> refreshWallet() async {
+  Future<void> regenerateWallets() async {
+    print("regenerateWallets");
+    String numWTxt = numWalletsController.text;
+    if (numWTxt.isEmpty) {
+      return;
+    }
+    int numWallets = int.parse(numWTxt);
+    if (numWallets < 1 || numWallets > 10) {
+      numWalletsController.text = "2";
+      return;
+    }
+    this._wallets.clear();
+    for (int i = 0; i < numWallets; i++) {
+      this._wallets.add(Wallet());
+    }
+  }
+
+  Future<void> regenerateWalletsImg() async {
+    print("regenerateWalletsImg");
     Art art = this.getSelectedArt();
     if (art == null) {
       return;
     }
-
-    this._wallets.clear();
-    this._qrs.clear();
-    await addWallet(1);
-    setState(() {});
-  }
-
-  Future<void> addWallet(int numWallets) async {
-    print("addWallet: " + numWallets.toString());
-    Art art = this.getSelectedArt();
-    for (int i = 0; i < numWallets; i++) {
-      Wallet w = Wallet();
+    for (int i = 0; i < this._wallets.length; i++) {
+      Wallet w = this._wallets[i];
       w.adImg = await Rasterizer.toImg(
           text: w.publicAddress, width: art.ad.width, height: art.ad.height, fontSize: art.ad.size, fgColor: art.ad.fgcolor, bgColor: art.ad.bgcolor);
       w.pkImg = await Rasterizer.toImg(
           text: w.privateKey, width: art.pk.width, height: art.pk.height, fontSize: art.pk.size, fgColor: art.pk.fgcolor, bgColor: art.pk.bgcolor);
       w.pkQr = await Rasterizer.toQrCodeImg(text: w.privateKey, size: art.pkQr.size, fgColor: art.pkQr.fgcolor, bgColor: art.pkQr.bgcolor);
       w.adQr = await Rasterizer.toQrCodeImg(text: w.publicAddress, size: art.adQr.size, fgColor: art.adQr.fgcolor, bgColor: art.adQr.bgcolor);
-      this._wallets.add(w);
     }
+    setState(() {});
   }
 
   Future<void> printWallets() async {
-    this.setPrinting(true);
-    String numWTxt = numWalletsController.text;
+    this.setPrintingInProgress(true);
     String wPpTxt = walletsPerPageController.text;
-    if (numWTxt.isEmpty || wPpTxt.isEmpty) {
+    if (wPpTxt.isEmpty) {
       return;
     }
-    int numWallets = int.parse(numWTxt);
     int walletsPP = int.parse(wPpTxt);
-    if (numWallets < 1 || numWallets > 10) {
-      numWalletsController.text = "2";
-      return;
-    }
     if (walletsPP < 1) {
       walletsPerPageController.text = "2";
       return;
     }
-    int missing = numWallets - this._wallets.length;
-    await addWallet(missing);
     this.lastGeneratedPDF = await PDFGenerator.toPDF(art: this.getSelectedArt(), wallets: _wallets, walletspp: walletsPP);
 
     await Printing.layoutPdf(onLayout: (format) async => this.lastGeneratedPDF);
-    this.setPrinting(false);
+    this.setPrintingInProgress(false);
   }
 
   Future<void> savePDF() async {
@@ -128,12 +129,24 @@ class BOPState extends State<BOP> {
     return this._printing;
   }
 
+  bool areWalletsReady() {
+    if (this._wallets.isEmpty) {
+      return false;
+    }
+    for (int i = 0; i < this._wallets.length; i++) {
+      if (this._wallets[i].isReady() == false) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   void addArt(String name, Art art) async {
     setState(() {
       _arts.putIfAbsent(name, () => art);
     });
     if (name == _defaultArt) {
-      this.refreshWallet();
+      this.selectArt(name);
     }
   }
 }

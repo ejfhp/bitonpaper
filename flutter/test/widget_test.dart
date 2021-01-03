@@ -5,21 +5,18 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
+import 'package:bitonpaper/intro.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:bitonpaper/main.dart';
-
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Test the intro page', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(BitOnPaper());
+    await tester.pumpWidget(Intro());
 
     //TODO Need a HttpClient implementation!
 
     // Verify that our counter starts at 0.
-    expect(find.text('BitOnPaper'), findsOneWidget);
-    expect(find.text('Pegacrick'), findsOneWidget);
+    expect(find.text('BOP '), findsWidgets);
 
     // Tap the '+' icon and trigger a frame.
     // await tester.tap(find.byIcon(Icons.add));

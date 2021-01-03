@@ -24,16 +24,16 @@ class PaperSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     BOPState appState = PaperSheetInh.of(context).state;
     var art = appState.getSelectedArt();
-    var w = appState.getWallet();
-    if (art == null || w == null) {
+    if (art == null || !appState.areWalletsReady()) {
       return Container(
         alignment: Alignment.center,
         child: Text("Loading..."),
       );
     }
+    var ws = appState.getWallets();
     var pageSize = MediaQuery.of(context).size;
     Paper p = Paper(
-      wallet: w,
+      wallets: ws,
       art: appState.getSelectedArt(),
       maxWidth: pageSize.width,
     );
@@ -53,11 +53,11 @@ class PaperSheet extends StatelessWidget {
 }
 
 class Paper extends StatelessWidget {
-  final Wallet wallet;
+  final List<Wallet> wallets;
   final Art art;
   final double maxWidth;
 
-  Paper({this.wallet, this.art, this.maxWidth});
+  Paper({this.wallets, this.art, this.maxWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -65,17 +65,28 @@ class Paper extends StatelessWidget {
     if (scale > 1) {
       scale = 1;
     }
-    return Column(children: [
-      Container(
-          height: art.height * scale,
-          width: art.width * scale,
-          child: LayoutBuilder(builder: (context, constraint) {
-            return getPaper(art: art, wallet: wallet, constraint: constraint);
-          })),
-    ]);
+    return Container(
+      child: LayoutBuilder(builder: (context, constraint) {
+        return getSheet(art: art, wallets: wallets, constraint: constraint);
+      }),
+    );
   }
 
-  Widget getPaper({Art art, Wallet wallet, BoxConstraints constraint}) {
+  Widget getSheet({Art art, List<Wallet> wallets, BoxConstraints constraint}) {
+    List<Widget> ww = List<Widget>.empty(growable: true);
+    for (int i = 0; i < wallets.length; i++) {
+      ww.add(Container(
+        margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+        child: prepareArt(art: art, wallet: wallets[i], constraint: constraint),
+      ));
+    }
+    return Column(
+      children: ww,
+    );
+  }
+
+  Widget prepareArt({Art art, Wallet wallet, BoxConstraints constraint}) {
+    print("Art Max Width: " + constraint.maxWidth.toString());
     List<Widget> els = List<Widget>.empty(growable: true);
     ImageProvider pkQrImage = MemoryImage(wallet.pkQr);
     ImageProvider adQrImage = MemoryImage(wallet.adQr);
@@ -85,9 +96,6 @@ class Paper extends StatelessWidget {
     els.add(getPaperElement(
         child: Container(
           child: Image.network(this.art.url, height: art.height, width: art.width),
-          decoration: BoxDecoration(
-            border: Border.all(width: 1, color: Colors.black45),
-          ),
         ),
         height: art.height,
         width: art.width,
@@ -135,10 +143,14 @@ class Paper extends StatelessWidget {
           scale: ratio,
           rotation: art.adQr.rotation));
     }
-    return Stack(
-      fit: StackFit.passthrough,
-      clipBehavior: Clip.hardEdge,
-      children: els,
+    return Container(
+      child: Stack(
+        fit: StackFit.passthrough,
+        clipBehavior: Clip.hardEdge,
+        children: els,
+      ),
+      height: art.height * ratio,
+      width: art.width * ratio,
     );
   }
 
