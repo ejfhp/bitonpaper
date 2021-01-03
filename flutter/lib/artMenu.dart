@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'BOPState.dart';
 import 'art.dart';
+import 'conf.dart';
 
 class ArtMenuInh extends InheritedWidget {
   final BOPState state;
@@ -17,11 +18,14 @@ class ArtMenuInh extends InheritedWidget {
 }
 
 class ArtMenu extends StatelessWidget {
+  final bool wide;
+  ArtMenu({@required this.wide});
+
   Widget build(BuildContext context) {
     BOPState appState = ArtMenuInh.of(context).state;
     List<Widget> artsList = new List<Widget>.empty(growable: true);
     Container headerContainer = Container(
-        height: appState.headerHeight,
+        height: HEADER_HEIGHT,
         child: DrawerHeader(
             padding: EdgeInsets.zero,
             margin: EdgeInsets.zero,
@@ -59,7 +63,9 @@ class ArtMenu extends StatelessWidget {
         onTap: () {
           appState.setSelected(k);
           //Close the drawer when user selects.
-          // Navigator.pop(context);
+          if (!wide) {
+            Navigator.pop(context);
+          }
         },
       );
       artsList.add(tI);

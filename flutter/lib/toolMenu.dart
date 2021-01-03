@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'BOPState.dart';
+import 'conf.dart';
 
 class ToolMenuInh extends InheritedWidget {
   final BOPState state;
@@ -17,11 +18,14 @@ class ToolMenuInh extends InheritedWidget {
 }
 
 class ToolMenu extends StatelessWidget {
+  final bool wide;
+  ToolMenu({@required this.wide});
+
   Widget build(BuildContext context) {
     BOPState state = ToolMenuInh.of(context).state;
     List<Widget> toolsList = new List<Widget>.empty(growable: true);
     Container containerHeader = Container(
-      height: state.headerHeight,
+      height: HEADER_HEIGHT,
       padding: EdgeInsets.all(0),
       child: DrawerHeader(
           padding: EdgeInsets.zero,

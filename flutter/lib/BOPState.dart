@@ -10,11 +10,6 @@ import 'BOP.dart';
 import 'package:flutter/material.dart';
 
 class BOPState extends State<BOP> {
-  final double artWidth = 250;
-  final double toolWidth = 250;
-  final double paperWidth = 840;
-  final double headerHeight = 108;
-
   final Map<String, Art> _arts = Map<String, Art>();
   final List<Wallet> _wallets = List<Wallet>.empty(growable: true);
   final Map<String, Uint8List> _qrs = Map<String, Uint8List>();

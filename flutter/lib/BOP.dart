@@ -3,6 +3,7 @@ import 'BOPState.dart';
 import 'artMenu.dart';
 import 'toolMenu.dart';
 import 'paperSheet.dart';
+import 'conf.dart';
 
 //Main StatefulWidget
 class BOP extends StatefulWidget {
@@ -18,7 +19,7 @@ class BOPUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool wideScreen = MediaQuery.of(context).size.width > this.state.artWidth + this.state.toolWidth + this.state.paperWidth;
+    final bool wideScreen = MediaQuery.of(context).size.width > ART_WIDTH + TOOL_WIDTH + PAPER_WIDTH;
     final bool implyBarLeading = !wideScreen;
     BottomAppBar bottomBar = BottomAppBar(
         elevation: 0,
@@ -29,16 +30,16 @@ class BOPUI extends StatelessWidget {
           style: TextStyle(fontSize: 10, color: Colors.blueGrey[200], fontFamily: "Roboto"),
         ));
     PreferredSize topBar = PreferredSize(
-      preferredSize: Size.fromHeight(this.state.headerHeight),
+      preferredSize: Size.fromHeight(HEADER_HEIGHT),
       child: AppBar(
           iconTheme: IconThemeData(color: Colors.amber),
           backgroundColor: Colors.red,
           automaticallyImplyLeading: implyBarLeading,
           elevation: 0,
           flexibleSpace: PreferredSize(
-              preferredSize: Size.fromHeight(this.state.headerHeight),
+              preferredSize: Size.fromHeight(HEADER_HEIGHT),
               child: Container(
-                height: this.state.headerHeight,
+                height: HEADER_HEIGHT,
                 color: Colors.blueGrey,
                 padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
                 child: Image.network(
@@ -48,11 +49,15 @@ class BOPUI extends StatelessWidget {
               ))),
     );
     Container artMenu = Container(
-      width: this.state.artWidth,
-      child: ArtMenuInh(child: ArtMenu(), state: state),
+      width: ART_WIDTH,
+      child: ArtMenuInh(
+          child: ArtMenu(
+            wide: wideScreen,
+          ),
+          state: state),
     );
     Container toolMenu = Container(
-      width: this.state.toolWidth,
+      width: TOOL_WIDTH,
       child: ToolMenuInh(child: ToolMenu(), state: state),
     );
 
