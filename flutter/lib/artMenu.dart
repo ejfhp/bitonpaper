@@ -61,7 +61,7 @@ class ArtMenu extends StatelessWidget {
         leading: i,
         title: t,
         onTap: () {
-          appState.setSelected(k);
+          appState.selectArt(k);
           //Close the drawer when user selects.
           if (!wide) {
             Navigator.pop(context);

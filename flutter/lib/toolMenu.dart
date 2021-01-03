@@ -48,6 +48,7 @@ class ToolMenu extends StatelessWidget {
           )),
     );
     toolsList.add(containerHeader);
+    toolsList.add(numWalletsBox(context: context, state: state));
     toolsList.add(printBox(context: context, state: state));
     ListView commands = ListView(children: toolsList);
 
@@ -57,7 +58,7 @@ class ToolMenu extends StatelessWidget {
     );
   }
 
-  Widget printBox({BuildContext context, BOPState state}) {
+  Widget numWalletsBox({BuildContext context, BOPState state}) {
     return Container(
         padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
         child: Column(
@@ -71,6 +72,27 @@ class ToolMenu extends StatelessWidget {
                 labelText: "wallets (max 10)",
               ),
             ),
+            Container(
+              child: RaisedButton(
+                onPressed: () {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                  state.regenerateWallets();
+                },
+                color: Colors.blueGrey,
+                padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                child: const Text('Apply', style: TextStyle(fontSize: 20, color: Colors.amber)),
+              ),
+              padding: EdgeInsets.fromLTRB(10, 50, 10, 50),
+            ),
+          ],
+        ));
+  }
+
+  Widget printBox({BuildContext context, BOPState state}) {
+    return Container(
+        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+        child: Column(
+          children: [
             TextField(
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               controller: state.walletsPerPageController,
@@ -93,18 +115,6 @@ class ToolMenu extends StatelessWidget {
               ),
               padding: EdgeInsets.fromLTRB(10, 50, 10, 50),
             ),
-            // Container(
-            //   child: RaisedButton(
-            //     onPressed: () {
-            //       // FocusScope.of(context).requestFocus(new FocusNode());
-            //       state.savePDF();
-            //     },
-            //     color: Colors.blueGrey,
-            //     padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-            //     child: const Text('Export', style: TextStyle(fontSize: 20, color: Colors.amber)),
-            //   ),
-            //   padding: EdgeInsets.fromLTRB(10, 50, 10, 50),
-            // ),
           ],
         ));
   }

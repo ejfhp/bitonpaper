@@ -15,4 +15,7 @@ class Wallet {
     this.publicAddress = privKey.toAddress().toString();
   }
 
+  bool isReady() {
+    return pkQr != null && adQr != null && pkImg != null && adImg != null;
+  }
 }
