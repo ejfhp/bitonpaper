@@ -54,7 +54,7 @@ class PDFGenerator {
     double scale = math.min(scaleW, scaleH) * 0.9;
     // print("Scales: W:" + scaleW.toString() + " H:" + scaleH.toString() + " S:" + scale.toString());
 
-    NetworkImage artImage = NetworkImage(art.url);
+    NetworkImage artImage = NetworkImage("fake");
     final artImageProvider = await flutterImageProvider(artImage);
 
     ImageProvider pkQrImage = MemoryImage(wallet.pkQr);

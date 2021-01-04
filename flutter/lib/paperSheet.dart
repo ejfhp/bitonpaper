@@ -95,7 +95,7 @@ class Paper extends StatelessWidget {
     double ratio = constraint.maxWidth / art.width;
     els.add(getPaperElement(
         child: Container(
-          child: Image.network(this.art.url, height: art.height, width: art.width),
+          child: RawImage(image: this.art.image, height: art.height, width: art.width),
         ),
         height: art.height,
         width: art.width,
