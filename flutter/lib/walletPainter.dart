@@ -5,6 +5,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
+import 'art.dart';
+import 'wallet.dart';
+
+class WalletPainter extends CustomPainter {
+  Wallet wallet;
+  Art art;
+
+  WalletPainter({this.wallet, this.art});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    ui.Paint p = ui.Paint();
+    canvas.drawImage(art.image, Offset.zero, p);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldPainter) {
+    return true;
+  }
+}
 
 class TextImage extends CustomPainter {
   String text;
@@ -64,6 +84,18 @@ class Rasterizer {
     txtImage.paint(canvas, Size(width, height));
     ui.Picture picture = recorder.endRecording();
     ui.Image image = await picture.toImage(width.toInt(), height.toInt());
+    ByteData data = await image.toByteData(format: format);
+    return Uint8List.sublistView(data);
+  }
+
+  static Future<Uint8List> rasterize({Wallet wallet, Art art}) async {
+    WalletPainter wp = WalletPainter(wallet: wallet, art: art);
+    ui.ImageByteFormat format = ui.ImageByteFormat.png;
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder);
+    wp.paint(canvas, Size(art.width, art.height));
+    ui.Picture picture = recorder.endRecording();
+    ui.Image image = await picture.toImage(art.width.toInt(), art.height.toInt());
     ByteData data = await image.toByteData(format: format);
     return Uint8List.sublistView(data);
   }

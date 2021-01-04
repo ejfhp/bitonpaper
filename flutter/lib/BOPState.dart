@@ -21,7 +21,7 @@ class BOPState extends State<BOP> {
 
   BOPState() {
     this._selected = this._defaultArt;
-    retrieveArts(this, "./img");
+    loadArts(this, "./img");
     regenerateWallets();
   }
 
@@ -110,6 +110,10 @@ class BOPState extends State<BOP> {
     return this._arts;
   }
 
+  int numArts() {
+    this._arts.length;
+  }
+
   Art getSelectedArt() {
     return this._arts[this._selected];
   }
@@ -141,12 +145,13 @@ class BOPState extends State<BOP> {
     return true;
   }
 
-  void addArt(String name, Art art) async {
+  void addArt(Art art) async {
     setState(() {
-      _arts.putIfAbsent(name, () => art);
+      _arts.putIfAbsent(art.name, () => art);
     });
-    if (name == _defaultArt) {
-      this.selectArt(name);
+    print("addArt: " + art.name);
+    if (art.name == _defaultArt) {
+      this.selectArt(art.name);
     }
   }
 }
