@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'BOPState.dart';
 import 'art.dart';
 import 'conf.dart';
-import 'walletPainter.dart';
 
 class ArtMenuInh extends InheritedWidget {
   final BOPState state;
