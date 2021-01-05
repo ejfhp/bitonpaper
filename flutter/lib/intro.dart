@@ -84,7 +84,7 @@ class Intro extends StatelessWidget {
         ]),
         TextSpan(children: <TextSpan>[
           TextSpan(text: '1 - ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-          TextSpan(text: 'Click "Continue" ath the bottom of this page.\n'),
+          TextSpan(text: 'Click "Continue" at the bottom of this page.\n'),
           TextSpan(text: '2 - ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
           TextSpan(text: 'Unplug the network. '),
           TextSpan(text: '\u20F0\n', style: TextStyle(color: Colors.black)),

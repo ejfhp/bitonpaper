@@ -3,6 +3,7 @@ import 'package:printing/printing.dart';
 import 'package:bitonpaper/print.dart';
 import 'package:bitonpaper/walletPainter.dart';
 import 'dart:html' as html;
+import 'dart:ui' as ui;
 
 import 'art.dart';
 import 'wallet.dart';
@@ -12,17 +13,17 @@ import 'package:flutter/material.dart';
 class BOPState extends State<BOP> {
   final Map<String, Art> _arts = Map<String, Art>();
   final List<Wallet> _wallets = List<Wallet>.empty(growable: true);
+  final List<Paper> _papers = Map<String, ui.Image>();
   final TextEditingController numWalletsController = TextEditingController.fromValue(TextEditingValue(text: "2"));
   final TextEditingController walletsPerPageController = TextEditingController();
   String _defaultArt = "Bitcoin";
-  String _selected;
-  bool _printing = false;
+  Art _selectedArt;
+  bool _printingInProgress = false;
   Uint8List lastGeneratedPDF;
 
   BOPState() {
-    this._selected = this._defaultArt;
     loadArts(this, "./img");
-    regenerateWallets();
+    this.regenerateWallets();
   }
 
   @override
@@ -32,13 +33,16 @@ class BOPState extends State<BOP> {
 
   Future<void> selectArt(String sel) async {
     print("selectArt" + sel);
-    _selected = sel;
-    await regenerateWalletsImg();
+    this._selectedArt = this._arts[sel];
+    // await regenerateWalletsImg();
+    await this.generatePapers();
+    setState(() {});
   }
 
   void setPrintingInProgress(bool printing) {
-    this._printing = printing;
-    setState(() {});
+    setState(() {
+      this._printingInProgress = printing;
+    });
   }
 
   Future<void> regenerateWallets() async {
@@ -66,12 +70,25 @@ class BOPState extends State<BOP> {
     }
     for (int i = 0; i < this._wallets.length; i++) {
       Wallet w = this._wallets[i];
-      w.adImg = await Rasterizer.toImg(
-          text: w.publicAddress, width: art.ad.width, height: art.ad.height, fontSize: art.ad.size, fgColor: art.ad.fgcolor, bgColor: art.ad.bgcolor);
-      w.pkImg = await Rasterizer.toImg(
-          text: w.privateKey, width: art.pk.width, height: art.pk.height, fontSize: art.pk.size, fgColor: art.pk.fgcolor, bgColor: art.pk.bgcolor);
-      w.pkQr = await Rasterizer.toQrCodeImg(text: w.privateKey, size: art.pkQr.size, fgColor: art.pkQr.fgcolor, bgColor: art.pkQr.bgcolor);
-      w.adQr = await Rasterizer.toQrCodeImg(text: w.publicAddress, size: art.adQr.size, fgColor: art.adQr.fgcolor, bgColor: art.adQr.bgcolor);
+      w.adImg = await Rasterizer()
+          .toImg(text: w.publicAddress, width: art.ad.width, height: art.ad.height, fontSize: art.ad.size, fgColor: art.ad.fgcolor, bgColor: art.ad.bgcolor);
+      w.pkImg = await Rasterizer()
+          .toImg(text: w.privateKey, width: art.pk.width, height: art.pk.height, fontSize: art.pk.size, fgColor: art.pk.fgcolor, bgColor: art.pk.bgcolor);
+      w.pkQr = await Rasterizer().toQrCodeImg(text: w.privateKey, size: art.pkQr.size, fgColor: art.pkQr.fgcolor, bgColor: art.pkQr.bgcolor);
+      w.adQr = await Rasterizer().toQrCodeImg(text: w.publicAddress, size: art.adQr.size, fgColor: art.adQr.fgcolor, bgColor: art.adQr.bgcolor);
+    }
+    setState(() {});
+  }
+
+  Future<void> generatePapers() async {
+    print("gnerating papers");
+    for (int i = 0; i < this._wallets.length; i++) {
+      Wallet w = this._wallets[i];
+      print("gnerating paper for: " + w.privateKey);
+      ui.Image wp = await Rasterizer().rasterize(wallet: w, art: this._selectedArt);
+      print("done gnerating paper for: " + w.privateKey);
+      this._papers.putIfAbsent(w.privateKey, () => wp);
+      print("added paper for: " + w.privateKey);
     }
     setState(() {});
   }
@@ -115,7 +132,7 @@ class BOPState extends State<BOP> {
   }
 
   Art getSelectedArt() {
-    return this._arts[this._selected];
+    return this._selectedArt;
   }
 
   Wallet getWallet() {
@@ -129,8 +146,12 @@ class BOPState extends State<BOP> {
     return this._wallets;
   }
 
+  Map<String, ui.Image> getPapers() {
+    return this._papers;
+  }
+
   bool isPrinting() {
-    return this._printing;
+    return this._printingInProgress;
   }
 
   bool areWalletsReady() {
