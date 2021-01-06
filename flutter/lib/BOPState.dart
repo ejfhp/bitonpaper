@@ -56,6 +56,7 @@ class BOPState extends State<BOP> {
       return;
     }
     this._wallets.clear();
+    print("BOPSTATE regenerateWallets numwallets: " + numWallets.toString());
     for (int i = 0; i < numWallets; i++) {
       this._wallets.add(Wallet());
     }
@@ -67,7 +68,12 @@ class BOPState extends State<BOP> {
     for (int i = 0; i < this._wallets.length; i++) {
       Wallet w = this._wallets[i];
       Uint8List bytes = await Rasterizer().rasterize(wallet: w, art: this._selectedArt);
-      Paper p = Paper(wallet: w, backgroundBytes: this._selectedArt.bytes, overlayBytes: bytes);
+      Paper p = Paper(
+          wallet: w,
+          backgroundBytes: this._selectedArt.bytes,
+          overlayBytes: bytes,
+          width: this._selectedArt.width.toInt(),
+          height: this._selectedArt.height.toInt());
       this._papers.add(p);
     }
     setState(() {});

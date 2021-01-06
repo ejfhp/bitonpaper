@@ -67,22 +67,14 @@ class ToolMenu extends StatelessWidget {
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               controller: state.numWalletsController,
               maxLength: 2,
+              onEditingComplete: () async {
+                await state.regenerateWallets();
+                await state.regeneratePapers();
+              },
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "wallets (max 10)",
               ),
-            ),
-            Container(
-              child: RaisedButton(
-                onPressed: () {
-                  FocusScope.of(context).requestFocus(new FocusNode());
-                  state.regenerateWallets();
-                },
-                color: Colors.blueGrey,
-                padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-                child: const Text('Apply', style: TextStyle(fontSize: 20, color: Colors.amber)),
-              ),
-              padding: EdgeInsets.fromLTRB(10, 50, 10, 50),
             ),
           ],
         ));
