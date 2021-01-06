@@ -9,7 +9,7 @@ class ArtMenuInh extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant ArtMenuInh oldWidget) {
-    return oldWidget.state.getSelectedArt() != state.getSelectedArt();
+    return (oldWidget.state.getSelectedArt() != state.getSelectedArt() || oldWidget.state.numArts() != state.numArts());
   }
 
   static ArtMenuInh of(BuildContext context) {
@@ -49,27 +49,30 @@ class ArtMenu extends StatelessWidget {
     artsList.add(headerContainer);
     Map<String, Art> arts = appState.getArts();
     Art selected = appState.getSelectedArt();
-    arts.forEach((k, v) {
-      Widget t;
-      if (k == selected.name) {
-        t = Text(k, style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Roboto", color: Colors.black54));
-      } else {
-        t = Text(k, style: TextStyle(fontFamily: "Roboto", color: Colors.black54));
-      }
-      var i = Image.network(v.url);
-      ListTile tI = ListTile(
-        leading: i,
-        title: t,
-        onTap: () {
-          appState.selectArt(k);
-          //Close the drawer when user selects.
-          if (!wide) {
-            Navigator.pop(context);
-          }
-        },
-      );
-      artsList.add(tI);
-    });
+    if (selected != null) {
+      arts.forEach((k, v) {
+        ImageProvider aip = MemoryImage(v.bytes);
+        Widget t;
+        if (k == selected.name) {
+          t = Text(k, style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Roboto", color: Colors.black54));
+        } else {
+          t = Text(k, style: TextStyle(fontFamily: "Roboto", color: Colors.black54));
+        }
+        var img = Image(image: aip);
+        ListTile tI = ListTile(
+          leading: img,
+          title: t,
+          onTap: () {
+            appState.selectArt(k);
+            //Close the drawer when user selects.
+            if (!wide) {
+              Navigator.pop(context);
+            }
+          },
+        );
+        artsList.add(tI);
+      });
+    }
     ListView list = ListView(
       children: artsList,
       padding: EdgeInsets.zero,
