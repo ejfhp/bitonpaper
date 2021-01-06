@@ -51,13 +51,14 @@ class ArtMenu extends StatelessWidget {
     Art selected = appState.getSelectedArt();
     if (selected != null) {
       arts.forEach((k, v) {
+        ImageProvider aip = MemoryImage(v.bytes);
         Widget t;
         if (k == selected.name) {
           t = Text(k, style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Roboto", color: Colors.black54));
         } else {
           t = Text(k, style: TextStyle(fontFamily: "Roboto", color: Colors.black54));
         }
-        var img = RawImage(image: v.image);
+        var img = Image(image: aip);
         ListTile tI = ListTile(
           leading: img,
           title: t,

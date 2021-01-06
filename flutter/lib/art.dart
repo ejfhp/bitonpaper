@@ -11,12 +11,13 @@ Future<void> loadArts(BOPState state, String baseUrl) async {
   var response = await http.get(baseUrl + "/arts.json");
   if (response.statusCode == 200) {
     List<dynamic> artList = (convert.jsonDecode(response.body) as List).cast<String>();
-    artList.forEach((el) {
-      print("Loading Art: " + el);
-      Art.loadFromUrl(baseUrl: baseUrl, name: el, state: state);
-    });
+    for (int i = 0; i < artList.length; i++) {
+      print("ART Loading Art: " + artList[i]);
+      Art art = await Art.loadFromUrl(baseUrl: baseUrl, name: artList[i]);
+      state.addArt(art);
+    }
   } else {
-    print('GetArts request failed with status: ${response.statusCode}.');
+    print('ART GetArts request failed with status: ${response.statusCode}.');
   }
 }
 
@@ -35,7 +36,8 @@ class ArtElement {
 class Art {
   String name;
   String file;
-  ui.Image image;
+  ui.Image _image;
+  Uint8List _imageData;
   double height;
   double width;
   ArtElement pk;
@@ -43,60 +45,68 @@ class Art {
   ArtElement ad;
   ArtElement adQr;
 
-  static loadFromUrl({String baseUrl, String name, BOPState state}) {
-    print("Art http.get");
+  ui.Image get image {
+    return _image.clone();
+  }
+
+  Uint8List get bytes {
+    return _imageData;
+  }
+
+  static Future<Art> loadFromUrl({String baseUrl, String name}) async {
+    print("ART http.get");
     Art art = Art();
-    http.get(baseUrl + "/" + name).then((response) {
-      if (response.statusCode == 200) {
-        Map<String, dynamic> artList = (convert.jsonDecode(response.body) as Map).cast<String, dynamic>();
-        artList.forEach((k, val) {
-          switch (k) {
-            case "name":
-              art.name = val as String;
-              break;
-            case "file":
-              art.file = val as String;
-              break;
-            case "height":
-              art.height = val as double;
-              break;
-            case "width":
-              art.width = val as double;
-              break;
-            case "privkey_qr":
-              art.pkQr = readElement(val);
-              break;
-            case "privkey":
-              art.pk = readElement(val);
-              break;
-            case "address_qr":
-              art.adQr = readElement(val);
-              break;
-            case "address":
-              art.ad = readElement(val);
-              break;
-            default:
-          }
-        });
-      } else {
-        print('GetArt request failed with status: ${response.statusCode}.');
-      }
-      return art;
-    }).then((art) {
-      Completer<ImageInfo> completer = Completer();
-      var img = new NetworkImage(baseUrl + "/" + art.file);
-      ImageConfiguration imgConf = ImageConfiguration();
-      ImageStream imgStream = img.resolve(imgConf);
-      imgStream.addListener(ImageStreamListener((ImageInfo info, bool syncro) {
-        completer.complete(info);
-      }));
-      return completer.future;
-    }).then((imageInfo) {
-      art.image = imageInfo.image;
-      state.addArt(art);
-    }).catchError((err) {
-      print(err);
-    });
+    http.Response response = await http.get(baseUrl + "/" + name);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> artList = (convert.jsonDecode(response.body) as Map).cast<String, dynamic>();
+      artList.forEach((k, val) {
+        switch (k) {
+          case "name":
+            art.name = val as String;
+            break;
+          case "file":
+            art.file = val as String;
+            break;
+          case "height":
+            art.height = val as double;
+            break;
+          case "width":
+            art.width = val as double;
+            break;
+          case "privkey_qr":
+            art.pkQr = readElement(val);
+            break;
+          case "privkey":
+            art.pk = readElement(val);
+            break;
+          case "address_qr":
+            art.adQr = readElement(val);
+            break;
+          case "address":
+            art.ad = readElement(val);
+            break;
+          default:
+        }
+      });
+    } else {
+      print('ART GetArt request failed with status: ${response.statusCode}.');
+    }
+    Completer<ImageInfo> completer = Completer();
+    var netImage = new NetworkImage(baseUrl + "/" + art.file);
+    ImageConfiguration imgConf = ImageConfiguration();
+    ImageStream imgStream = netImage.resolve(imgConf);
+    imgStream.addListener(ImageStreamListener((ImageInfo info, bool syncro) {
+      completer.complete(info);
+    }));
+    ImageInfo imageInfo = await completer.future;
+
+    ui.Image image = imageInfo.image;
+    ByteData imageData = await image.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List bytes = imageData.buffer.asUint8List();
+    assert(bytes != null);
+    art._imageData = bytes;
+    art._image = image;
+    return art;
   }
 
   static ArtElement readElement(dynamic val) {

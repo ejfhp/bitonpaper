@@ -1,8 +1,8 @@
 {
     "name": "Dragon",
     "file": "art_bitcoinsv.jpg",
-    "height": 430,
-    "width": 800,
+    "height": 860,
+    "width": 1600,
     "privkey_qr": {
         "visible": true,
         "top": 230,
