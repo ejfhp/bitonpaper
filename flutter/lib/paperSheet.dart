@@ -77,7 +77,6 @@ class PaperView extends StatelessWidget {
   }
 
   Widget prepareArt({Paper paper, BoxConstraints constraint}) {
-    print("PAPERSHEET Art Max Width: " + constraint.maxWidth.toString());
     assert(paper.backgroundBytes != null);
     assert(paper.overlayBytes != null);
     ImageProvider bip = MemoryImage(paper.backgroundBytes);

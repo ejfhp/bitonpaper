@@ -1,4 +1,6 @@
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
+
 import 'wallet.dart';
 
 class Paper {
@@ -8,7 +10,7 @@ class Paper {
   final int height;
   final int width;
 
-  Paper({this.wallet, this.backgroundBytes, this.overlayBytes, this.height, this.width}) {
+  Paper({@required this.wallet, @required this.backgroundBytes, @required this.overlayBytes, @required this.height, @required this.width}) {
     assert(this.wallet != null);
     assert(this.backgroundBytes != null);
     assert(this.overlayBytes != null);
