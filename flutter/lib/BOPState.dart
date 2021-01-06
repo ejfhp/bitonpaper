@@ -3,7 +3,6 @@ import 'package:printing/printing.dart';
 import 'package:bitonpaper/print.dart';
 import 'package:bitonpaper/walletPainter.dart';
 import 'dart:html' as html;
-import 'dart:ui' as ui;
 
 import 'art.dart';
 import 'wallet.dart';
@@ -35,9 +34,7 @@ class BOPState extends State<BOP> {
   Future<void> selectArt(String sel) async {
     print("BOPSTATE selectArt" + sel);
     this._selectedArt = this._arts[sel];
-    print("BOPSTATE selectArt art image disposed? " + this._selectedArt.image.debugDisposed.toString());
     await this.regeneratePapers();
-    print("BOPSTATE selectArt after art image disposed? " + this._selectedArt.image.debugDisposed.toString());
     setState(() {});
   }
 
@@ -69,19 +66,15 @@ class BOPState extends State<BOP> {
     this._papers.clear();
     for (int i = 0; i < this._wallets.length; i++) {
       Wallet w = this._wallets[i];
-      print("BOPSTATE gnerating paper for: " + w.privateKey);
-      ui.Image wp = await Rasterizer().rasterize(wallet: w, art: this._selectedArt);
-      ByteData data = await wp.toByteData(format: ui.ImageByteFormat.png);
-      print("BOPSTATE done gnerating paper for: " + w.privateKey);
-      print("BOPSTATE regenatePapers art image disposed? " + this._selectedArt.image.debugDisposed.toString());
-      Paper p = Paper(wallet: w, bgdImage: this._selectedArt.image, overlayImage: wp, bgdData: this._selectedArt.byteData, overlayData: data);
+      Uint8List bytes = await Rasterizer().rasterize(wallet: w, art: this._selectedArt);
+      Paper p = Paper(wallet: w, backgroundBytes: this._selectedArt.bytes, overlayBytes: bytes);
       this._papers.add(p);
-      print("BOPSTATE added paper for: " + w.privateKey);
     }
     setState(() {});
   }
 
-  Future<void> printWallets() async {
+  Future<void> printPapers() async {
+    print("BOPSTATE printPapers");
     this.setPrintingInProgress(true);
     String wPpTxt = walletsPerPageController.text;
     if (wPpTxt.isEmpty) {
@@ -92,14 +85,13 @@ class BOPState extends State<BOP> {
       walletsPerPageController.text = "2";
       return;
     }
-    print("BOPSTATE printwallets art image disposed? " + this._selectedArt.image.debugDisposed.toString());
     this.lastGeneratedPDF = await PDFGenerator().toPDF(papers: this._papers, walletsPerPage: walletsPP);
-
     await Printing.layoutPdf(onLayout: (format) async => this.lastGeneratedPDF);
     this.setPrintingInProgress(false);
   }
 
-  Future<void> savePDF() async {
+  Future<void> savePapersToPDF() async {
+    print("BOPSTATE savePapersToPDF");
     final blob = html.Blob([this.lastGeneratedPDF], "application/pdf");
     final url = html.Url.createObjectUrlFromBlob(blob);
     final anchor = html.document.createElement('a') as html.AnchorElement
@@ -124,13 +116,6 @@ class BOPState extends State<BOP> {
     return this._selectedArt;
   }
 
-  Wallet getWallet() {
-    if (_wallets.length == 0) {
-      return null;
-    }
-    return _wallets.first;
-  }
-
   List<Wallet> getWallets() {
     return this._wallets;
   }
@@ -143,17 +128,17 @@ class BOPState extends State<BOP> {
     return this._printingInProgress;
   }
 
-  bool areWalletsReady() {
-    if (this._wallets.isEmpty) {
-      return false;
-    }
-    for (int i = 0; i < this._wallets.length; i++) {
-      if (this._wallets[i].isReady() == false) {
-        return false;
-      }
-    }
-    return true;
-  }
+  // bool areWalletsReady() {
+  //   if (this._wallets.isEmpty) {
+  //     return false;
+  //   }
+  //   for (int i = 0; i < this._wallets.length; i++) {
+  //     if (this._wallets[i].isReady() == false) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
 
   void addArt(Art art) async {
     setState(() {
