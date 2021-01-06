@@ -1,22 +1,23 @@
+import 'dart:typed_data';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'dart:convert' as convert;
+import 'dart:async';
 import 'dart:ui' as ui;
 import 'BOPState.dart';
 
-class Art {
-  String name;
-  String file;
-  String baseUrl;
-  double height;
-  double width;
-  ArtElement pkQr;
-  ArtElement pk;
-  ArtElement adQr;
-  ArtElement ad;
-
-  String get url {
-    return baseUrl + "/" + file;
+Future<void> loadArts(BOPState state, String baseUrl) async {
+  var response = await http.get(baseUrl + "/arts.json");
+  if (response.statusCode == 200) {
+    List<dynamic> artList = (convert.jsonDecode(response.body) as List).cast<String>();
+    for (int i = 0; i < artList.length; i++) {
+      print("ART Loading Art: " + artList[i]);
+      Art art = await Art.loadFromUrl(baseUrl: baseUrl, name: artList[i]);
+      state.addArt(art);
+    }
+  } else {
+    print('ART GetArts request failed with status: ${response.statusCode}.');
   }
 }
 
@@ -32,96 +33,103 @@ class ArtElement {
   ui.Color bgcolor = Colors.transparent;
 }
 
-Future<void> retrieveArts(BOPState state, String baseUrl) async {
-  var response = await http.get(baseUrl + "/arts.json");
-  if (response.statusCode == 200) {
-    List<dynamic> artList =
-        (convert.jsonDecode(response.body) as List).cast<String>();
-    artList.forEach((el) {
-      print("Getting Art: " + el);
-      getArt(state, baseUrl, el);
-    });
-  } else {
-    print('GetArts request failed with status: ${response.statusCode}.');
-  }
-}
+class Art {
+  String name;
+  String file;
+  Uint8List _bytes;
+  double height;
+  double width;
+  ArtElement pk;
+  ArtElement pkQr;
+  ArtElement ad;
+  ArtElement adQr;
 
-Future<void> getArt(BOPState state, String baseUrl, String confFile) async {
-  var response = await http.get(baseUrl + "/" + confFile);
-  if (response.statusCode == 200) {
-    Map<String, dynamic> artList =
-        (convert.jsonDecode(response.body) as Map).cast<String, dynamic>();
+  Uint8List get bytes {
+    return _bytes;
+  }
+
+  static Future<Art> loadFromUrl({String baseUrl, String name}) async {
+    print("ART http.get " + baseUrl + "/" + name);
     Art art = Art();
-    art.baseUrl = baseUrl;
-    artList.forEach((k, val) {
-      switch (k) {
-        case "name":
-          art.name = val as String;
+    http.Response response = await http.get(baseUrl + "/" + name);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> artList = (convert.jsonDecode(response.body) as Map).cast<String, dynamic>();
+      artList.forEach((k, val) {
+        switch (k) {
+          case "name":
+            art.name = val as String;
+            break;
+          case "file":
+            art.file = val as String;
+            break;
+          case "height":
+            art.height = val as double;
+            break;
+          case "width":
+            art.width = val as double;
+            break;
+          case "privkey_qr":
+            art.pkQr = readElement(val);
+            break;
+          case "privkey":
+            art.pk = readElement(val);
+            break;
+          case "address_qr":
+            art.adQr = readElement(val);
+            break;
+          case "address":
+            art.ad = readElement(val);
+            break;
+          default:
+        }
+      });
+    } else {
+      print('ART GetArt request failed with status: ${response.statusCode}.');
+    }
+    String imageFileUrl = baseUrl + "/" + art.file;
+    print("ART get image: " + imageFileUrl);
+    http.Response imgResp = await http.get(imageFileUrl);
+    Uint8List bytes = imgResp.bodyBytes; //Uint8List
+    assert(bytes != null);
+    art._bytes = bytes;
+    return art;
+  }
+
+  static ArtElement readElement(dynamic val) {
+    Map<String, dynamic> element = (val as Map).cast<String, dynamic>();
+    ArtElement ae = ArtElement();
+    element.forEach((key, val) {
+      switch (key) {
+        case "top":
+          ae.top = val as double;
           break;
-        case "file":
-          art.file = val as String;
+        case "left":
+          ae.left = val as double;
           break;
         case "height":
-          art.height = val as double;
+          ae.height = val as double;
           break;
         case "width":
-          art.width = val as double;
+          ae.width = val as double;
           break;
-        case "privkey_qr":
-          art.pkQr = readElement(val);
+        case "size":
+          ae.size = val as double;
           break;
-        case "privkey":
-          art.pk = readElement(val);
+        case "rotation":
+          ae.rotation = val as double;
           break;
-        case "address_qr":
-          art.adQr = readElement(val);
+        case "visible":
+          ae.visible = val as bool;
           break;
-        case "address":
-          art.ad = readElement(val);
+        case "fgcolor":
+          ae.fgcolor = ui.Color(int.parse("0x" + val));
+          break;
+        case "bgcolor":
+          ae.bgcolor = ui.Color(int.parse("0x" + val));
           break;
         default:
       }
     });
-    state.addArt(art.name, art);
-  } else {
-    print('GetArt request failed with status: ${response.statusCode}.');
+    return ae;
   }
-}
-
-ArtElement readElement(dynamic val) {
-  Map<String, dynamic> element = (val as Map).cast<String, dynamic>();
-  ArtElement ae = ArtElement();
-  element.forEach((key, val) {
-    switch (key) {
-      case "top":
-        ae.top = val as double;
-        break;
-      case "left":
-        ae.left = val as double;
-        break;
-      case "height":
-        ae.height = val as double;
-        break;
-      case "width":
-        ae.width = val as double;
-        break;
-      case "size":
-        ae.size = val as double;
-        break;
-      case "rotation":
-        ae.rotation = val as double;
-        break;
-      case "visible":
-        ae.visible = val as bool;
-        break;
-      case "fgcolor":
-        ae.fgcolor = ui.Color(int.parse("0x" + val));
-        break;
-      case "bgcolor":
-        ae.bgcolor = ui.Color(int.parse("0x" + val));
-        break;
-      default:
-    }
-  });
-  return ae;
 }
