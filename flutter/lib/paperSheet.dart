@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'BOPState.dart';
 import 'paper.dart';
@@ -44,7 +42,6 @@ class PaperSheet extends StatelessWidget {
         padding: EdgeInsets.all(20),
         child: p,
         alignment: Alignment.center,
-        // height: pageSize.height - 68, //- (header + bottom bar)
         height: 5000, //- (header + bottom bar)
       ),
     );
@@ -59,10 +56,6 @@ class PaperView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // double scale = this.maxWidth / art.width;
-    // if (scale > 1) {
-    //   scale = 1;
-    // }
     return Container(
       child: LayoutBuilder(builder: (context, constraint) {
         return getSheet(papers: papers, constraint: constraint);
@@ -85,9 +78,10 @@ class PaperView extends StatelessWidget {
 
   Widget prepareArt({Paper paper, BoxConstraints constraint}) {
     print("PAPERSHEET Art Max Width: " + constraint.maxWidth.toString());
-    ImageProvider bip = MemoryImage(paper.backgroundData.buffer);
-    ImageProvider oip = MemoryImage(paper.overlayData.buffer.asUint8List());
-    // double ratio = constraint.maxWidth / art.width;
+    assert(paper.backgroundBytes != null);
+    assert(paper.overlayBytes != null);
+    ImageProvider bip = MemoryImage(paper.backgroundBytes);
+    ImageProvider oip = MemoryImage(paper.overlayBytes);
     return Container(
         child: Stack(
       children: [

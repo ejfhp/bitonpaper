@@ -36,8 +36,7 @@ class ArtElement {
 class Art {
   String name;
   String file;
-  ui.Image _image;
-  Uint8List _imageData;
+  Uint8List _bytes;
   double height;
   double width;
   ArtElement pk;
@@ -45,16 +44,12 @@ class Art {
   ArtElement ad;
   ArtElement adQr;
 
-  ui.Image get image {
-    return _image.clone();
-  }
-
   Uint8List get bytes {
-    return _imageData;
+    return _bytes;
   }
 
   static Future<Art> loadFromUrl({String baseUrl, String name}) async {
-    print("ART http.get");
+    print("ART http.get " + baseUrl + "/" + name);
     Art art = Art();
     http.Response response = await http.get(baseUrl + "/" + name);
     if (response.statusCode == 200) {
@@ -91,21 +86,12 @@ class Art {
     } else {
       print('ART GetArt request failed with status: ${response.statusCode}.');
     }
-    Completer<ImageInfo> completer = Completer();
-    var netImage = new NetworkImage(baseUrl + "/" + art.file);
-    ImageConfiguration imgConf = ImageConfiguration();
-    ImageStream imgStream = netImage.resolve(imgConf);
-    imgStream.addListener(ImageStreamListener((ImageInfo info, bool syncro) {
-      completer.complete(info);
-    }));
-    ImageInfo imageInfo = await completer.future;
-
-    ui.Image image = imageInfo.image;
-    ByteData imageData = await image.toByteData(format: ui.ImageByteFormat.png);
-    Uint8List bytes = imageData.buffer.asUint8List();
+    String imageFileUrl = baseUrl + "/" + art.file;
+    print("ART get image: " + imageFileUrl);
+    http.Response imgResp = await http.get(imageFileUrl);
+    Uint8List bytes = imgResp.bodyBytes; //Uint8List
     assert(bytes != null);
-    art._imageData = bytes;
-    art._image = image;
+    art._bytes = bytes;
     return art;
   }
 

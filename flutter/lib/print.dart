@@ -22,12 +22,12 @@ class PDFGenerator {
     int wi = 0;
     int wl = papers.length;
     print("PRINT getBackground");
-    pdfw.MemoryImage background = await getMemoryImage(papers.first.backgroundData);
+    pdfw.MemoryImage background = await getMemoryImage(papers.first.backgroundBytes);
     for (int p = 0; p < numPages; p++) {
       List<pdfw.Widget> wp = List<pdfw.Widget>.empty(growable: true);
       for (int pp = 0; pp < walletsPerPage && wi < wl; pp++) {
         print("PRINT getOverlay");
-        pdfw.MemoryImage overlay = await getMemoryImage(papers[wi++].overlayData);
+        pdfw.MemoryImage overlay = await getMemoryImage(papers[wi++].overlayBytes);
         pdfw.Widget w = await makePDFWallet(background: background, overlay: overlay, maxWidth: ppf.availableWidth, maxHeight: wMaxH);
         wp.add(w);
       }
@@ -72,12 +72,12 @@ class PDFGenerator {
         ));
   }
 
-  Future<pdfw.MemoryImage> getMemoryImage(ByteData data) async {
+  Future<pdfw.MemoryImage> getMemoryImage(Uint8List bytes) async {
     // print("Image: " + image.toString());
     // print("Image disposed: " + image.debugDisposed.toString());
     // ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    print("PRINT ByteData: " + data.toString());
-    Uint8List bytes = data.buffer.asUint8List();
+    // print("PRINT ByteData: " + data.toString());
+    // Uint8List bytes = data.buffer.asUint8List();
     print("PRINT Bytes: " + bytes.length.toString());
     return pdfw.MemoryImage(bytes);
   }

@@ -1,41 +1,42 @@
 import 'dart:ui' as ui;
-import 'dart:async';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter/services.dart';
 import 'art.dart';
 import 'wallet.dart';
 
 class Rasterizer {
-  Future<Uint8List> toQrCodeImg({String text, double size, ui.Color fgColor = Colors.black, ui.Color bgColor = Colors.white}) async {
-    QrPainter qr = QrPainter(
-      data: text,
-      color: fgColor,
-      emptyColor: bgColor,
-      version: QrVersions.auto,
-      gapless: true,
-    );
+  Future<Uint8List> rasterize({Wallet wallet, Art art}) async {
+    //TODO to test/check in the future
+    // ui.Codec codec = await ui.instantiateImageCodec(art.bytes, targetHeight: art.height.toInt(), targetWidth: art.width.toInt(), allowUpscaling: true);
+    // print("WALLETPAINTER frameCount: " + codec.frameCount.toString());
+    // ui.FrameInfo frameInfo = await codec.getNextFrame();
+    // ui.Image image = frameInfo.image;
 
-    ByteData qrBytes = await qr.toImageData(size);
-    return Uint8List.sublistView(qrBytes);
-  }
-
-  Future<ui.Image> rasterize({Wallet wallet, Art art}) async {
     final rec = ui.PictureRecorder();
     final canvas = Canvas(rec, Rect.fromLTRB(0, 0, art.width, art.height));
-    // p2..blendMode = BlendMode.src;
-    // p2..imageFilter = ui.ImageFilter.blur();
-    _paintQr(canvas, wallet.privateKey, art.pkQr);
-    _paintQr(canvas, wallet.publicAddress, art.adQr);
-    _paintText(canvas, wallet.privateKey, art.pk);
-    _paintText(canvas, wallet.publicAddress, art.ad);
+    //TODO to test/check in the future
+    // paintImage(canvas: canvas, image: image, rect: Rect.fromLTRB(0, 0, art.width, art.height));
+    print("Rasterizing privKey: " + wallet.publicAddress);
+    if (art.pkQr.visible) {
+      _paintQr(canvas, wallet.privateKey, art.pkQr);
+    }
+    if (art.adQr.visible) {
+      _paintQr(canvas, wallet.publicAddress, art.adQr);
+    }
+    if (art.pk.visible) {
+      _paintText(canvas, wallet.privateKey, art.pk);
+    }
+    if (art.ad.visible) {
+      _paintText(canvas, wallet.publicAddress, art.ad);
+    }
     ui.Picture pic = rec.endRecording();
     final ui.Image im = await pic.toImage(art.width.toInt(), art.height.toInt());
-    return im;
+    ByteData data = await im.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List bytes = data.buffer.asUint8List();
+    assert(bytes != null);
+    return bytes;
   }
 
   void _paintQr(Canvas canvas, String text, ArtElement artE) {
@@ -63,7 +64,6 @@ class Rasterizer {
     assert(artE != null);
     ui.Paint p = ui.Paint();
     p.color = artE.bgcolor;
-    // canvas.drawRect(ui.Rect.fromLTRB(artE.left, artE.top, artE.width, artE.height), p);
     TextSpan span = new TextSpan(style: new TextStyle(color: artE.fgcolor, fontSize: artE.size, fontFamily: "Roboto"), text: text);
     TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.left, textDirection: TextDirection.ltr);
     double rad = (artE.rotation / 180) * math.pi;

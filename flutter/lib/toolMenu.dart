@@ -107,7 +107,7 @@ class ToolMenu extends StatelessWidget {
               child: RaisedButton(
                 onPressed: () {
                   FocusScope.of(context).requestFocus(new FocusNode());
-                  state.printWallets();
+                  state.printPapers();
                 },
                 color: Colors.blueGrey,
                 padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
