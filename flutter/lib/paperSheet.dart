@@ -9,7 +9,7 @@ class PaperSheetInh extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant PaperSheetInh oldWidget) {
-    return oldWidget.state.getSelectedArt() != state.getSelectedArt();
+    return oldWidget.state.getSelectedArt() != state.getSelectedArt() || oldWidget.state.getPapers().length != state.getPapers().length;
   }
 
   static PaperSheetInh of(BuildContext context) {

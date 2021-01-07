@@ -10,20 +10,23 @@ import 'paper.dart';
 import 'BOP.dart';
 import 'package:flutter/material.dart';
 
+const WIP_PRINTING = "printing";
+
 class BOPState extends State<BOP> {
   final Map<String, Art> _arts = Map<String, Art>();
   final List<Wallet> _wallets = List<Wallet>.empty(growable: true);
   final List<Paper> _papers = List<Paper>.empty(growable: true);
-  final TextEditingController numWalletsController = TextEditingController.fromValue(TextEditingValue(text: "2"));
+  final TextEditingController numWalletsController = TextEditingController.fromValue(TextEditingValue(text: "1"));
   final TextEditingController walletsPerPageController = TextEditingController();
   String _defaultArt = "Bitcoin";
   Art _selectedArt;
-  bool _printingInProgress = false;
+  String _wipWork;
+  bool _wip = false;
   Uint8List lastGeneratedPDF;
 
   BOPState() {
     loadArts(this, "./img");
-    this.regenerateWallets();
+    updateWallets();
   }
 
   @override
@@ -34,54 +37,52 @@ class BOPState extends State<BOP> {
   Future<void> selectArt(String sel) async {
     print("BOPSTATE selectArt" + sel);
     this._selectedArt = this._arts[sel];
+    if (this._wallets.length == 0) {
+      await this.updateWallets();
+    }
     await this.regeneratePapers();
     setState(() {});
   }
 
-  void setPrintingInProgress(bool printing) {
-    setState(() {
-      this._printingInProgress = printing;
-    });
-  }
-
-  Future<void> regenerateWallets() async {
+  Future<void> updateWallets() async {
     print("BOPSTATE regenerateWallets");
     String numWTxt = numWalletsController.text;
-    if (numWTxt.isEmpty) {
+    if (numWTxt.isEmpty || (this._selectedArt == null)) {
       return;
     }
-    int numWallets = int.parse(numWTxt);
-    if (numWallets < 1 || numWallets > 10) {
-      numWalletsController.text = "2";
+    int numWs = int.parse(numWTxt);
+    if (numWs < 1 || numWs > 10) {
+      numWalletsController.text = "1";
       return;
     }
-    this._wallets.clear();
-    print("BOPSTATE regenerateWallets numwallets: " + numWallets.toString());
-    for (int i = 0; i < numWallets; i++) {
-      this._wallets.add(Wallet());
+    int curNumWs = this._wallets.length;
+    if (curNumWs > numWs) {
+      this._wallets.removeRange(numWs, curNumWs);
+      this._papers.removeRange(numWs, curNumWs);
+    } else if (curNumWs < numWs) {
+      for (int i = curNumWs; i < numWs; i++) {
+        int s = DateTime.now().millisecondsSinceEpoch;
+        this._wallets.add(Wallet());
+        this._papers.add(await Paper.generatePaper(this._wallets[i], this._selectedArt));
+        int l = DateTime.now().millisecondsSinceEpoch - s;
+        print("BOPSTATE wallet created in (millis):" + l.toString());
+      }
     }
+    setState(() {});
   }
 
   Future<void> regeneratePapers() async {
     print("BOPSTATE regenerate papers");
     this._papers.clear();
     for (int i = 0; i < this._wallets.length; i++) {
-      Wallet w = this._wallets[i];
-      Uint8List bytes = await Rasterizer().rasterize(wallet: w, art: this._selectedArt);
-      Paper p = Paper(
-          wallet: w,
-          backgroundBytes: this._selectedArt.bytes,
-          overlayBytes: bytes,
-          width: this._selectedArt.width.toInt(),
-          height: this._selectedArt.height.toInt());
-      this._papers.add(p);
+      this._papers.add(await Paper.generatePaper(this._wallets[i], this._selectedArt));
     }
     setState(() {});
   }
 
   Future<void> printPapers() async {
     print("BOPSTATE printPapers");
-    this.setPrintingInProgress(true);
+    this.setWIP(WIP_PRINTING, true);
     String wPpTxt = walletsPerPageController.text;
     if (wPpTxt.isEmpty) {
       return;
@@ -93,7 +94,7 @@ class BOPState extends State<BOP> {
     }
     this.lastGeneratedPDF = await PDFGenerator().toPDF(papers: this._papers, walletsPerPage: walletsPP);
     await Printing.layoutPdf(onLayout: (format) async => this.lastGeneratedPDF);
-    this.setPrintingInProgress(false);
+    this.setWIP(WIP_PRINTING, false);
   }
 
   Future<void> savePapersToPDF() async {
@@ -130,21 +131,24 @@ class BOPState extends State<BOP> {
     return this._papers;
   }
 
-  bool isPrinting() {
-    return this._printingInProgress;
+  void setWIP(String work, bool wip) {
+    setState(() {
+      if (wip) {
+        this._wipWork = work;
+        this._wip = true;
+      } else {
+        this._wipWork = "";
+        this._wip = false;
+      }
+    });
   }
 
-  // bool areWalletsReady() {
-  //   if (this._wallets.isEmpty) {
-  //     return false;
-  //   }
-  //   for (int i = 0; i < this._wallets.length; i++) {
-  //     if (this._wallets[i].isReady() == false) {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
+  bool isWIP(String work) {
+    if (this._wip && this._wipWork == work) {
+      return true;
+    }
+    return false;
+  }
 
   void addArt(Art art) async {
     setState(() {

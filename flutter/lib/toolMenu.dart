@@ -9,7 +9,7 @@ class ToolMenuInh extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant ToolMenuInh oldWidget) {
-    return oldWidget.state.isPrinting() != state.isPrinting();
+    return oldWidget.state.isWIP(WIP_PRINTING) != state.isWIP(WIP_PRINTING);
   }
 
   static ToolMenuInh of(BuildContext context) {
@@ -32,7 +32,7 @@ class ToolMenu extends StatelessWidget {
           margin: EdgeInsets.zero,
           child: Container(
             color: Colors.blueGrey,
-            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+            padding: EdgeInsets.fromLTRB(40, 30, 40, 5),
             alignment: Alignment.bottomRight,
             child: Text(
               "Tools",
@@ -60,7 +60,7 @@ class ToolMenu extends StatelessWidget {
 
   Widget numWalletsBox({BuildContext context, BOPState state}) {
     return Container(
-        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+        padding: EdgeInsets.fromLTRB(40, 30, 40, 5),
         child: Column(
           children: [
             TextField(
@@ -68,8 +68,7 @@ class ToolMenu extends StatelessWidget {
               controller: state.numWalletsController,
               maxLength: 2,
               onEditingComplete: () async {
-                await state.regenerateWallets();
-                await state.regeneratePapers();
+                await state.updateWallets();
               },
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -82,7 +81,7 @@ class ToolMenu extends StatelessWidget {
 
   Widget printBox({BuildContext context, BOPState state}) {
     return Container(
-        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+        padding: EdgeInsets.fromLTRB(40, 30, 40, 5),
         child: Column(
           children: [
             TextField(
@@ -94,7 +93,8 @@ class ToolMenu extends StatelessWidget {
                 labelText: "wallets per page",
               ),
             ),
-            if (state.isPrinting()) RichText(text: TextSpan(text: "Be patient, wallets generation takes a while...", style: TextStyle(color: Colors.black54))),
+            if (state.isWIP(WIP_PRINTING))
+              RichText(text: TextSpan(text: "Be patient, wallets generation takes a while...", style: TextStyle(color: Colors.black54))),
             Container(
               child: RaisedButton(
                 onPressed: () {
