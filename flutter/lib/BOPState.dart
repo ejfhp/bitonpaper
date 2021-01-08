@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'package:printing/printing.dart';
 import 'package:bitonpaper/print.dart';
-import 'package:bitonpaper/walletPainter.dart';
 import 'dart:html' as html;
 
 import 'art.dart';
@@ -10,7 +9,8 @@ import 'paper.dart';
 import 'BOP.dart';
 import 'package:flutter/material.dart';
 
-const WIP_PRINTING = "printing";
+const WIP_PRINTING = 11;
+const WIP_IDLE = 0;
 
 class BOPState extends State<BOP> {
   final Map<String, Art> _arts = Map<String, Art>();
@@ -20,8 +20,7 @@ class BOPState extends State<BOP> {
   final TextEditingController walletsPerPageController = TextEditingController();
   String _defaultArt = "Bitcoin";
   Art _selectedArt;
-  String _wipWork;
-  bool _wip = false;
+  int wip = 0;
   Uint8List lastGeneratedPDF;
 
   BOPState() {
@@ -36,16 +35,17 @@ class BOPState extends State<BOP> {
 
   Future<void> selectArt(String sel) async {
     print("BOPSTATE selectArt" + sel);
-    this._selectedArt = this._arts[sel];
+    setState(() {
+      this._selectedArt = this._arts[sel];
+    });
     if (this._wallets.length == 0) {
       await this.updateWallets();
     }
     await this.regeneratePapers();
-    setState(() {});
   }
 
   Future<void> updateWallets() async {
-    print("BOPSTATE regenerateWallets");
+    print("BOPSTATE updateWallets");
     String numWTxt = numWalletsController.text;
     if (numWTxt.isEmpty || (this._selectedArt == null)) {
       return;
@@ -63,9 +63,9 @@ class BOPState extends State<BOP> {
       for (int i = curNumWs; i < numWs; i++) {
         int s = DateTime.now().millisecondsSinceEpoch;
         this._wallets.add(Wallet());
-        this._papers.add(await Paper.generatePaper(this._wallets[i], this._selectedArt));
         int l = DateTime.now().millisecondsSinceEpoch - s;
         print("BOPSTATE wallet created in (millis):" + l.toString());
+        this._papers.add(await Paper.generatePaper(this._wallets[i], this._selectedArt));
       }
     }
     setState(() {});
@@ -82,7 +82,9 @@ class BOPState extends State<BOP> {
 
   Future<void> printPapers() async {
     print("BOPSTATE printPapers");
-    this.setWIP(WIP_PRINTING, true);
+    this.setWIP(WIP_PRINTING);
+    //Wait just a bit before starting the printing to allow UI to refresh
+    await Future.delayed(const Duration(milliseconds: 100), () {});
     String wPpTxt = walletsPerPageController.text;
     if (wPpTxt.isEmpty) {
       return;
@@ -92,9 +94,12 @@ class BOPState extends State<BOP> {
       walletsPerPageController.text = "2";
       return;
     }
-    this.lastGeneratedPDF = await PDFGenerator().toPDF(papers: this._papers, walletsPerPage: walletsPP);
+    PDFGenerator pdfGen = PDFGenerator();
+    this.lastGeneratedPDF = await pdfGen.toPDF(papers: this._papers, walletsPerPage: walletsPP);
+    int s = DateTime.now().millisecondsSinceEpoch;
     await Printing.layoutPdf(onLayout: (format) async => this.lastGeneratedPDF);
-    this.setWIP(WIP_PRINTING, false);
+    print("BOPSTATE PDF shown to print dialog in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
+    this.setWIP(WIP_IDLE);
   }
 
   Future<void> savePapersToPDF() async {
@@ -131,23 +136,11 @@ class BOPState extends State<BOP> {
     return this._papers;
   }
 
-  void setWIP(String work, bool wip) {
+  void setWIP(int task) {
     setState(() {
-      if (wip) {
-        this._wipWork = work;
-        this._wip = true;
-      } else {
-        this._wipWork = "";
-        this._wip = false;
-      }
+      print("BOPSTATE setWIP: " + task.toString());
+      this.wip = task;
     });
-  }
-
-  bool isWIP(String work) {
-    if (this._wip && this._wipWork == work) {
-      return true;
-    }
-    return false;
   }
 
   void addArt(Art art) async {
