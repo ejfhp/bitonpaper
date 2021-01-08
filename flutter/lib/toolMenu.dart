@@ -9,7 +9,7 @@ class ToolMenuInh extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant ToolMenuInh oldWidget) {
-    return oldWidget.state.isWIP(WIP_PRINTING) != state.isWIP(WIP_PRINTING);
+    return oldWidget.state.wip != state.wip;
   }
 
   static ToolMenuInh of(BuildContext context) {
@@ -93,8 +93,15 @@ class ToolMenu extends StatelessWidget {
                 labelText: "wallets per page",
               ),
             ),
-            if (state.isWIP(WIP_PRINTING))
-              RichText(text: TextSpan(text: "Be patient, wallets generation takes a while...", style: TextStyle(color: Colors.black54))),
+            if (state.wip == WIP_PRINTING)
+              RichText(
+                  text: TextSpan(
+                text: "Be patient, wallets generation takes a while...",
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontFamily: "Roboto",
+                ),
+              )),
             Container(
               child: RaisedButton(
                 onPressed: () {

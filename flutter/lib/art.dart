@@ -12,7 +12,7 @@ Future<void> loadArts(BOPState state, String baseUrl) async {
   if (response.statusCode == 200) {
     List<dynamic> artList = (convert.jsonDecode(response.body) as List).cast<String>();
     for (int i = 0; i < artList.length; i++) {
-      print("ART Loading Art: " + artList[i]);
+      print("ART Loading: " + artList[i]);
       Art art = await Art.loadFromUrl(baseUrl: baseUrl, name: artList[i]);
       state.addArt(art);
     }
@@ -49,7 +49,6 @@ class Art {
   }
 
   static Future<Art> loadFromUrl({String baseUrl, String name}) async {
-    print("ART http.get " + baseUrl + "/" + name);
     Art art = Art();
     http.Response response = await http.get(baseUrl + "/" + name);
     if (response.statusCode == 200) {
@@ -87,7 +86,6 @@ class Art {
       print('ART GetArt request failed with status: ${response.statusCode}.');
     }
     String imageFileUrl = baseUrl + "/" + art.file;
-    print("ART get image: " + imageFileUrl);
     http.Response imgResp = await http.get(imageFileUrl);
     Uint8List bytes = imgResp.bodyBytes; //Uint8List
     assert(bytes != null);

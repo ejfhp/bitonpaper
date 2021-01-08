@@ -22,7 +22,6 @@ class PaperSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     BOPState appState = PaperSheetInh.of(context).state;
     List<Paper> papers = appState.getPapers();
-    print("PAPERSHEET Papers Lenght: " + papers.length.toString());
     if (papers.length < 1) {
       return Container(
         alignment: Alignment.center,
@@ -36,13 +35,8 @@ class PaperSheet extends StatelessWidget {
     );
     return SingleChildScrollView(
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(width: 0, color: Colors.black45),
-        ),
-        padding: EdgeInsets.all(20),
         child: p,
         alignment: Alignment.center,
-        height: 5000, //- (header + bottom bar)
       ),
     );
   }
@@ -67,7 +61,7 @@ class PaperView extends StatelessWidget {
     List<Widget> ww = List<Widget>.empty(growable: true);
     papers.forEach((paper) {
       ww.add(Container(
-        margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+        margin: EdgeInsets.fromLTRB(30, 20, 30, 20),
         child: prepareArt(paper: paper, constraint: constraint),
       ));
     });
