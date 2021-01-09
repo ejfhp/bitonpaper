@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'BOPState.dart';
 import 'conf.dart';
+import 'html_print.dart';
 
 class ToolMenuInh extends InheritedWidget {
   final BOPState state;
@@ -50,6 +51,7 @@ class ToolMenu extends StatelessWidget {
     toolsList.add(containerHeader);
     toolsList.add(numWalletsBox(context: context, state: state));
     toolsList.add(printBox(context: context, state: state));
+    toolsList.add(pdfBox(context: context, state: state));
     ListView commands = ListView(children: toolsList);
 
     return Drawer(
@@ -84,6 +86,35 @@ class ToolMenu extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(40, 30, 40, 5),
         child: Column(
           children: [
+            Container(
+              child: RaisedButton(
+                onPressed: () async {
+                  PrintSheet print = PrintSheet(state);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => print,
+                      ));
+                  await Future.delayed(const Duration(seconds: 3), () {});
+                  print.showPrintPreview();
+                  await Future.delayed(const Duration(seconds: 3), () {});
+                  Navigator.pop(context);
+                },
+                color: Colors.blueGrey,
+                padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                child: const Text('Print', style: TextStyle(fontSize: 20, color: Colors.amber)),
+              ),
+              padding: EdgeInsets.fromLTRB(10, 50, 10, 50),
+            ),
+          ],
+        ));
+  }
+
+  Widget pdfBox({BuildContext context, BOPState state}) {
+    return Container(
+        padding: EdgeInsets.fromLTRB(40, 30, 40, 5),
+        child: Column(
+          children: [
             TextField(
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               controller: state.walletsPerPageController,
@@ -96,7 +127,7 @@ class ToolMenu extends StatelessWidget {
             if (state.wip == WIP_PRINTING)
               RichText(
                   text: TextSpan(
-                text: "Be patient, wallets generation takes a while...",
+                text: "Be patient, PDF generation takes a while...",
                 style: TextStyle(
                   color: Colors.black54,
                   fontFamily: "Roboto",
@@ -110,7 +141,7 @@ class ToolMenu extends StatelessWidget {
                 },
                 color: Colors.blueGrey,
                 padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-                child: const Text('Print', style: TextStyle(fontSize: 20, color: Colors.amber)),
+                child: const Text('Generate', style: TextStyle(fontSize: 20, color: Colors.amber)),
               ),
               padding: EdgeInsets.fromLTRB(10, 50, 10, 50),
             ),

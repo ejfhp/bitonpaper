@@ -58,7 +58,10 @@ class BOPUI extends StatelessWidget {
     );
     Container toolMenu = Container(
       width: TOOL_WIDTH,
-      child: ToolMenuInh(child: ToolMenu(), state: state),
+      child: ToolMenuInh(
+        child: ToolMenu(wide: wideScreen),
+        state: state,
+      ),
     );
 
     return Row(
