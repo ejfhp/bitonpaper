@@ -13,7 +13,7 @@ class PrintSheet extends StatelessWidget {
     List<Paper> papers = state.getPapers();
     var pageSize = MediaQuery.of(context).size;
     return SizedBox(
-      height: 4000,
+      height: 8000,
       width: 1000,
       child: Container(
         child: getSheet(papers: papers),
