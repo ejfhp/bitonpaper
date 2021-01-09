@@ -95,9 +95,10 @@ class ToolMenu extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => print,
                       ));
-                  await Future.delayed(const Duration(seconds: 3), () {});
+                  print.preparePrintPreview(3);
+                  await Future.delayed(const Duration(seconds: 5), () {});
                   print.showPrintPreview();
-                  await Future.delayed(const Duration(seconds: 3), () {});
+                  await Future.delayed(const Duration(seconds: 1), () {});
                   Navigator.pop(context);
                 },
                 color: Colors.blueGrey,

@@ -1,0 +1,50 @@
+{
+    "name": "Tiny",
+    "file": "art_tiny.png",
+    "height": 294,
+    "width": 427,
+    "privkey_qr": {
+        "visible": false,
+        "top": 4,
+        "left": 1240,
+        "width": 300,
+        "height": 300,
+        "size": 300,
+        "rotation": 0,
+        "fgcolor": "FFF3B600",
+        "bgcolor": "FFFFFFFF"
+    },
+    "privkey": {
+        "visible": false,
+        "top": 820,
+        "left": 1190,
+        "width": 800,
+        "height": 24,
+        "size": 24,
+        "rotation": -90,
+        "fgcolor": "FFF3B600",
+        "bgcolor": "FFFFFFFF"
+    },
+    "address_qr": {
+        "visible": false,
+        "top": 80,
+        "left": 40,
+        "width": 330,
+        "height": 330,
+        "size": 330,
+        "rotation": 0,
+        "fgcolor": "FFF3B600",
+        "bgcolor": "FFFFFFFF"
+    },
+    "address": {
+        "visible": true,
+        "top": 8,
+        "left": 3,
+        "width": 300,
+        "height": 24,
+        "size": 8,
+        "rotation": 0,
+        "fgcolor": "FF000000",
+        "bgcolor": "FFFFFFFF"
+    }
+}
