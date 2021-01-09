@@ -13,8 +13,8 @@ class PrintSheet extends StatelessWidget {
     List<Paper> papers = state.getPapers();
     var pageSize = MediaQuery.of(context).size;
     return SizedBox(
-      height: 8000,
-      width: 10000,
+      height: 4000,
+      width: 100000,
       child: Container(
         child: getSheet(papers: papers),
         alignment: Alignment.center,
@@ -48,15 +48,17 @@ class PrintSheet extends StatelessWidget {
     ImageProvider bip = MemoryImage(paper.backgroundBytes);
     ImageProvider oip = MemoryImage(paper.overlayBytes);
     return Container(
+        height: paper.height.toDouble(),
+        width: paper.width.toDouble(),
         child: Stack(
-      children: [
-        Positioned(
-          child: Image(image: bip),
-        ),
-        Positioned(
-          child: Image(image: oip),
-        )
-      ],
-    ));
+          children: [
+            Positioned(
+              child: Image(image: bip),
+            ),
+            Positioned(
+              child: Image(image: oip),
+            )
+          ],
+        ));
   }
 }
