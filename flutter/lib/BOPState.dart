@@ -16,7 +16,7 @@ class BOPState extends State<BOP> {
   final Map<String, Art> _arts = Map<String, Art>();
   final List<Wallet> _wallets = List<Wallet>.empty(growable: true);
   final List<Paper> _papers = List<Paper>.empty(growable: true);
-  final TextEditingController numWalletsController = TextEditingController.fromValue(TextEditingValue(text: "1"));
+  final TextEditingController numWalletsController = TextEditingController.fromValue(TextEditingValue(text: "4"));
   final TextEditingController walletsPerPageController = TextEditingController();
   String _defaultArt = "Bitcoin";
   Art _selectedArt;
