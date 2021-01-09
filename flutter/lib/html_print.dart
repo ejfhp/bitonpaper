@@ -22,8 +22,10 @@ class PrintSheet extends StatelessWidget {
     );
   }
 
+//https://stackoverflow.com/questions/16649943/css-to-set-a4-paper-size
   showPrintPreview() {
-    print("HTML_PRINT printing page");
+    print("HTML_PRINT printing page: v01");
+    window.resizeTo(1000, 4000);
     window.print();
   }
 
