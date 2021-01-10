@@ -4,47 +4,47 @@
     "height": 860,
     "width": 1600,
     "privkey_qr": {
-        "visible": true,
         "top": 460,
         "left": 1240,
         "width": 300,
         "height": 300,
         "size": 300,
         "rotation": 0,
-        "fgcolor": "FFF3B600",
-        "bgcolor": "FFFFFFFF"
+        "fgcolor": "ff9d7903",
+        "bgcolor": "ffffffff",
+        "visible": true
     },
     "privkey": {
-        "visible": true,
         "top": 820,
         "left": 1190,
         "width": 800,
         "height": 24,
         "size": 24,
         "rotation": -90,
-        "fgcolor": "FFF3B600",
-        "bgcolor": "FFFFFFFF"
+        "fgcolor": "ff9d7903",
+        "bgcolor": "ffffffff",
+        "visible": true
     },
     "address_qr": {
-        "visible": true,
         "top": 80,
         "left": 40,
         "width": 330,
         "height": 330,
         "size": 330,
         "rotation": 0,
-        "fgcolor": "FFF3B600",
-        "bgcolor": "FFFFFFFF"
+        "fgcolor": "ff9d7903",
+        "bgcolor": "ffffffff",
+        "visible": true
     },
     "address": {
-        "visible": true,
         "top": 820,
         "left": 390,
         "width": 800,
         "height": 24,
         "size": 24,
         "rotation": -90,
-        "fgcolor": "FFF3B600",
-        "bgcolor": "FFFFFFFF"
+        "fgcolor": "ff9d7903",
+        "bgcolor": "ffffffff",
+        "visible": true
     }
 }
