@@ -3,6 +3,7 @@ import 'package:printing/printing.dart';
 import 'package:bitonpaper/print.dart';
 import 'dart:html' as html;
 
+import 'html_print.dart';
 import 'art.dart';
 import 'wallet.dart';
 import 'paper.dart';
@@ -10,18 +11,18 @@ import 'BOP.dart';
 import 'package:flutter/material.dart';
 
 const WIP_PRINTING = 11;
+const WIP_PDF = 12;
 const WIP_IDLE = 0;
 
 class BOPState extends State<BOP> {
   final Map<String, Art> _arts = Map<String, Art>();
   final List<Wallet> _wallets = List<Wallet>.empty(growable: true);
   final List<Paper> _papers = List<Paper>.empty(growable: true);
-  final TextEditingController numWalletsController = TextEditingController.fromValue(TextEditingValue(text: "4"));
-  final TextEditingController walletsPerPageController = TextEditingController();
+  final TextEditingController numWalletsController = TextEditingController.fromValue(TextEditingValue(text: "2"));
+  final TextEditingController walletsPerPageController = TextEditingController.fromValue(TextEditingValue(text: "2"));
   String _defaultArt = "Bitcoin";
   Art _selectedArt;
   int wip = 0;
-  Uint8List lastGeneratedPDF;
 
   BOPState() {
     loadArts(this, "./img");
@@ -91,29 +92,53 @@ class BOPState extends State<BOP> {
     }
     int walletsPP = int.parse(wPpTxt);
     if (walletsPP < 1) {
-      walletsPerPageController.text = "2";
+      walletsPerPageController.text = "1";
       return;
     }
-    PDFGenerator pdfGen = PDFGenerator();
-    this.lastGeneratedPDF = await pdfGen.toPDF(papers: this._papers, walletsPerPage: walletsPP);
+
     int s = DateTime.now().millisecondsSinceEpoch;
-    await Printing.layoutPdf(onLayout: (format) async => this.lastGeneratedPDF);
-    print("BOPSTATE PDF shown to print dialog in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
+    PrintSheet printSheet = PrintSheet(this._papers);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => printSheet,
+        ));
+    await printSheet.preparePrintPreview(walletsPP);
+    print("BOPSTATE print preview prepared in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
+    printSheet.showPrintPreview();
+    Navigator.pop(context);
     this.setWIP(WIP_IDLE);
   }
 
   Future<void> savePapersToPDF() async {
     print("BOPSTATE savePapersToPDF");
-    final blob = html.Blob([this.lastGeneratedPDF], "application/pdf");
+    this.setWIP(WIP_PDF);
+    //Wait just a bit before starting the printing to allow UI to refresh
+    await Future.delayed(const Duration(milliseconds: 100), () {});
+    String wPpTxt = walletsPerPageController.text;
+    if (wPpTxt.isEmpty) {
+      return;
+    }
+    int walletsPP = int.parse(wPpTxt);
+    if (walletsPP < 1) {
+      walletsPerPageController.text = "1";
+      return;
+    }
+    int s = DateTime.now().millisecondsSinceEpoch;
+    PDFGenerator pdfGen = PDFGenerator();
+    Uint8List generatedPDF = await pdfGen.toPDF(papers: this._papers, walletsPerPage: walletsPP);
+    print("BOPSTATE PDF generated in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
+    final blob = html.Blob([generatedPDF], "application/pdf");
     final url = html.Url.createObjectUrlFromBlob(blob);
     final anchor = html.document.createElement('a') as html.AnchorElement
       ..href = url
       ..style.display = 'none'
-      ..download = 'wallets.pdf';
+      ..download = 'bop_wallet.pdf';
     html.document.body.children.add(anchor);
     anchor.click();
     html.document.body.children.remove(anchor);
     html.Url.revokeObjectUrl(url);
+    this.setWIP(WIP_IDLE);
   }
 
   Map<String, Art> getArts() {
