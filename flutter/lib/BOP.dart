@@ -3,6 +3,7 @@ import 'BOPState.dart';
 import 'artMenu.dart';
 import 'toolMenu.dart';
 import 'paperSheet.dart';
+import 'version.dart';
 import 'conf.dart';
 
 //Main StatefulWidget
@@ -22,13 +23,19 @@ class BOPUI extends StatelessWidget {
     final bool wideScreen = MediaQuery.of(context).size.width > ART_WIDTH + TOOL_WIDTH + PAPER_WIDTH;
     final bool implyBarLeading = !wideScreen;
     BottomAppBar bottomBar = BottomAppBar(
-        elevation: 0,
-        color: Colors.blueGrey,
-        child: Text(
-          "Use at your own risk.",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 10, color: Colors.blueGrey[200], fontFamily: "Roboto"),
-        ));
+      elevation: 0,
+      color: Colors.blueGrey,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Version " + VERSION,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 10, color: Colors.black54, fontFamily: "Roboto"),
+          ),
+        ],
+      ),
+    );
     PreferredSize topBar = PreferredSize(
       preferredSize: Size.fromHeight(HEADER_HEIGHT),
       child: AppBar(
