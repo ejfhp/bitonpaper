@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 import 'package:printing/printing.dart';
 import 'package:bitonpaper/print.dart';
-import 'dart:html' as html;
 
 import 'html_print.dart';
+import 'html_export.dart';
 import 'art.dart';
 import 'wallet.dart';
 import 'paper.dart';
@@ -97,7 +97,7 @@ class BOPState extends State<BOP> {
     }
 
     int s = DateTime.now().millisecondsSinceEpoch;
-    PrintSheet printSheet = PrintSheet(this._papers);
+    PrintSheetHTML printSheet = PrintSheetHTML(this._papers);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -128,16 +128,18 @@ class BOPState extends State<BOP> {
     PDFGenerator pdfGen = PDFGenerator();
     Uint8List generatedPDF = await pdfGen.toPDF(papers: this._papers, walletsPerPage: walletsPP);
     print("BOPSTATE PDF generated in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
-    final blob = html.Blob([generatedPDF], "application/pdf");
-    final url = html.Url.createObjectUrlFromBlob(blob);
-    final anchor = html.document.createElement('a') as html.AnchorElement
-      ..href = url
-      ..style.display = 'none'
-      ..download = 'bop_wallet.pdf';
-    html.document.body.children.add(anchor);
-    anchor.click();
-    html.document.body.children.remove(anchor);
-    html.Url.revokeObjectUrl(url);
+    openDownloadHTML(generatedPDF, MIME_PDF, "bop_wallets.pdf");
+
+    // final blob = html.Blob([generatedPDF], "application/pdf");
+    // final url = html.Url.createObjectUrlFromBlob(blob);
+    // final anchor = html.document.createElement('a') as html.AnchorElement
+    //   ..href = url
+    //   ..style.display = 'none'
+    //   ..download = 'bop_wallet.pdf';
+    // html.document.body.children.add(anchor);
+    // anchor.click();
+    // html.document.body.children.remove(anchor);
+    // html.Url.revokeObjectUrl(url);
     this.setWIP(WIP_IDLE);
   }
 

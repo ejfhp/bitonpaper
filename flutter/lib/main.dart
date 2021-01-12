@@ -4,6 +4,9 @@ import 'intro.dart';
 
 const appTitle = "BitOnPaper - Bitcoin On Paper";
 
+//TODO Check null safety
+//flutter packages pub outdated --mode=null-safety
+
 void main() {
   // var initialPage = PaperPage();
   var initialPage = Intro();
