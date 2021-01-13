@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:html' as html;
 
 const String MIME_PDF = "application/pdf";
+const String MIME_JSON = "application/json";
 
 void openDownloadHTML(Uint8List data, String mime, String fileName) {
   final blob = html.Blob([data], mime);

@@ -1,7 +1,6 @@
 import 'dart:typed_data';
-import 'package:printing/printing.dart';
 import 'package:bitonpaper/print.dart';
-
+import 'dart:convert';
 import 'html_print.dart';
 import 'html_export.dart';
 import 'art.dart';
@@ -12,6 +11,7 @@ import 'package:flutter/material.dart';
 
 const WIP_PRINTING = 11;
 const WIP_PDF = 12;
+const WIP_EXPKEYS = 13;
 const WIP_IDLE = 0;
 
 class BOPState extends State<BOP> {
@@ -129,17 +129,23 @@ class BOPState extends State<BOP> {
     Uint8List generatedPDF = await pdfGen.toPDF(papers: this._papers, walletsPerPage: walletsPP);
     print("BOPSTATE PDF generated in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
     openDownloadHTML(generatedPDF, MIME_PDF, "bop_wallets.pdf");
+    this.setWIP(WIP_IDLE);
+  }
 
-    // final blob = html.Blob([generatedPDF], "application/pdf");
-    // final url = html.Url.createObjectUrlFromBlob(blob);
-    // final anchor = html.document.createElement('a') as html.AnchorElement
-    //   ..href = url
-    //   ..style.display = 'none'
-    //   ..download = 'bop_wallet.pdf';
-    // html.document.body.children.add(anchor);
-    // anchor.click();
-    // html.document.body.children.remove(anchor);
-    // html.Url.revokeObjectUrl(url);
+  Future<void> saveKeysToTXT() async {
+    print("BOPSTATE savePapersToPDF");
+    this.setWIP(WIP_EXPKEYS);
+    String exportText = "{";
+    int numWallets = this._wallets.length;
+    for (int i = 0; i < numWallets; i++) {
+      exportText += "\"" + this._wallets[i].publicAddress + "\": \"" + this._wallets[i].publicAddress + "\"";
+      if (i < numWallets - 1) {
+        exportText += ",\n";
+      }
+    }
+    exportText += "}";
+    final bytes = utf8.encode(exportText);
+    openDownloadHTML(bytes, MIME_JSON, "bop_keys.json");
     this.setWIP(WIP_IDLE);
   }
 
