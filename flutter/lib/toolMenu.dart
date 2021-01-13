@@ -61,6 +61,10 @@ class ToolMenu extends StatelessWidget {
       child: pdfBox(context: context, state: state),
       padding: EdgeInsets.fromLTRB(40, 30, 40, 5),
     ));
+    toolsList.add(Container(
+      child: exportBox(context: context, state: state),
+      padding: EdgeInsets.fromLTRB(40, 30, 40, 5),
+    ));
     ListView commands = ListView(children: toolsList);
 
     return Drawer(
@@ -148,5 +152,24 @@ class ToolMenu extends StatelessWidget {
           )
       ],
     ));
+  }
+
+  Widget exportBox({BuildContext context, BOPState state}) {
+    return IntrinsicWidth(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            child: RaisedButton(
+              onPressed: () async {
+                await state.saveKeysToTXT();
+              },
+              color: Colors.blueGrey,
+              child: const Text('Export keys', style: TextStyle(fontSize: 20, color: Colors.amber)),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

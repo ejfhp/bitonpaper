@@ -22,11 +22,15 @@ RUN flutter channel beta
 RUN flutter upgrade
 
 
+ARG ver=""
 
 WORKDIR /bitonpaper
 COPY . .
 RUN ls -l
 WORKDIR /bitonpaper/flutter
+
+RUN echo 'const String VERSION = "${ver}"' > ./flutter/lib/version.dart
+
 RUN flutter build web
 
 # Copy local code to the container image.

@@ -138,7 +138,7 @@ class BOPState extends State<BOP> {
     String exportText = "{";
     int numWallets = this._wallets.length;
     for (int i = 0; i < numWallets; i++) {
-      exportText += "\"" + this._wallets[i].publicAddress + "\": \"" + this._wallets[i].publicAddress + "\"";
+      exportText += "\"" + this._wallets[i].publicAddress + "\": \"" + this._wallets[i].privateKey + "\"";
       if (i < numWallets - 1) {
         exportText += ",\n";
       }
