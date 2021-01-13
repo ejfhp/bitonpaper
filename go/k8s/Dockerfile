@@ -29,7 +29,7 @@ COPY . .
 RUN ls -l
 WORKDIR /bitonpaper/flutter
 
-RUN echo 'const String VERSION = "${ver}"' > ./flutter/lib/version.dart
+RUN echo 'const String VERSION = "${ver}"' > ./lib/version.dart
 
 RUN flutter build web
 
