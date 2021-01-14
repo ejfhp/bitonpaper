@@ -14,5 +14,7 @@ Key concept/feature:
 - Suitable to generate flyer and promotional material for Bitcoin.
 
 
+If you know how to deal with Docker you can compile and run BOP following the instruction in folder go/k8s.
+
 https://twitter.com/boprun
 bop@simply.cash
