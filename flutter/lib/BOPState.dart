@@ -21,6 +21,7 @@ class BOPState extends State<BOP> {
   final TextEditingController numWalletsController = TextEditingController.fromValue(TextEditingValue(text: "2"));
   final TextEditingController walletsPerPageController = TextEditingController.fromValue(TextEditingValue(text: "2"));
   String _defaultArt = "Bitcoin";
+  bool _exportOnlyKeys = false;
   Art _selectedArt;
   int wip = 0;
 
@@ -114,7 +115,9 @@ class BOPState extends State<BOP> {
     print("BOPSTATE savePapersToPDF");
     this.setWIP(WIP_PDF);
     //Wait just a bit before starting the printing to allow UI to refresh
+    this._showMyDialog();
     await Future.delayed(const Duration(milliseconds: 100), () {});
+
     String wPpTxt = walletsPerPageController.text;
     if (wPpTxt.isEmpty) {
       return;
@@ -176,6 +179,16 @@ class BOPState extends State<BOP> {
     });
   }
 
+  set exportOnlyKeys(bool val) {
+    setState(() {
+      this._exportOnlyKeys = val;
+    });
+  }
+
+  bool get exportOnlyKeys {
+    return this._exportOnlyKeys;
+  }
+
   void addArt(Art art) async {
     setState(() {
       _arts.putIfAbsent(art.name, () => art);
@@ -184,5 +197,33 @@ class BOPState extends State<BOP> {
     if (art.name == _defaultArt) {
       this.selectArt(art.name);
     }
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('AlertDialog Title'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('This is a demo alert dialog.'),
+                Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Approve'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

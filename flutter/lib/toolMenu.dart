@@ -9,7 +9,7 @@ class ToolMenuInh extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant ToolMenuInh oldWidget) {
-    return oldWidget.state.wip != state.wip;
+    return (oldWidget.state.wip != state.wip) || (oldWidget.state.exportOnlyKeys != state.exportOnlyKeys);
   }
 
   static ToolMenuInh of(BuildContext context) {
@@ -159,6 +159,25 @@ class ToolMenu extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Container(
+            child: Row(
+              children: [
+                RichText(
+                    text: TextSpan(
+                  text: "Keys only",
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontFamily: "Roboto",
+                  ),
+                )),
+                Checkbox(
+                    value: state.exportOnlyKeys,
+                    onChanged: (val) {
+                      state.exportOnlyKeys = !state.exportOnlyKeys;
+                    }),
+              ],
+            ),
+          ),
           Container(
             child: RaisedButton(
               onPressed: () async {
