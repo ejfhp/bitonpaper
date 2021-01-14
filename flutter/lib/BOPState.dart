@@ -84,7 +84,6 @@ class BOPState extends State<BOP> {
 
   Future<void> printPapers() async {
     print("BOPSTATE printPapers");
-    this.setWIP(WIP_PRINTING);
     //Wait just a bit before starting the printing to allow UI to refresh
     await Future.delayed(const Duration(milliseconds: 100), () {});
     String wPpTxt = walletsPerPageController.text;
@@ -108,14 +107,11 @@ class BOPState extends State<BOP> {
     print("BOPSTATE print preview prepared in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
     printSheet.showPrintPreview();
     Navigator.pop(context);
-    this.setWIP(WIP_IDLE);
   }
 
   Future<void> savePapersToPDF() async {
     print("BOPSTATE savePapersToPDF");
-    this.setWIP(WIP_PDF);
-    //Wait just a bit before starting the printing to allow UI to refresh
-    this._showMyDialog();
+    setWIPAlert("PDF Generation", "Please, be patient, this activity can take a while.");
     await Future.delayed(const Duration(milliseconds: 100), () {});
 
     String wPpTxt = walletsPerPageController.text;
@@ -132,12 +128,11 @@ class BOPState extends State<BOP> {
     Uint8List generatedPDF = await pdfGen.toPDF(papers: this._papers, walletsPerPage: walletsPP);
     print("BOPSTATE PDF generated in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
     openDownloadHTML(generatedPDF, MIME_PDF, "bop_wallets.pdf");
-    this.setWIP(WIP_IDLE);
+    setWIPAlert("", "");
   }
 
   Future<void> saveKeysToTXT() async {
     print("BOPSTATE savePapersToPDF");
-    this.setWIP(WIP_EXPKEYS);
     String exportText = "{";
     int numWallets = this._wallets.length;
     for (int i = 0; i < numWallets; i++) {
@@ -149,7 +144,6 @@ class BOPState extends State<BOP> {
     exportText += "}";
     final bytes = utf8.encode(exportText);
     openDownloadHTML(bytes, MIME_JSON, "bop_keys.json");
-    this.setWIP(WIP_IDLE);
   }
 
   Map<String, Art> getArts() {
@@ -172,11 +166,27 @@ class BOPState extends State<BOP> {
     return this._papers;
   }
 
-  void setWIP(int task) {
-    setState(() {
-      print("BOPSTATE setWIP: " + task.toString());
-      this.wip = task;
-    });
+  void setWIPAlert(String title, String message) async {
+    if (message != "") {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(message),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    } else {
+      Navigator.of(context).pop();
+    }
   }
 
   set exportOnlyKeys(bool val) {
@@ -199,27 +209,24 @@ class BOPState extends State<BOP> {
     }
   }
 
-  Future<void> _showMyDialog() async {
+  Future<void> _showMyDialog(String title, String text) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('AlertDialog Title'),
+          title: Text(title),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('This is a demo alert dialog.'),
-                Text('Would you like to approve of this message?'),
+                Text(text),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
               child: Text('Approve'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () {},
             ),
           ],
         );
