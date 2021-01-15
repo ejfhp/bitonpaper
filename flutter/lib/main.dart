@@ -14,10 +14,10 @@ void main() {
     theme: ThemeData(
       primarySwatch: Colors.blueGrey,
       brightness: Brightness.light,
-      accentColor: Colors.cyan[600],
+      accentColor: Colors.amber,
       canvasColor: Colors.blueGrey[50],
       applyElevationOverlayColor: false,
-      shadowColor: Colors.black,
+      shadowColor: Colors.black54,
       fontFamily: "Roboto",
     ),
     routes: <String, WidgetBuilder>{
