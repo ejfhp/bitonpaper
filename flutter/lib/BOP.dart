@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'BOPState.dart';
-import 'artMenu.dart';
-import 'toolMenu.dart';
+import 'menuArt.dart';
+import 'menuTool.dart';
 import 'paperSheet.dart';
 import 'version.dart';
 import 'conf.dart';

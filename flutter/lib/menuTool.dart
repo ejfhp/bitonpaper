@@ -9,7 +9,7 @@ class ToolMenuInh extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant ToolMenuInh oldWidget) {
-    return (oldWidget.state.wip != state.wip) || (oldWidget.state.exportOnlyKeys != state.exportOnlyKeys);
+    return (oldWidget.state.exportOnlyKeys != state.exportOnlyKeys);
   }
 
   static ToolMenuInh of(BuildContext context) {
@@ -54,12 +54,8 @@ class ToolMenu extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(40, 30, 40, 5),
     ));
     toolsList.add(Container(
+      padding: EdgeInsets.fromLTRB(40, 30, 40, 5),
       child: printBox(context: context, state: state),
-      padding: EdgeInsets.fromLTRB(40, 30, 40, 5),
-    ));
-    toolsList.add(Container(
-      child: pdfBox(context: context, state: state),
-      padding: EdgeInsets.fromLTRB(40, 30, 40, 5),
     ));
     toolsList.add(Container(
       child: exportBox(context: context, state: state),
@@ -74,14 +70,24 @@ class ToolMenu extends StatelessWidget {
   }
 
   Widget numWalletsBox({BuildContext context, BOPState state}) {
-    return IntrinsicWidth(
+    return Container(
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: Colors.black54, width: 1),
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ),
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextField(
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             controller: state.numWalletsController,
             textAlign: TextAlign.right,
             maxLength: 2,
+            style: TextStyle(fontFamily: "Roboto", color: Colors.black54),
             onEditingComplete: () async {
               await state.updateWallets();
             },
@@ -90,14 +96,14 @@ class ToolMenu extends StatelessWidget {
               labelText: "wallets (max 10)",
             ),
           ),
-          TextField(
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            controller: state.walletsPerPageController,
-            textAlign: TextAlign.right,
-            maxLength: 1,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: "wallets per page",
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: RaisedButton(
+              onPressed: () async {
+                await state.updateWallets();
+              },
+              color: Colors.blueGrey,
+              child: const Text('Apply', style: TextStyle(fontSize: 20, color: Colors.amber)),
             ),
           ),
         ],
@@ -106,11 +112,31 @@ class ToolMenu extends StatelessWidget {
   }
 
   Widget printBox({BuildContext context, BOPState state}) {
-    return IntrinsicWidth(
+    return Container(
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: Colors.black54, width: 1),
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ),
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          TextField(
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            controller: state.walletsPerPageController,
+            textAlign: TextAlign.right,
+            maxLength: 1,
+            style: TextStyle(fontFamily: "Roboto", color: Colors.black54),
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: "wallets per page",
+            ),
+          ),
           Container(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: RaisedButton(
               onPressed: () async {
                 await state.printPapers();
@@ -119,48 +145,37 @@ class ToolMenu extends StatelessWidget {
               child: const Text('Print', style: TextStyle(fontSize: 20, color: Colors.amber)),
             ),
           ),
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: RaisedButton(
+              onPressed: () async {
+                FocusScope.of(context).requestFocus(new FocusNode());
+                await state.savePapersToPDF();
+              },
+              color: Colors.blueGrey,
+              child: const Text('Generate PDF', style: TextStyle(fontSize: 20, color: Colors.amber)),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget pdfBox({BuildContext context, BOPState state}) {
-    return IntrinsicWidth(
-        child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          child: RaisedButton(
-            onPressed: () async {
-              FocusScope.of(context).requestFocus(new FocusNode());
-              await state.savePapersToPDF();
-            },
-            color: Colors.blueGrey,
-            child: const Text('Generate PDF', style: TextStyle(fontSize: 20, color: Colors.amber)),
-          ),
-        ),
-        if (state.wip == WIP_PDF)
-          Container(
-            child: RichText(
-                text: TextSpan(
-              text: "Be patient, PDF generation takes a while...",
-              style: TextStyle(
-                color: Colors.black54,
-                fontFamily: "Roboto",
-              ),
-            )),
-          )
-      ],
-    ));
-  }
-
   Widget exportBox({BuildContext context, BOPState state}) {
-    return IntrinsicWidth(
+    return Container(
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: Colors.black54, width: 1),
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ),
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 RichText(
                     text: TextSpan(

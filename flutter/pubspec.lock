@@ -194,12 +194,12 @@ packages:
     source: hosted
     version: "0.1.4"
   pdf:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: pdf
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.13.0"
+    version: "2.0.0"
   pedantic:
     dependency: transitive
     description:
@@ -234,7 +234,7 @@ packages:
       name: printing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.7.2"
+    version: "4.0.0"
   qr:
     dependency: transitive
     description:

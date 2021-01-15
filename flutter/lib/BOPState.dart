@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:bitonpaper/print.dart';
+import 'package:bitonpaper/pdf_print.dart';
 import 'dart:convert';
 import 'html_print.dart';
 import 'html_export.dart';
@@ -8,11 +8,6 @@ import 'wallet.dart';
 import 'paper.dart';
 import 'BOP.dart';
 import 'package:flutter/material.dart';
-
-const WIP_PRINTING = 11;
-const WIP_PDF = 12;
-const WIP_EXPKEYS = 13;
-const WIP_IDLE = 0;
 
 class BOPState extends State<BOP> {
   final Map<String, Art> _arts = Map<String, Art>();
@@ -23,7 +18,6 @@ class BOPState extends State<BOP> {
   String _defaultArt = "Bitcoin";
   bool _exportOnlyKeys = false;
   Art _selectedArt;
-  int wip = 0;
 
   BOPState() {
     loadArts(this, "./img");
@@ -84,8 +78,6 @@ class BOPState extends State<BOP> {
 
   Future<void> printPapers() async {
     print("BOPSTATE printPapers");
-    //Wait just a bit before starting the printing to allow UI to refresh
-    await Future.delayed(const Duration(milliseconds: 100), () {});
     String wPpTxt = walletsPerPageController.text;
     if (wPpTxt.isEmpty) {
       return;
@@ -106,14 +98,15 @@ class BOPState extends State<BOP> {
     await printSheet.preparePrintPreview(walletsPP);
     print("BOPSTATE print preview prepared in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
     printSheet.showPrintPreview();
+    //Back to the normal UI
     Navigator.pop(context);
   }
 
   Future<void> savePapersToPDF() async {
     print("BOPSTATE savePapersToPDF");
-    setWIPAlert("PDF Generation", "Please, be patient, this activity can take a while.");
+    _showAlert("PDF", "Please, be patient, to build a PDF takes a bit of CPU...");
+    //PDF generation freeze the UI, better to have some time to allow the alert to be drawn.
     await Future.delayed(const Duration(milliseconds: 100), () {});
-
     String wPpTxt = walletsPerPageController.text;
     if (wPpTxt.isEmpty) {
       return;
@@ -124,26 +117,36 @@ class BOPState extends State<BOP> {
       return;
     }
     int s = DateTime.now().millisecondsSinceEpoch;
-    PDFGenerator pdfGen = PDFGenerator();
-    Uint8List generatedPDF = await pdfGen.toPDF(papers: this._papers, walletsPerPage: walletsPP);
+    DocSet pdfConf = DocSet(papers: this._papers, walletPerPage: walletsPP);
+    Uint8List generatedPDF = await generatePDF(pdfConf);
     print("BOPSTATE PDF generated in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
     openDownloadHTML(generatedPDF, MIME_PDF, "bop_wallets.pdf");
-    setWIPAlert("", "");
+    //Remove the alert
+    Navigator.pop(context);
   }
 
   Future<void> saveKeysToTXT() async {
     print("BOPSTATE savePapersToPDF");
-    String exportText = "{";
     int numWallets = this._wallets.length;
-    for (int i = 0; i < numWallets; i++) {
-      exportText += "\"" + this._wallets[i].publicAddress + "\": \"" + this._wallets[i].privateKey + "\"";
-      if (i < numWallets - 1) {
-        exportText += ",\n";
+    String filename = "bop_keys-addr.json";
+    String exportText = "";
+    if (this._exportOnlyKeys) {
+      filename = "bop_keys.txt";
+      for (int i = 0; i < numWallets; i++) {
+        exportText += this._wallets[i].privateKey + " ";
       }
+    } else {
+      exportText += "{";
+      for (int i = 0; i < numWallets; i++) {
+        exportText += "\"" + this._wallets[i].publicAddress + "\": \"" + this._wallets[i].privateKey + "\"";
+        if (i < numWallets - 1) {
+          exportText += ",\n";
+        }
+      }
+      exportText += "}";
     }
-    exportText += "}";
     final bytes = utf8.encode(exportText);
-    openDownloadHTML(bytes, MIME_JSON, "bop_keys.json");
+    openDownloadHTML(bytes, MIME_JSON, filename);
   }
 
   Map<String, Art> getArts() {
@@ -166,29 +169,6 @@ class BOPState extends State<BOP> {
     return this._papers;
   }
 
-  void setWIPAlert(String title, String message) async {
-    if (message != "") {
-      return showDialog<void>(
-        context: context,
-        barrierDismissible: false, // user must tap button!
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text(message),
-                ],
-              ),
-            ),
-          );
-        },
-      );
-    } else {
-      Navigator.of(context).pop();
-    }
-  }
-
   set exportOnlyKeys(bool val) {
     setState(() {
       this._exportOnlyKeys = val;
@@ -209,26 +189,28 @@ class BOPState extends State<BOP> {
     }
   }
 
-  Future<void> _showMyDialog(String title, String text) async {
+  Future<void> _showAlert(String title, String text) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(title),
-          content: SingleChildScrollView(
-            child: ListBody(
+          backgroundColor: Colors.blueGrey,
+          title: Text(
+            title,
+            style: TextStyle(color: Colors.amber, fontFamily: "Roboto"),
+          ),
+          content: Container(
+            height: 150,
+            child: Column(
               children: <Widget>[
-                Text(text),
+                Text(
+                  text,
+                  style: TextStyle(color: Colors.amber, fontFamily: "Roboto"),
+                ),
               ],
             ),
           ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Approve'),
-              onPressed: () {},
-            ),
-          ],
         );
       },
     );

@@ -82,7 +82,7 @@ class Intro extends StatelessWidget {
         TextSpan(children: <TextSpan>[
           TextSpan(
               text:
-                  'Keys, addresses, QR-codes, everything is generated locally in your browser, nothing is sent over the Internet, your keys are safe... just take care no one is watching your screen!\n'),
+                  'Keys, addresses, QR-codes, everything is generated locally in your browser, nothing is sent over the Internet, your keys are safe, they never leave your browser... just take care no one is watching your screen!\n'),
           TextSpan(text: '\n'),
         ]),
         TextSpan(children: <TextSpan>[
