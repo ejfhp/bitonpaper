@@ -1,8 +1,5 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
-
-import 'package:flutter/foundation.dart';
-
 import 'paper.dart';
 import 'package:pdf/pdf.dart' as pdf;
 import 'package:pdf/widgets.dart' as pdfw;
