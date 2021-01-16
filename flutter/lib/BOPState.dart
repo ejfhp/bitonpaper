@@ -99,14 +99,14 @@ class BOPState extends State<BOP> {
     print("BOPSTATE print preview prepared in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
     printSheet.showPrintPreview();
     //Back to the normal UI
-    Navigator.pop(context);
+    Navigator.of(context).pop();
   }
 
   Future<void> savePapersToPDF() async {
     print("BOPSTATE savePapersToPDF");
-    _showAlert("PDF", "Please, be patient, to build a PDF takes a bit of CPU...");
+    _showAlert("", "Please be patient, PDF generation takes a while...");
     //PDF generation freeze the UI, better to have some time to allow the alert to be drawn.
-    await Future.delayed(const Duration(milliseconds: 100), () {});
+    await Future.delayed(const Duration(milliseconds: 300), () {});
     String wPpTxt = walletsPerPageController.text;
     if (wPpTxt.isEmpty) {
       return;
@@ -122,7 +122,7 @@ class BOPState extends State<BOP> {
     print("BOPSTATE PDF generated in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
     openDownloadHTML(generatedPDF, MIME_PDF, "bop_wallets.pdf");
     //Remove the alert
-    Navigator.pop(context);
+    Navigator.of(context).pop();
   }
 
   Future<void> saveKeysToTXT() async {
@@ -196,12 +196,17 @@ class BOPState extends State<BOP> {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Colors.blueGrey,
+          elevation: 20,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: Colors.black54, width: 1),
+            borderRadius: BorderRadius.circular(4),
+          ),
           title: Text(
             title,
             style: TextStyle(color: Colors.amber, fontFamily: "Roboto"),
           ),
           content: Container(
-            height: 150,
+            height: 50,
             child: Column(
               children: <Widget>[
                 Text(
