@@ -14,6 +14,9 @@ void main() {
     theme: ThemeData(
       primarySwatch: Colors.blueGrey,
       brightness: Brightness.light,
+      primaryTextTheme: TextTheme(
+        bodyText1: TextStyle(fontFamily: "Roboto", color: Colors.black54),
+      ),
       accentColor: Colors.amber,
       canvasColor: Colors.blueGrey[50],
       applyElevationOverlayColor: false,

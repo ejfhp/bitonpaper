@@ -22,8 +22,7 @@ class ArtMenu extends StatelessWidget {
   ArtMenu({@required this.wide});
 
   Widget build(BuildContext context) {
-    BOPState appState = ArtMenuInh.of(context).state;
-    List<Widget> artsList = new List<Widget>.empty(growable: true);
+    BOPState state = ArtMenuInh.of(context).state;
     Container headerContainer = Container(
         height: HEADER_HEIGHT,
         child: DrawerHeader(
@@ -46,40 +45,71 @@ class ArtMenu extends StatelessWidget {
               ),
             )));
 
+    List<Widget> artsList = new List<Widget>.empty(growable: true);
     artsList.add(headerContainer);
-    Map<String, Art> arts = appState.getArts();
-    Art selected = appState.getSelectedArt();
-    if (selected != null) {
-      arts.forEach((k, v) {
-        ImageProvider aip = MemoryImage(v.bytes);
-        Widget t;
-        if (k == selected.name) {
-          t = Text(k, style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Roboto", color: Colors.black54));
-        } else {
-          t = Text(k, style: TextStyle(fontFamily: "Roboto", color: Colors.black54));
-        }
-        var img = Image(image: aip);
-        ListTile tI = ListTile(
-          leading: img,
-          title: t,
-          onTap: () {
-            appState.selectArt(k);
-            //Close the drawer when user selects.
-            if (!wide) {
-              Navigator.pop(context);
-            }
-          },
-        );
-        artsList.add(tI);
-      });
+    List<Art> arts = state.getArts();
+    Art selected = state.getSelectedArt();
+    for (int i = 0; i < arts.length; i++) {
+      artsList.add(_buildArtItem(context, state, arts[i], selected));
     }
     ListView list = ListView(
       children: artsList,
-      padding: EdgeInsets.zero,
     );
     return Drawer(
       elevation: 0,
       child: list,
+    );
+  }
+
+  Widget _buildArtItem(
+    BuildContext context,
+    BOPState state,
+    Art art,
+    Art selected,
+  ) {
+    bool sel = false;
+    if (selected != null && art == selected) {
+      sel = true;
+    }
+    return Container(
+      margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+      child: Stack(
+        children: [
+          Positioned(
+            child: Container(
+              decoration: ShapeDecoration(
+                color: Colors.blueGrey,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: sel ? Colors.amber : Colors.black54, width: sel ? 3 : 1),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    height: 70,
+                    padding: EdgeInsets.all(5),
+                    child: Image(image: MemoryImage(art.bytes)),
+                  ),
+                  Text(art.name, style: TextStyle(fontFamily: "Roboto", color: Colors.black54)),
+                ],
+              ),
+            ),
+          ),
+          Positioned.fill(
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(onTap: () {
+                state.selectArt(art);
+                //Close the drawer when user selects.
+                if (!wide) {
+                  Navigator.pop(context);
+                }
+              }),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

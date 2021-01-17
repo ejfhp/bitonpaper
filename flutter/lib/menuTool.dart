@@ -24,6 +24,7 @@ class ToolMenu extends StatelessWidget {
 
   Widget build(BuildContext context) {
     BOPState state = ToolMenuInh.of(context).state;
+    Theme theme = Theme.of(context);
     List<Widget> toolsList = new List<Widget>.empty(growable: true);
     Container containerHeader = Container(
       height: HEADER_HEIGHT,
@@ -84,12 +85,15 @@ class ToolMenu extends StatelessWidget {
         children: [
           TextField(
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            controller: state.numWalletsController,
             textAlign: TextAlign.right,
             maxLength: 2,
             style: TextStyle(fontFamily: "Roboto", color: Colors.black54),
+            controller: state.numWCtrl,
             onEditingComplete: () async {
               await state.updateWallets();
+            },
+            onTap: () {
+              state.numWCtrl.selection = TextSelection(baseOffset: 0, extentOffset: state.numWCtrl.value.text.length);
             },
             decoration: InputDecoration(
               border: OutlineInputBorder(),
@@ -126,7 +130,10 @@ class ToolMenu extends StatelessWidget {
         children: [
           TextField(
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            controller: state.walletsPerPageController,
+            controller: state.wPPageCtrl,
+            onTap: () {
+              state.wPPageCtrl.selection = TextSelection(baseOffset: 0, extentOffset: state.wPPageCtrl.value.text.length);
+            },
             textAlign: TextAlign.right,
             maxLength: 1,
             style: TextStyle(fontFamily: "Roboto", color: Colors.black54),
