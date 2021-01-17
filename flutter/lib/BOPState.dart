@@ -10,11 +10,11 @@ import 'BOP.dart';
 import 'package:flutter/material.dart';
 
 class BOPState extends State<BOP> {
-  final Map<String, Art> _arts = Map<String, Art>();
+  final List<Art> _arts = List<Art>.empty(growable: true);
   final List<Wallet> _wallets = List<Wallet>.empty(growable: true);
   final List<Paper> _papers = List<Paper>.empty(growable: true);
-  final TextEditingController numWalletsController = TextEditingController.fromValue(TextEditingValue(text: "2"));
-  final TextEditingController walletsPerPageController = TextEditingController.fromValue(TextEditingValue(text: "2"));
+  final TextEditingController numWCtrl = TextEditingController.fromValue(TextEditingValue(text: "2"));
+  final TextEditingController wPPageCtrl = TextEditingController.fromValue(TextEditingValue(text: "2"));
   String _defaultArt = "Bitcoin";
   bool _exportOnlyKeys = false;
   Art _selectedArt;
@@ -29,10 +29,10 @@ class BOPState extends State<BOP> {
     return BOPUI(this);
   }
 
-  Future<void> selectArt(String sel) async {
-    print("BOPSTATE selectArt" + sel);
+  Future<void> selectArt(Art sel) async {
+    print("BOPSTATE selectArt" + sel.name);
     setState(() {
-      this._selectedArt = this._arts[sel];
+      this._selectedArt = sel;
     });
     if (this._wallets.length == 0) {
       await this.updateWallets();
@@ -42,13 +42,13 @@ class BOPState extends State<BOP> {
 
   Future<void> updateWallets() async {
     print("BOPSTATE updateWallets");
-    String numWTxt = numWalletsController.text;
+    String numWTxt = numWCtrl.text;
     if (numWTxt.isEmpty || (this._selectedArt == null)) {
       return;
     }
     int numWs = int.parse(numWTxt);
     if (numWs < 1 || numWs > 10) {
-      numWalletsController.text = "1";
+      numWCtrl.text = "1";
       return;
     }
     int curNumWs = this._wallets.length;
@@ -78,13 +78,13 @@ class BOPState extends State<BOP> {
 
   Future<void> printPapers() async {
     print("BOPSTATE printPapers");
-    String wPpTxt = walletsPerPageController.text;
+    String wPpTxt = wPPageCtrl.text;
     if (wPpTxt.isEmpty) {
       return;
     }
     int walletsPP = int.parse(wPpTxt);
     if (walletsPP < 1) {
-      walletsPerPageController.text = "1";
+      wPPageCtrl.text = "1";
       return;
     }
 
@@ -107,13 +107,13 @@ class BOPState extends State<BOP> {
     _showAlert("", "Please be patient, PDF generation takes a while...");
     //PDF generation freeze the UI, better to have some time to allow the alert to be drawn.
     await Future.delayed(const Duration(milliseconds: 300), () {});
-    String wPpTxt = walletsPerPageController.text;
+    String wPpTxt = wPPageCtrl.text;
     if (wPpTxt.isEmpty) {
       return;
     }
     int walletsPP = int.parse(wPpTxt);
     if (walletsPP < 1) {
-      walletsPerPageController.text = "1";
+      wPPageCtrl.text = "1";
       return;
     }
     int s = DateTime.now().millisecondsSinceEpoch;
@@ -149,7 +149,7 @@ class BOPState extends State<BOP> {
     openDownloadHTML(bytes, MIME_JSON, filename);
   }
 
-  Map<String, Art> getArts() {
+  List<Art> getArts() {
     return this._arts;
   }
 
@@ -181,11 +181,11 @@ class BOPState extends State<BOP> {
 
   void addArt(Art art) async {
     setState(() {
-      _arts.putIfAbsent(art.name, () => art);
+      this._arts.add(art);
     });
     print("BOPSTATE addArt: " + art.name);
     if (art.name == _defaultArt) {
-      this.selectArt(art.name);
+      this.selectArt(art);
     }
   }
 
