@@ -24,7 +24,7 @@ class ToolMenu extends StatelessWidget {
 
   Widget build(BuildContext context) {
     BOPState state = ToolMenuInh.of(context).state;
-    Theme theme = Theme.of(context);
+    ThemeData theme = Theme.of(context);
     List<Widget> toolsList = new List<Widget>.empty(growable: true);
     Container containerHeader = Container(
       height: HEADER_HEIGHT,
@@ -51,15 +51,15 @@ class ToolMenu extends StatelessWidget {
     );
     toolsList.add(containerHeader);
     toolsList.add(Container(
-      child: numWalletsBox(context: context, state: state),
+      child: numWalletsBox(context: context, state: state, theme: theme),
       padding: EdgeInsets.fromLTRB(40, 30, 40, 5),
     ));
     toolsList.add(Container(
       padding: EdgeInsets.fromLTRB(40, 30, 40, 5),
-      child: printBox(context: context, state: state),
+      child: printBox(context: context, state: state, theme: theme),
     ));
     toolsList.add(Container(
-      child: exportBox(context: context, state: state),
+      child: exportBox(context: context, state: state, theme: theme),
       padding: EdgeInsets.fromLTRB(40, 30, 40, 5),
     ));
     ListView commands = ListView(children: toolsList);
@@ -70,7 +70,7 @@ class ToolMenu extends StatelessWidget {
     );
   }
 
-  Widget numWalletsBox({BuildContext context, BOPState state}) {
+  Widget numWalletsBox({BuildContext context, BOPState state, ThemeData theme}) {
     return Container(
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(
@@ -102,12 +102,11 @@ class ToolMenu extends StatelessWidget {
           ),
           Container(
             padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: RaisedButton(
+            child: ElevatedButton(
               onPressed: () async {
                 await state.updateWallets();
               },
-              color: Colors.blueGrey,
-              child: const Text('Apply', style: TextStyle(fontSize: 20, color: Colors.amber)),
+              child: const Text('Apply'),
             ),
           ),
         ],
@@ -115,7 +114,7 @@ class ToolMenu extends StatelessWidget {
     );
   }
 
-  Widget printBox({BuildContext context, BOPState state}) {
+  Widget printBox({BuildContext context, BOPState state, ThemeData theme}) {
     return Container(
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(
@@ -144,23 +143,21 @@ class ToolMenu extends StatelessWidget {
           ),
           Container(
             padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: RaisedButton(
+            child: ElevatedButton(
               onPressed: () async {
                 await state.printPapers();
               },
-              color: Colors.blueGrey,
-              child: const Text('Print', style: TextStyle(fontSize: 20, color: Colors.amber)),
+              child: const Text('Print'),
             ),
           ),
           Container(
             padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: RaisedButton(
+            child: ElevatedButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
                 await state.savePapersToPDF();
               },
-              color: Colors.blueGrey,
-              child: const Text('Generate PDF', style: TextStyle(fontSize: 20, color: Colors.amber)),
+              child: const Text('Generate PDF'),
             ),
           ),
         ],
@@ -168,7 +165,7 @@ class ToolMenu extends StatelessWidget {
     );
   }
 
-  Widget exportBox({BuildContext context, BOPState state}) {
+  Widget exportBox({BuildContext context, BOPState state, ThemeData theme}) {
     return Container(
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(
@@ -184,14 +181,7 @@ class ToolMenu extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                RichText(
-                    text: TextSpan(
-                  text: "Keys only",
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontFamily: "Roboto",
-                  ),
-                )),
+                Text("Keys only"),
                 Checkbox(
                     value: state.exportOnlyKeys,
                     onChanged: (val) {
@@ -201,12 +191,11 @@ class ToolMenu extends StatelessWidget {
             ),
           ),
           Container(
-            child: RaisedButton(
+            child: ElevatedButton(
               onPressed: () async {
                 await state.saveKeysToTXT();
               },
-              color: Colors.blueGrey,
-              child: const Text('Export keys', style: TextStyle(fontSize: 20, color: Colors.amber)),
+              child: const Text('Export keys'),
             ),
           ),
         ],
