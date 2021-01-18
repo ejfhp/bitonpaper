@@ -91,7 +91,7 @@ class ArtMenu extends StatelessWidget {
                     padding: EdgeInsets.all(5),
                     child: Image(image: MemoryImage(art.bytes)),
                   ),
-                  Text(art.name, style: TextStyle(fontFamily: "Roboto", color: Colors.black54)),
+                  Text(art.name, style: sel ? Theme.of(context).textTheme.headline5 : Theme.of(context).textTheme.headline6),
                 ],
               ),
             ),

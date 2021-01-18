@@ -14,9 +14,22 @@ void main() {
     theme: ThemeData(
       primarySwatch: Colors.blueGrey,
       brightness: Brightness.light,
-      primaryTextTheme: TextTheme(
-        bodyText1: TextStyle(fontFamily: "Roboto", color: Colors.black54),
+      textTheme: TextTheme(
+        bodyText2: TextStyle(fontFamily: "Roboto", color: Colors.black54, fontSize: 12),
+        subtitle1: TextStyle(fontFamily: "Roboto", color: Colors.black54, fontSize: 16),
+        headline5: TextStyle(fontFamily: "Roboto", color: Colors.amber, fontSize: 16),
+        headline6: TextStyle(fontFamily: "Roboto", color: Colors.black54, fontSize: 16),
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
+        textStyle: MaterialStateProperty.all(TextStyle(
+          fontFamily: "Roboto",
+          color: Colors.amber,
+          fontSize: 20,
+        )),
+        foregroundColor: MaterialStateProperty.all(Colors.amber),
+      )),
       accentColor: Colors.amber,
       canvasColor: Colors.blueGrey[50],
       applyElevationOverlayColor: false,
