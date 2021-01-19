@@ -15,10 +15,11 @@ void main() {
       primarySwatch: Colors.blueGrey,
       brightness: Brightness.light,
       textTheme: TextTheme(
+        headline1: TextStyle(fontFamily: "Roboto", color: Colors.amber, fontSize: 50, fontWeight: FontWeight.bold, letterSpacing: 2),
         bodyText2: TextStyle(fontFamily: "Roboto", color: Colors.black54, fontSize: 12),
         subtitle1: TextStyle(fontFamily: "Roboto", color: Colors.black54, fontSize: 16),
         headline5: TextStyle(fontFamily: "Roboto", color: Colors.amber, fontSize: 16),
-        headline6: TextStyle(fontFamily: "Roboto", color: Colors.black54, fontSize: 16),
+        headline6: TextStyle(fontFamily: "Roboto", color: Colors.blueGrey[50], fontSize: 16),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
