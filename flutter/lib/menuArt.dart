@@ -24,26 +24,22 @@ class ArtMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     BOPState state = ArtMenuInh.of(context).state;
     Container headerContainer = Container(
-        height: HEADER_HEIGHT,
-        child: DrawerHeader(
-            padding: EdgeInsets.zero,
-            margin: EdgeInsets.zero,
-            child: Container(
-              color: Colors.blueGrey,
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-              alignment: Alignment.bottomLeft,
-              child: Text(
-                "Arts",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  color: Colors.amber,
-                  fontFamily: "Roboto",
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
-                ),
-              ),
-            )));
+      height: HEADER_HEIGHT,
+      child: DrawerHeader(
+        padding: EdgeInsets.zero,
+        margin: EdgeInsets.zero,
+        child: Container(
+          color: Colors.blueGrey,
+          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          alignment: Alignment.bottomLeft,
+          child: Text(
+            "Arts",
+            textAlign: TextAlign.left,
+            style: Theme.of(context).textTheme.headline1,
+          ),
+        ),
+      ),
+    );
 
     List<Widget> artsList = new List<Widget>.empty(growable: true);
     artsList.add(headerContainer);
@@ -72,7 +68,7 @@ class ArtMenu extends StatelessWidget {
       sel = true;
     }
     return Container(
-      margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+      margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
       child: Stack(
         children: [
           Positioned(
@@ -85,13 +81,26 @@ class ArtMenu extends StatelessWidget {
                 ),
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
                     height: 70,
                     padding: EdgeInsets.all(5),
                     child: Image(image: MemoryImage(art.bytes)),
                   ),
-                  Text(art.name, style: sel ? Theme.of(context).textTheme.headline5 : Theme.of(context).textTheme.headline6),
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    alignment: Alignment.center,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          art.name,
+                          style: sel ? Theme.of(context).textTheme.headline5 : Theme.of(context).textTheme.headline6,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
