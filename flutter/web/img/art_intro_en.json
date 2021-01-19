@@ -1,6 +1,7 @@
 {
-    "name": "Intro IT",
-    "file": "art_intro-it.png",
+    "name": "Intro",
+    "flavour": "en",
+    "file": "art_intro_en.png",
     "height": 860,
     "width": 1600,
     "privkey_qr": {

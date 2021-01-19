@@ -35,6 +35,7 @@ class ArtElement {
 
 class Art {
   String name;
+  String flavour;
   String file;
   Uint8List _bytes;
   double height;
@@ -57,6 +58,9 @@ class Art {
         switch (k) {
           case "name":
             art.name = val as String;
+            break;
+          case "flavour":
+            art.flavour = val as String;
             break;
           case "file":
             art.file = val as String;
