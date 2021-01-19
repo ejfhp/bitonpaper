@@ -44,10 +44,19 @@ class ArtMenu extends StatelessWidget {
     List<Widget> artsList = new List<Widget>.empty(growable: true);
     artsList.add(headerContainer);
     List<Art> arts = state.getArts();
-    Art selected = state.getSelectedArt();
+    Map<String, List<Art>> flArts = Map<String, List<Art>>();
     for (int i = 0; i < arts.length; i++) {
-      artsList.add(_buildArtItem(context, state, arts[i], selected));
+      if (flArts[arts[i].name] != null) {
+        flArts[arts[i].name].add(arts[i]);
+      } else {
+        flArts[arts[i].name] = List<Art>.empty(growable: true);
+      }
     }
+    flArts.forEach((artName, artList) {
+      print("artName: " + artName);
+      artsList.add(ArtButton(artList, wide, state));
+    });
+
     ListView list = ListView(
       children: artsList,
     );
@@ -57,16 +66,96 @@ class ArtMenu extends StatelessWidget {
     );
   }
 
-  Widget _buildArtItem(
-    BuildContext context,
-    BOPState state,
-    Art art,
-    Art selected,
-  ) {
-    bool sel = false;
-    if (selected != null && art == selected) {
-      sel = true;
+//   Widget _buildArtItem(
+//     BuildContext context,
+//     BOPState state,
+//     Art art,
+//     Art selected,
+//   ) {
+//     bool sel = false;
+//     if (selected != null && art == selected) {
+//       sel = true;
+//     }
+//     return Container(
+//       margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+//       child: Stack(
+//         children: [
+//           Positioned(
+//             child: Container(
+//               decoration: ShapeDecoration(
+//                 color: Colors.blueGrey,
+//                 shape: RoundedRectangleBorder(
+//                   side: BorderSide(color: sel ? Colors.amber : Colors.black54, width: sel ? 3 : 1),
+//                   borderRadius: BorderRadius.circular(4),
+//                 ),
+//               ),
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   Container(
+//                     height: 70,
+//                     padding: EdgeInsets.all(5),
+//                     child: Image(image: MemoryImage(art.bytes)),
+//                   ),
+//                   Container(
+//                     padding: EdgeInsets.all(5),
+//                     alignment: Alignment.center,
+//                     child: Column(
+//                       crossAxisAlignment: CrossAxisAlignment.center,
+//                       children: [
+//                         Text(
+//                           art.name,
+//                           style: sel ? Theme.of(context).textTheme.headline5 : Theme.of(context).textTheme.headline6,
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//           Positioned.fill(
+//             child: Material(
+//               color: Colors.transparent,
+//               child: InkWell(onTap: () {
+//                 state.selectArt(art);
+//                 //Close the drawer when user selects.
+//                 if (!wide) {
+//                   Navigator.pop(context);
+//                 }
+//               }),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+}
+
+class ArtButton extends StatefulWidget {
+  final List<Art> arts;
+  final bool wide;
+  final BOPState state;
+
+  ArtButton(this.arts, this.wide, this.state);
+
+  State createState() => _ArtButtonState();
+}
+
+class _ArtButtonState extends State<ArtButton> {
+  Art shown;
+
+  _ArtButtonState() {
+    if (widget.arts != null) {
+      this.shown = widget.arts.first;
     }
+  }
+
+  Widget build(BuildContext context) {
+    if (shown == null) {
+      return Text("null");
+    }
+    bool sel = widget.state.getSelectedArt().name == shown.name;
     return Container(
       margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
       child: Stack(
@@ -86,7 +175,7 @@ class ArtMenu extends StatelessWidget {
                   Container(
                     height: 70,
                     padding: EdgeInsets.all(5),
-                    child: Image(image: MemoryImage(art.bytes)),
+                    child: Image(image: MemoryImage(shown.bytes)),
                   ),
                   Container(
                     padding: EdgeInsets.all(5),
@@ -95,7 +184,7 @@ class ArtMenu extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          art.name,
+                          shown.name,
                           style: sel ? Theme.of(context).textTheme.headline5 : Theme.of(context).textTheme.headline6,
                         ),
                       ],
@@ -109,9 +198,9 @@ class ArtMenu extends StatelessWidget {
             child: Material(
               color: Colors.transparent,
               child: InkWell(onTap: () {
-                state.selectArt(art);
+                widget.state.selectArt(shown);
                 //Close the drawer when user selects.
-                if (!wide) {
+                if (!widget.wide) {
                   Navigator.pop(context);
                 }
               }),
@@ -120,5 +209,11 @@ class ArtMenu extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  _setShown(Art art) {
+    setState(() {
+      shown = art;
+    });
   }
 }
