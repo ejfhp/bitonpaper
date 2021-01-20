@@ -1,0 +1,51 @@
+{
+    "name": "Bitcoin",
+    "flavour": "Blue",
+    "file": "art_bitcoin-blue.png",
+    "height": 860,
+    "width": 1600,
+    "privkey_qr": {
+        "top": 460,
+        "left": 1240,
+        "width": 300,
+        "height": 300,
+        "size": 300,
+        "rotation": 0,
+        "fgcolor": "ff0067ea",
+        "bgcolor": "ffffffff",
+        "visible": true
+    },
+    "privkey": {
+        "top": 820,
+        "left": 1190,
+        "width": 800,
+        "height": 24,
+        "size": 24,
+        "rotation": -90,
+        "fgcolor": "ff0067ea",
+        "bgcolor": "ffffffff",
+        "visible": true
+    },
+    "address_qr": {
+        "top": 80,
+        "left": 40,
+        "width": 330,
+        "height": 330,
+        "size": 330,
+        "rotation": 0,
+        "fgcolor": "ff0067ea",
+        "bgcolor": "ffffffff",
+        "visible": true
+    },
+    "address": {
+        "top": 820,
+        "left": 390,
+        "width": 800,
+        "height": 24,
+        "size": 24,
+        "rotation": -90,
+        "fgcolor": "ff0067ea",
+        "bgcolor": "ffffffff",
+        "visible": true
+    }
+}

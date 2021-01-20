@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:bitonpaper/conf.dart';
 import 'package:bitonpaper/pdf_print.dart';
 import 'dart:convert';
 import 'html_print.dart';
@@ -16,7 +17,6 @@ class BOPState extends State<BOP> {
   final List<Paper> _papers = List<Paper>.empty(growable: true);
   final TextEditingController numWCtrl = TextEditingController.fromValue(TextEditingValue(text: "2"));
   final TextEditingController wPPageCtrl = TextEditingController.fromValue(TextEditingValue(text: "2"));
-  String _defaultArt = "Bitcoin";
   bool _exportOnlyKeys = false;
   Art _selectedArt;
 
@@ -187,7 +187,7 @@ class BOPState extends State<BOP> {
         this._arts[art.name] = List<Art>.empty(growable: true);
       }
       this._arts[art.name].add(art);
-      if (art.name == _defaultArt) {
+      if (art.name == DEFAULT_ART && art.flavour == DEFAULT_FLAVOUR) {
         this.selectArt(art);
       }
     });
