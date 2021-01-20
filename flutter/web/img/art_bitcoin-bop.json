@@ -1,7 +1,7 @@
 {
     "name": "Bitcoin",
     "flavour": "BOP",
-    "file": "art_bitcoin-blue.png",
+    "file": "art_bitcoin-bop.png",
     "height": 860,
     "width": 1600,
     "privkey_qr": {
