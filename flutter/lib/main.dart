@@ -1,8 +1,7 @@
+import 'package:bitonpaper/conf.dart';
 import 'package:flutter/material.dart';
 import 'BOP.dart';
 import 'intro.dart';
-
-const appTitle = "BitOnPaper - Bitcoin On Paper";
 
 //TODO Check null safety
 //flutter packages pub outdated --mode=null-safety
@@ -11,6 +10,7 @@ void main() {
   // var initialPage = PaperPage();
   var initialPage = Intro();
   var app = MaterialApp(
+    title: APPLICATION_TITLE,
     theme: ThemeData(
       primarySwatch: Colors.blueGrey,
       brightness: Brightness.light,

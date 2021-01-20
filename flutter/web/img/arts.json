@@ -1,5 +1,10 @@
 [
-    "art_bitcoin.json",
+    "art_bitcoin-gold.json",
+    "art_bitcoin-lime.json",
+    "art_bitcoin-blue.json",
+    "art_bitcoin-fire.json",
+    "art_bitcoin-viola.json",
+    "art_bitcoin-bop.json",
     "art_bsvdragon.json",
     "art_intro_it.json",
     "art_intro_en.json",

@@ -1,6 +1,7 @@
 {
     "name": "Bitcoin",
-    "file": "art_bitcoin.png",
+    "flavour": "Viola",
+    "file": "art_bitcoin-viola.png",
     "height": 860,
     "width": 1600,
     "privkey_qr": {
@@ -10,7 +11,7 @@
         "height": 300,
         "size": 300,
         "rotation": 0,
-        "fgcolor": "ff9d7903",
+        "fgcolor": "ffb800ea",
         "bgcolor": "ffffffff",
         "visible": true
     },
@@ -21,7 +22,7 @@
         "height": 24,
         "size": 24,
         "rotation": -90,
-        "fgcolor": "ff9d7903",
+        "fgcolor": "ffb800ea",
         "bgcolor": "ffffffff",
         "visible": true
     },
@@ -32,7 +33,7 @@
         "height": 330,
         "size": 330,
         "rotation": 0,
-        "fgcolor": "ff9d7903",
+        "fgcolor": "ffb800ea",
         "bgcolor": "ffffffff",
         "visible": true
     },
@@ -43,7 +44,7 @@
         "height": 24,
         "size": 24,
         "rotation": -90,
-        "fgcolor": "ff9d7903",
+        "fgcolor": "ffb800ea",
         "bgcolor": "ffffffff",
         "visible": true
     }
