@@ -43,20 +43,10 @@ class ArtMenu extends StatelessWidget {
 
     List<Widget> artsList = new List<Widget>.empty(growable: true);
     artsList.add(headerContainer);
-    List<Art> arts = state.getArts();
-    Map<String, List<Art>> flArts = Map<String, List<Art>>();
-    for (int i = 0; i < arts.length; i++) {
-      if (flArts[arts[i].name] != null) {
-        flArts[arts[i].name].add(arts[i]);
-      } else {
-        flArts[arts[i].name] = List<Art>.empty(growable: true);
-      }
-    }
-    flArts.forEach((artName, artList) {
-      print("artName: " + artName);
-      artsList.add(ArtButton(artList, wide, state));
+    Map<String, List<Art>> arts = state.getArts();
+    arts.forEach((artName, artFlavs) {
+      artsList.add(ArtButton(arts: artFlavs, wide: wide, state: state));
     });
-
     ListView list = ListView(
       children: artsList,
     );
@@ -65,71 +55,6 @@ class ArtMenu extends StatelessWidget {
       child: list,
     );
   }
-
-//   Widget _buildArtItem(
-//     BuildContext context,
-//     BOPState state,
-//     Art art,
-//     Art selected,
-//   ) {
-//     bool sel = false;
-//     if (selected != null && art == selected) {
-//       sel = true;
-//     }
-//     return Container(
-//       margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-//       child: Stack(
-//         children: [
-//           Positioned(
-//             child: Container(
-//               decoration: ShapeDecoration(
-//                 color: Colors.blueGrey,
-//                 shape: RoundedRectangleBorder(
-//                   side: BorderSide(color: sel ? Colors.amber : Colors.black54, width: sel ? 3 : 1),
-//                   borderRadius: BorderRadius.circular(4),
-//                 ),
-//               ),
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: [
-//                   Container(
-//                     height: 70,
-//                     padding: EdgeInsets.all(5),
-//                     child: Image(image: MemoryImage(art.bytes)),
-//                   ),
-//                   Container(
-//                     padding: EdgeInsets.all(5),
-//                     alignment: Alignment.center,
-//                     child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.center,
-//                       children: [
-//                         Text(
-//                           art.name,
-//                           style: sel ? Theme.of(context).textTheme.headline5 : Theme.of(context).textTheme.headline6,
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//           Positioned.fill(
-//             child: Material(
-//               color: Colors.transparent,
-//               child: InkWell(onTap: () {
-//                 state.selectArt(art);
-//                 //Close the drawer when user selects.
-//                 if (!wide) {
-//                   Navigator.pop(context);
-//                 }
-//               }),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
 }
 
 class ArtButton extends StatefulWidget {
@@ -137,83 +62,131 @@ class ArtButton extends StatefulWidget {
   final bool wide;
   final BOPState state;
 
-  ArtButton(this.arts, this.wide, this.state);
+  ArtButton({this.arts, this.wide, this.state});
 
   State createState() => _ArtButtonState();
 }
 
 class _ArtButtonState extends State<ArtButton> {
   Art shown;
+  int fIndex = 0;
 
-  _ArtButtonState() {
-    if (widget.arts != null) {
-      this.shown = widget.arts.first;
+  initState() {
+    super.initState();
+    this.shown = widget.arts.first;
+  }
+
+  _setShown(int val) {
+    setState(() {
+      print("Flavours: " + widget.arts.length.toString() + " selected: " + val.toString());
+      if (val < widget.arts.length) {
+        fIndex = val;
+        shown = widget.arts[fIndex];
+      }
+    });
+  }
+
+  Art _getShown() {
+    return widget.arts[fIndex];
+  }
+
+  int getLastFlavourIndex() {
+    if (widget.arts.isEmpty) {
+      return 0;
     }
+    print("getLastFlavourIndex: " + (widget.arts.length - 1).toString());
+    return widget.arts.length - 1;
   }
 
   Widget build(BuildContext context) {
-    if (shown == null) {
-      return Text("null");
-    }
-    bool sel = widget.state.getSelectedArt().name == shown.name;
+    bool sel = (widget.state.getSelectedArt().name == shown.name) && (widget.state.getSelectedArt().flavour == shown.flavour);
+    TextStyle nameTextStyle = Theme.of(context).textTheme.headline5;
+    TextStyle flavTextStyle = Theme.of(context).textTheme.headline6;
     return Container(
       margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-      child: Stack(
-        children: [
-          Positioned(
-            child: Container(
-              decoration: ShapeDecoration(
-                color: Colors.blueGrey,
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(color: sel ? Colors.amber : Colors.black54, width: sel ? 3 : 1),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    height: 70,
-                    padding: EdgeInsets.all(5),
-                    child: Image(image: MemoryImage(shown.bytes)),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(5),
-                    alignment: Alignment.center,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          shown.name,
-                          style: sel ? Theme.of(context).textTheme.headline5 : Theme.of(context).textTheme.headline6,
-                        ),
-                      ],
+      child: Container(
+        decoration: ShapeDecoration(
+          color: Colors.blueGrey,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: sel ? Colors.amber : Colors.blueGrey, width: sel ? 3 : 3),
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Stack(
+                  children: [
+                    Positioned(
+                      child: Container(
+                        height: 70,
+                        padding: EdgeInsets.all(5),
+                        child: Image(image: MemoryImage(shown.bytes)),
+                      ),
                     ),
+                    Positioned.fill(
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(onTap: () {
+                          widget.state.selectArt(shown);
+                          //Close the drawer when user selects.
+                          if (!widget.wide) {
+                            Navigator.pop(context);
+                          }
+                        }),
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: EdgeInsets.all(5),
+                  alignment: Alignment.center,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        shown.name,
+                        style: TextStyle(
+                          fontFamily: nameTextStyle.fontFamily,
+                          fontSize: nameTextStyle.fontSize,
+                          color: sel ? Colors.amber : Colors.blueGrey[50],
+                        ),
+                      ),
+                      Text(
+                        shown.flavour,
+                        style: TextStyle(
+                          fontFamily: flavTextStyle.fontFamily,
+                          fontSize: flavTextStyle.fontSize,
+                          color: sel ? Colors.amber : Colors.blueGrey[50],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-          Positioned.fill(
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(onTap: () {
-                widget.state.selectArt(shown);
-                //Close the drawer when user selects.
-                if (!widget.wide) {
-                  Navigator.pop(context);
-                }
-              }),
-            ),
-          ),
-        ],
+            Container(
+              height: 20,
+              child: (widget.arts.length > 1)
+                  ? Slider(
+                      value: fIndex.toDouble(),
+                      min: 0,
+                      max: getLastFlavourIndex().toDouble(),
+                      divisions: getLastFlavourIndex(),
+                      // label: _getShown().flavour.toString(),
+                      onChanged: (value) {
+                        _setShown(value.toInt());
+                      },
+                      activeColor: Colors.amber,
+                      inactiveColor: Colors.blueGrey[50],
+                    )
+                  : null,
+            )
+          ],
+        ),
       ),
     );
-  }
-
-  _setShown(Art art) {
-    setState(() {
-      shown = art;
-    });
   }
 }

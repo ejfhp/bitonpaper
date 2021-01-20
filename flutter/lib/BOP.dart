@@ -81,7 +81,7 @@ class BOPUI extends StatelessWidget {
             backgroundColor: Colors.white,
             drawer: !wideScreen ? artMenu : null,
             endDrawer: !wideScreen ? toolMenu : null,
-            body: PaperSheetInh(child: PaperSheet(), state: state),
+            body: PaperSheetInh(child: PaperSheet(), papers: state.getPapers()),
           ),
         ),
         if (wideScreen) toolMenu,
