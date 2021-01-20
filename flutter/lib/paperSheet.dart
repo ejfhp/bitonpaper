@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'BOPState.dart';
 import 'paper.dart';
 
 class PaperSheetInh extends InheritedWidget {
-  final BOPState state;
+  final List<Paper> papers;
 
-  PaperSheetInh({Key key, Widget child, this.state}) : super(key: key, child: child);
+  PaperSheetInh({Widget child, this.papers}) : super(child: child);
 
   @override
   bool updateShouldNotify(covariant PaperSheetInh oldWidget) {
-    return oldWidget.state.getSelectedArt() != state.getSelectedArt() || oldWidget.state.getPapers().length != state.getPapers().length;
+    return oldWidget.papers != papers;
   }
 
   static PaperSheetInh of(BuildContext context) {
@@ -20,8 +19,7 @@ class PaperSheetInh extends InheritedWidget {
 class PaperSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    BOPState appState = PaperSheetInh.of(context).state;
-    List<Paper> papers = appState.getPapers();
+    List<Paper> papers = PaperSheetInh.of(context).papers;
     if (papers.length < 1) {
       return Container(
         alignment: Alignment.center,

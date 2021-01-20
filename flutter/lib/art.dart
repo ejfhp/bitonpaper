@@ -34,8 +34,8 @@ class ArtElement {
 }
 
 class Art {
-  String name;
-  String flavour;
+  String name = "";
+  String flavour = "";
   String file;
   Uint8List _bytes;
   double height;

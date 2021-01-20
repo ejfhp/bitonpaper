@@ -10,7 +10,8 @@ import 'BOP.dart';
 import 'package:flutter/material.dart';
 
 class BOPState extends State<BOP> {
-  final List<Art> _arts = List<Art>.empty(growable: true);
+  final Map<String, List<Art>> _arts = Map<String, List<Art>>();
+  // final List<Art> _arts = List<Art>.empty(growable: true);
   final List<Wallet> _wallets = List<Wallet>.empty(growable: true);
   final List<Paper> _papers = List<Paper>.empty(growable: true);
   final TextEditingController numWCtrl = TextEditingController.fromValue(TextEditingValue(text: "2"));
@@ -149,7 +150,7 @@ class BOPState extends State<BOP> {
     openDownloadHTML(bytes, MIME_JSON, filename);
   }
 
-  List<Art> getArts() {
+  Map<String, List<Art>> getArts() {
     return this._arts;
   }
 
@@ -180,13 +181,16 @@ class BOPState extends State<BOP> {
   }
 
   void addArt(Art art) async {
-    setState(() {
-      this._arts.add(art);
-    });
     print("BOPSTATE addArt: " + art.name);
-    if (art.name == _defaultArt) {
-      this.selectArt(art);
-    }
+    setState(() {
+      if (this._arts[art.name] == null) {
+        this._arts[art.name] = List<Art>.empty(growable: true);
+      }
+      this._arts[art.name].add(art);
+      if (art.name == _defaultArt) {
+        this.selectArt(art);
+      }
+    });
   }
 
   Future<void> _showAlert(String title, String text) async {
