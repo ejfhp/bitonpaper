@@ -1,0 +1,49 @@
+{
+    "name": "Hidden",
+    "flavour": "T4L3",
+    "file": "art_hidden.png",
+    "height": 1586,
+    "width": 2030,
+    "privkey_qr": {
+        "visible": true,
+        "top": 645,
+        "left": 946,
+        "width": 300,
+        "height": 300,
+        "size": 300,
+        "fgcolor": "ffff0000",
+        "bgcolor": "ffffffff",
+        "rotation": 90
+    },
+    "privkey": {
+        "visible": false,
+        "top": 10,
+        "left": 10,
+        "width": 800,
+        "height": 40,
+        "size": 20,
+        "rotation": -90
+    },
+    "address_qr": {
+        "visible": true,
+        "top": 45,
+        "left": 1647,
+        "width": 300,
+        "height": 300,
+        "size": 300,
+        "fgcolor": "ff000000",
+        "bgcolor": "ffffffff",
+        "rotation": 0
+    },
+    "address": {
+        "visible": true,
+        "top": 680,
+        "left": 1580,
+        "width": 800,
+        "height": 40,
+        "size": 30,
+        "fgcolor": "ff000000",
+        "bgcolor": "ffffffff",
+        "rotation": -90
+    }
+}

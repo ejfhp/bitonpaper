@@ -50,11 +50,15 @@ class Rasterizer {
       version: QrVersions.auto,
       gapless: true,
     );
+    Paint p = Paint();
+    p.color = artE.bgcolor;
     double rad = (artE.rotation / 180) * math.pi;
     canvas.save();
     canvas.translate(artE.left, artE.top);
     canvas.rotate(rad);
+    canvas.drawRect(Rect.fromLTRB(0, 0, artE.width, artE.height), p);
     qr.paint(canvas, Size(artE.size, artE.size));
+
     canvas.restore();
   }
 
