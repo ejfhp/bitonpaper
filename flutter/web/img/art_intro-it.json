@@ -1,7 +1,7 @@
 {
     "name": "Intro",
     "flavour": "Italiano",
-    "file": "art_intro_i.png",
+    "file": "art_intro-it.png",
     "height": 860,
     "width": 1600,
     "privkey_qr": {
