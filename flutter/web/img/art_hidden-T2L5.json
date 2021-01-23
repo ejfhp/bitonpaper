@@ -1,19 +1,19 @@
 {
     "name": "Hidden",
-    "flavour": "Top4 Left3",
+    "flavour": "Top2 Left5",
     "file": "art_hidden.png",
     "height": 1586,
     "width": 2030,
     "privkey_qr": {
         "visible": true,
-        "top": 956,
-        "left": 946,
+        "top": 634,
+        "left": 1570,
         "width": 300,
         "height": 300,
         "size": 300,
         "fgcolor": "ff000000",
         "bgcolor": "ffffffff",
-        "rotation": 90
+        "rotation": 180
     },
     "privkey": {
         "visible": false,

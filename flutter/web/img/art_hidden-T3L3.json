@@ -1,6 +1,6 @@
 {
     "name": "Hidden",
-    "flavour": "T3L3",
+    "flavour": "Top3 Left3",
     "file": "art_hidden.png",
     "height": 1586,
     "width": 2030,
@@ -11,7 +11,7 @@
         "width": 300,
         "height": 300,
         "size": 300,
-        "fgcolor": "ffff0000",
+        "fgcolor": "ff000000",
         "bgcolor": "ffffffff",
         "rotation": 90
     },
