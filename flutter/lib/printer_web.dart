@@ -10,6 +10,21 @@ const SAFE_WIDTH = 670;
 const SAFE_HEIGHT = 944;
 const MARGIN = 10;
 
+printPages(BuildContext context, List<Paper> papers, int walletsPP) async {
+  int s = DateTime.now().millisecondsSinceEpoch;
+  PrintSheetHTML printSheet = PrintSheetHTML(papers);
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => printSheet,
+      ));
+  await printSheet.preparePrintPreview(walletsPP);
+  print("BOPSTATE print preview prepared in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
+  printSheet.showPrintPreview();
+  //Back to the normal UI
+  Navigator.of(context).pop();
+}
+
 class PrintSheetHTML extends StatelessWidget {
   final List<Paper> papers;
 
