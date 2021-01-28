@@ -136,7 +136,7 @@ class Intro extends StatelessWidget {
           TextSpan(text: 'We think that the original Bitcoin white paper, together with the genesis block, is what really defines Bitcoin.\n'),
           TextSpan(
               text:
-                  'We host the bitcoin.pdf here to underline the fact that the only Blockchain that fully respect Satoshi\'s work and that should be called "Bitcoin" is BitcoinSV (BSV): '),
+                  'We host the bitcoin.pdf here to underline the fact that the only Blockchain that fully respects Satoshi\'s work and that should be called "Bitcoin" is BitcoinSV (BSV): '),
           TextSpan(
             text: "https://bop.run/bitcoin.pdf",
             style: TextStyle(fontStyle: FontStyle.italic, decoration: TextDecoration.underline),
