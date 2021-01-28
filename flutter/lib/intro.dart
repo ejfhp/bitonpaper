@@ -123,13 +123,29 @@ class Intro extends StatelessWidget {
           TextSpan(text: 'BOP ', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber, fontSize: 18)),
           TextSpan(text: 'on Twitter: '),
           TextSpan(
-            text: "https://twitter.com/boprun.",
+            text: "https://twitter.com/boprun",
             style: TextStyle(fontStyle: FontStyle.italic, decoration: TextDecoration.underline),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 launch('https://twitter.com/boprun');
               },
           ),
+          TextSpan(text: '.\n\n'),
+        ]),
+        TextSpan(children: <TextSpan>[
+          TextSpan(text: 'We think that the original Bitcoin white paper, together with the genesis block, is what really defines Bitcoin.\n'),
+          TextSpan(
+              text:
+                  'We host the bitcoin.pdf here to underline the fact that the only Blockchain that fully respect Satoshi\'s work and that should be called "Bitcoin" is BitcoinSV (BSV): '),
+          TextSpan(
+            text: "https://bop.run/bitcoin.pdf",
+            style: TextStyle(fontStyle: FontStyle.italic, decoration: TextDecoration.underline),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launch('https://bop.run/bitcoin.pdf');
+              },
+          ),
+          TextSpan(text: '.'),
         ]),
         TextSpan(children: <TextSpan>[
           TextSpan(text: '\n\nThis website uses only basic Google Analytics cookies. No information is shared with any other third party service.\n'),
