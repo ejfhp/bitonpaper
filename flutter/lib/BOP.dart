@@ -49,8 +49,8 @@ class BOPUI extends StatelessWidget {
                 height: HEADER_HEIGHT,
                 color: Colors.blueGrey,
                 padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
-                child: Image.network(
-                  "./icons/bop_long.png",
+                child: Image.asset(
+                  "imgs/bop_long.png",
                   fit: BoxFit.contain,
                 ),
               ))),
