@@ -41,8 +41,8 @@ class Intro extends StatelessWidget {
     Widget main = Column(
       children: [
         Container(
-          child: Image.network(
-            "./icons/bop_twol.png",
+          child: Image.asset(
+            'imgs/bop_twol.png',
             width: 300,
             fit: BoxFit.contain,
           ),

@@ -1,14 +1,14 @@
 import 'dart:typed_data';
 import 'package:bitonpaper/conf.dart';
-import 'package:bitonpaper/pdf_print.dart';
+import 'package:bitonpaper/pdf.dart';
 import 'dart:convert';
-import 'html_print.dart';
-import 'html_export.dart';
 import 'art.dart';
 import 'wallet.dart';
 import 'paper.dart';
 import 'BOP.dart';
 import 'package:flutter/material.dart';
+import 'printer.dart' if (dart.library.io) 'printer_hw.dart' if (dart.library.js) 'printer_web.dart';
+import 'export.dart' if (dart.library.io) 'export_hw.dart' if (dart.library.js) 'export_web.dart';
 
 class BOPState extends State<BOP> {
   final Map<String, List<Art>> _arts = Map<String, List<Art>>();
@@ -88,19 +88,7 @@ class BOPState extends State<BOP> {
       wPPageCtrl.text = "1";
       return;
     }
-
-    int s = DateTime.now().millisecondsSinceEpoch;
-    PrintSheetHTML printSheet = PrintSheetHTML(this._papers);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => printSheet,
-        ));
-    await printSheet.preparePrintPreview(walletsPP);
-    print("BOPSTATE print preview prepared in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
-    printSheet.showPrintPreview();
-    //Back to the normal UI
-    Navigator.of(context).pop();
+    printPages(context, this._papers, walletsPP);
   }
 
   Future<void> savePapersToPDF() async {
@@ -121,7 +109,7 @@ class BOPState extends State<BOP> {
     DocSet pdfConf = DocSet(papers: this._papers, walletPerPage: walletsPP);
     Uint8List generatedPDF = await generatePDF(pdfConf);
     print("BOPSTATE PDF generated in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
-    openDownloadHTML(generatedPDF, MIME_PDF, "bop_wallets.pdf");
+    openDownload(generatedPDF, "application/pdf", "bop_wallets.pdf");
     //Remove the alert
     Navigator.of(context).pop();
   }
@@ -147,7 +135,7 @@ class BOPState extends State<BOP> {
       exportText += "}";
     }
     final bytes = utf8.encode(exportText);
-    openDownloadHTML(bytes, MIME_JSON, filename);
+    openDownload(bytes, "application/json", filename);
   }
 
   Map<String, List<Art>> getArts() {
