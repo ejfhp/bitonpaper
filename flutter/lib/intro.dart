@@ -42,7 +42,7 @@ class Intro extends StatelessWidget {
       children: [
         Container(
           child: Image.asset(
-            'imgs/bop_twol.png',
+            'resources/imgs/bop_twol.png',
             width: 300,
             fit: BoxFit.contain,
           ),
