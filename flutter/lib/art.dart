@@ -40,12 +40,12 @@ Future<void> loadArts(BOPState state, String baseUrl) async {
 }
 
 class ArtElement {
-  double top = 0;
-  double left = 0;
-  double height = 0;
-  double width = 0;
-  double size = 0;
-  double rotation = 0;
+  int top = 0;
+  int left = 0;
+  int height = 0;
+  int width = 0;
+  int size = 0;
+  int rotation = 0;
   bool visible = true;
   ui.Color fgcolor = Colors.black;
   ui.Color bgcolor = Colors.transparent;
@@ -56,8 +56,8 @@ class Art {
   String flavour = "";
   String file;
   Uint8List _bytes;
-  double height;
-  double width;
+  int height;
+  int width;
   ArtElement pk;
   ArtElement pkQr;
   ArtElement ad;
@@ -84,10 +84,10 @@ class Art {
             art.file = val as String;
             break;
           case "height":
-            art.height = val as double;
+            art.height = val as int;
             break;
           case "width":
-            art.width = val as double;
+            art.width = val as int;
             break;
           case "privkey_qr":
             art.pkQr = readElement(val);
@@ -132,10 +132,10 @@ class Art {
             art.file = val as String;
             break;
           case "height":
-            art.height = val as double;
+            art.height = val as int;
             break;
           case "width":
-            art.width = val as double;
+            art.width = val as int;
             break;
           case "privkey_qr":
             art.pkQr = readElement(val);
@@ -169,22 +169,22 @@ class Art {
     element.forEach((key, val) {
       switch (key) {
         case "top":
-          ae.top = val as double;
+          ae.top = val as int;
           break;
         case "left":
-          ae.left = val as double;
+          ae.left = val as int;
           break;
         case "height":
-          ae.height = val as double;
+          ae.height = val as int;
           break;
         case "width":
-          ae.width = val as double;
+          ae.width = val as int;
           break;
         case "size":
-          ae.size = val as double;
+          ae.size = val as int;
           break;
         case "rotation":
-          ae.rotation = val as double;
+          ae.rotation = val as int;
           break;
         case "visible":
           ae.visible = val as bool;
