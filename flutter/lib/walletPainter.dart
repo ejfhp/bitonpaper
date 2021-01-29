@@ -15,7 +15,7 @@ class Rasterizer {
     // ui.Image image = frameInfo.image;
 
     final rec = ui.PictureRecorder();
-    final canvas = Canvas(rec, Rect.fromLTRB(0, 0, art.width, art.height));
+    final canvas = Canvas(rec, Rect.fromLTRB(0, 0, art.width.toDouble(), art.height.toDouble()));
     //TODO to test/check in the future
     // paintImage(canvas: canvas, image: image, rect: Rect.fromLTRB(0, 0, art.width, art.height));
     print("WALLETPAINTER Rasterizing privKey: " + wallet.publicAddress);
@@ -54,10 +54,10 @@ class Rasterizer {
     p.color = artE.bgcolor;
     double rad = (artE.rotation / 180) * math.pi;
     canvas.save();
-    canvas.translate(artE.left, artE.top);
+    canvas.translate(artE.left.toDouble(), artE.top.toDouble());
     canvas.rotate(rad);
-    canvas.drawRect(Rect.fromLTRB(0, 0, artE.width, artE.height), p);
-    qr.paint(canvas, Size(artE.size, artE.size));
+    canvas.drawRect(Rect.fromLTRB(0, 0, artE.width.toDouble(), artE.height.toDouble()), p);
+    qr.paint(canvas, Size(artE.size.toDouble(), artE.size.toDouble()));
 
     canvas.restore();
   }
@@ -68,12 +68,12 @@ class Rasterizer {
     assert(artE != null);
     ui.Paint p = ui.Paint();
     p.color = artE.bgcolor;
-    TextSpan span = new TextSpan(style: new TextStyle(color: artE.fgcolor, fontSize: artE.size, fontFamily: "Roboto"), text: text);
+    TextSpan span = new TextSpan(style: new TextStyle(color: artE.fgcolor, fontSize: artE.size.toDouble(), fontFamily: "Roboto"), text: text);
     TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.left, textDirection: TextDirection.ltr);
     double rad = (artE.rotation / 180) * math.pi;
     tp.layout();
     canvas.save();
-    canvas.translate(artE.left, artE.top);
+    canvas.translate(artE.left.toDouble(), artE.top.toDouble());
     canvas.rotate(rad);
     tp.paint(canvas, new Offset(0, 0));
     canvas.restore();
