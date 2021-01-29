@@ -8,7 +8,7 @@ import 'dart:async';
 import 'dart:ui' as ui;
 import 'BOPState.dart';
 
-const String ART_FOLDER = "arts";
+const String ART_FOLDER = "resources/arts";
 const List<String> artList = [
   "art_bitcoin-gold.json",
   "art_bitcoin-lime.json",
