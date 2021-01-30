@@ -1,13 +1,11 @@
-import 'dart:typed_data';
 import 'package:bitonpaper/conf.dart';
-import 'package:bitonpaper/pdf.dart';
+import 'package:bitonpaper/paperPDF.dart';
 import 'dart:convert';
 import 'art.dart';
 import 'wallet.dart';
 import 'paper.dart';
 import 'BOP.dart';
 import 'package:flutter/material.dart';
-import 'printer.dart' if (dart.library.io) 'printer_hw.dart' if (dart.library.js) 'printer_web.dart';
 import 'export.dart' if (dart.library.io) 'export_hw.dart' if (dart.library.js) 'export_web.dart';
 
 class BOPState extends State<BOP> {
@@ -79,21 +77,7 @@ class BOPState extends State<BOP> {
 
   Future<void> printPapers() async {
     print("BOPSTATE printPapers");
-    String wPpTxt = wPPageCtrl.text;
-    if (wPpTxt.isEmpty) {
-      return;
-    }
-    int walletsPP = int.parse(wPpTxt);
-    if (walletsPP < 1) {
-      wPPageCtrl.text = "1";
-      return;
-    }
-    printPages(context, this._papers, walletsPP);
-  }
-
-  Future<void> savePapersToPDF() async {
-    print("BOPSTATE savePapersToPDF");
-    _showAlert("", "Please be patient, PDF generation takes a while...");
+    _showAlert("", "Please be patient, unfortunately printing a PDF takes a while...");
     //PDF generation freeze the UI, better to have some time to allow the alert to be drawn.
     await Future.delayed(const Duration(milliseconds: 300), () {});
     String wPpTxt = wPPageCtrl.text;
@@ -106,11 +90,31 @@ class BOPState extends State<BOP> {
       return;
     }
     int s = DateTime.now().millisecondsSinceEpoch;
-    DocSet pdfConf = DocSet(papers: this._papers, walletPerPage: walletsPP);
-    Uint8List generatedPDF = await generatePDF(pdfConf);
-    print("BOPSTATE PDF generated in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
-    openDownload(generatedPDF, "application/pdf", "bop_wallets.pdf");
-    //Remove the alert
+    PaperPrintSet printSet = PaperPrintSet(papers: this._papers, walletPerPage: walletsPP);
+    printSet.printPages();
+    print("BOPSTATE PDF printed in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
+    Navigator.of(context).pop();
+  }
+
+  Future<void> savePapersToPDF() async {
+    print("BOPSTATE savePapersToPDF");
+    _showAlert("", "Please be patient, unfortunately exporting a PDF takes a while...");
+    //PDF generation freeze the UI, better to have some time to allow the alert to be drawn.
+    await Future.delayed(const Duration(milliseconds: 300), () {});
+    String wPpTxt = wPPageCtrl.text;
+    if (wPpTxt.isEmpty) {
+      return;
+    }
+    int walletsPP = int.parse(wPpTxt);
+    if (walletsPP < 1) {
+      wPPageCtrl.text = "1";
+      return;
+    }
+    int s = DateTime.now().millisecondsSinceEpoch;
+    PaperPrintSet printSet = PaperPrintSet(papers: this._papers, walletPerPage: walletsPP);
+    printSet.downloadPages();
+    print("BOPSTATE PDF exported in (millis):" + (DateTime.now().millisecondsSinceEpoch - s).toString());
+    // //Remove the alert
     Navigator.of(context).pop();
   }
 
