@@ -28,7 +28,8 @@ const List<String> artList = [
   "art_hidden-T4L3.json",
   "art_hidden-T4L5.json",
   "art_hidden-T5L2.json",
-  "art_pegacrick.json"
+  "art_pegacrick.json",
+  "art_intro_de.json"
 ];
 
 Future<void> loadArts(BOPState state, String baseUrl) async {
