@@ -46,7 +46,7 @@ class BOPState extends State<BOP> {
       return;
     }
     int numWs = int.parse(numWTxt);
-    if (numWs < 1 || numWs > 10) {
+    if (numWs < 1 || numWs > 9) {
       numWCtrl.text = "1";
       return;
     }

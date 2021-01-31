@@ -87,9 +87,13 @@ class ToolMenu extends StatelessWidget {
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             keyboardType: TextInputType.number,
             textAlign: TextAlign.right,
-            maxLength: 2,
+            maxLength: 1,
             style: TextStyle(fontFamily: "Roboto", color: Colors.black54),
             controller: state.numWCtrl,
+            onSubmitted: (text) async {
+              await state.updateWallets();
+              FocusScope.of(context).unfocus();
+            },
             onEditingComplete: () async {
               await state.updateWallets();
             },
@@ -98,7 +102,7 @@ class ToolMenu extends StatelessWidget {
             },
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText: "wallets (max 10)",
+              labelText: "wallets (max 9)",
             ),
           ),
           Container(
@@ -106,6 +110,9 @@ class ToolMenu extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () async {
                 await state.updateWallets();
+                if (!wide) {
+                  Navigator.pop(context);
+                }
               },
               child: const Text('Apply'),
             ),
@@ -134,6 +141,9 @@ class ToolMenu extends StatelessWidget {
             controller: state.wPPageCtrl,
             onTap: () {
               state.wPPageCtrl.selection = TextSelection(baseOffset: 0, extentOffset: state.wPPageCtrl.value.text.length);
+            },
+            onSubmitted: (text) async {
+              FocusScope.of(context).unfocus();
             },
             textAlign: TextAlign.right,
             maxLength: 1,

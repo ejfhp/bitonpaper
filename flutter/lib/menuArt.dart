@@ -86,10 +86,6 @@ class _ArtButtonState extends State<ArtButton> {
     });
   }
 
-  Art _getShown() {
-    return widget.arts[fIndex];
-  }
-
   int getLastFlavourIndex() {
     if (widget.arts.isEmpty) {
       return 0;
