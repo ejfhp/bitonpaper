@@ -1,5 +1,5 @@
 import 'package:bitonpaper/conf.dart';
-import 'package:bitonpaper/paperPDF.dart';
+import 'package:bitonpaper/printPDF.dart';
 import 'dart:convert';
 import 'art.dart';
 import 'wallet.dart';
