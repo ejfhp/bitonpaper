@@ -85,6 +85,7 @@ class ToolMenu extends StatelessWidget {
         children: [
           TextField(
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.number,
             textAlign: TextAlign.right,
             maxLength: 2,
             style: TextStyle(fontFamily: "Roboto", color: Colors.black54),
@@ -129,6 +130,7 @@ class ToolMenu extends StatelessWidget {
         children: [
           TextField(
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.number,
             controller: state.wPPageCtrl,
             onTap: () {
               state.wPPageCtrl.selection = TextSelection(baseOffset: 0, extentOffset: state.wPPageCtrl.value.text.length);
