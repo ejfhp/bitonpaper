@@ -1,0 +1,43 @@
+{
+    "name": "Intro",
+    "flavour": "Deutsch",
+    "file": "art_intro-de.png",
+    "height": 860,
+    "width": 1600,
+    "privkey_qr": {
+        "visible": true,
+        "top": 220,
+        "left": 1180,
+        "width": 380,
+        "height": 380,
+        "size": 380,
+        "rotation": 0
+    },
+    "privkey": {
+        "visible": true,
+        "top": 740,
+        "left": 1140,
+        "width": 800,
+        "height": 40,
+        "size": 20,
+        "rotation": -90
+    },
+    "address_qr": {
+        "visible": true,
+        "top": 100,
+        "left": 40,
+        "width": 340,
+        "height": 340,
+        "size": 340,
+        "rotation": 0
+    },
+    "address": {
+        "visible": true,
+        "top": 740,
+        "left": 480,
+        "width": 800,
+        "height": 40,
+        "size": 30,
+        "rotation": -90
+    }
+}
