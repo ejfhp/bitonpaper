@@ -24,6 +24,7 @@ class Intro extends StatelessWidget {
                     minHeight: constraints.maxHeight,
                   ),
                   child: Container(
+                    padding: EdgeInsets.all(20),
                     color: Colors.blueGrey,
                     child: buildIntro(context, constraints),
                     alignment: Alignment.topCenter,
@@ -149,7 +150,6 @@ class Intro extends StatelessWidget {
         ]),
         TextSpan(children: <TextSpan>[
           TextSpan(text: '\n\nThis website uses only basic Google Analytics cookies. No information is shared with any other third party service.\n'),
-          TextSpan(text: '\n'),
         ]),
       ]),
     );
