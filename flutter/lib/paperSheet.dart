@@ -34,7 +34,7 @@ class PaperSheet extends StatelessWidget {
     return SingleChildScrollView(
       child: Container(
         child: p,
-        alignment: Alignment.center,
+        alignment: Alignment.topCenter,
       ),
     );
   }

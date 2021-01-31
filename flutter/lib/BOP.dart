@@ -40,7 +40,7 @@ class BOPUI extends StatelessWidget {
       preferredSize: Size.fromHeight(HEADER_HEIGHT),
       child: AppBar(
           iconTheme: IconThemeData(color: Colors.amber),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.blueGrey,
           automaticallyImplyLeading: implyBarLeading,
           elevation: 0,
           flexibleSpace: PreferredSize(
