@@ -14,10 +14,10 @@ steps:
 
   # Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/${_DEPL_SERVICE}-${_DEPL_VERSION}:$SHORT_SHA']
+  args: ['push', 'gcr.io/$PROJECT_ID/${_DEPL_SERVICE}-${_DEPL_VERSION}']
   # Deploy container image to Cloud Run
 substitutions:
   _DEPL_SERVICE: flutter-build
   _DEPL_VERSION: main
 images:
- - 'gcr.io/$PROJECT_ID/${_DEPL_SERVICE}-${_DEPL_VERSION}:$SHORT_SHA'
+ - 'gcr.io/$PROJECT_ID/${_DEPL_SERVICE}-${_DEPL_VERSION}'
