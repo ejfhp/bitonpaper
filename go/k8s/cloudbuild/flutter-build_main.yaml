@@ -4,6 +4,7 @@ steps:
   args: 
   - 'build' 
   - '--tag=gcr.io/$PROJECT_ID/${_DEPL_SERVICE}-${_DEPL_VERSION}:$SHORT_SHA'
+  - '--tag=gcr.io/$PROJECT_ID/${_DEPL_SERVICE}-${_DEPL_VERSION}:$TAG_NAME'
   - '--tag=gcr.io/$PROJECT_ID/${_DEPL_SERVICE}-${_DEPL_VERSION}:latest'
   - '--build-arg'
   - 'ver=$TAG_NAME'
