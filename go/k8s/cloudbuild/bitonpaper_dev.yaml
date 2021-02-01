@@ -1,7 +1,15 @@
 steps:
   # Build Docker image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '--tag=gcr.io/$PROJECT_ID/${_DEPL_SERVICE}-${_DEPL_VERSION}:$SHORT_SHA', '--build-arg', 'ver=$BRANCH_NAME-$SHORT_SHA', '-f', './go/k8s/Dockerfile', '.']
+  args: 
+  - 'build'
+  - '--tag=gcr.io/$PROJECT_ID/${_DEPL_SERVICE}-${_DEPL_VERSION}:$SHORT_SHA'
+  - '--tag=gcr.io/$PROJECT_ID/${_DEPL_SERVICE}-${_DEPL_VERSION}:latest'
+  - '--build-arg'
+  - 'ver=$BRANCH_NAME-$SHORT_SHA'
+  - '-f'
+  - './go/k8s/${_DEPL_SERVICE}/${_DEPL_VERSION}/Dockerfile'
+  - '.'
 
   # Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
