@@ -1,11 +1,19 @@
 steps:
   # Build Docker image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '--tag=gcr.io/$PROJECT_ID/${_DEPL_SERVICE}-${_DEPL_VERSION}:$SHORT_SHA', '-f', './go/k8s/Dockerfile', '.']
+  args: 
+  - 'build'
+  - '--tag=gcr.io/$PROJECT_ID/${_DEPL_SERVICE}_${_DEPL_VERSION}:$SHORT_SHA'
+  - '--tag=gcr.io/$PROJECT_ID/${_DEPL_SERVICE}_${_DEPL_VERSION}:latest'
+  - '--build-arg'
+  - 'ver=$BRANCH_NAME-$SHORT_SHA'
+  - '-f'
+  - './go/k8s/${_DEPL_SERVICE}/${_DEPL_VERSION}/Dockerfile'
+  - '.'
 
   # Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/${_DEPL_SERVICE}-${_DEPL_VERSION}:$SHORT_SHA']
+  args: ['push', 'gcr.io/$PROJECT_ID/${_DEPL_SERVICE}_${_DEPL_VERSION}']
   # Deploy container image to Cloud Run
 - name: 'gcr.io/cloud-builders/gcloud'
   args:
@@ -14,7 +22,7 @@ steps:
   - '${_DEPL_SERVICE}-${_DEPL_VERSION}'
   - '--allow-unauthenticated'
   - '--image'
-  - 'gcr.io/$PROJECT_ID/${_DEPL_SERVICE}-${_DEPL_VERSION}:$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/${_DEPL_SERVICE}_${_DEPL_VERSION}:$SHORT_SHA'
   - '--region'
   - 'europe-north1'
   - '--platform'
@@ -23,4 +31,4 @@ substitutions:
   _DEPL_SERVICE: bitonpaper
   _DEPL_VERSION: experimental
 images:
- - 'gcr.io/$PROJECT_ID/${_DEPL_SERVICE}-${_DEPL_VERSION}:$SHORT_SHA'
+ - 'gcr.io/$PROJECT_ID/${_DEPL_SERVICE}_${_DEPL_VERSION}'

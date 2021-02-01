@@ -4,9 +4,10 @@ steps:
   args: 
   - 'build'
   - '--tag=gcr.io/$PROJECT_ID/${_DEPL_SERVICE}_${_DEPL_VERSION}:$SHORT_SHA'
+  - '--tag=gcr.io/$PROJECT_ID/${_DEPL_SERVICE}_${_DEPL_VERSION}:$TAG_NAME'
   - '--tag=gcr.io/$PROJECT_ID/${_DEPL_SERVICE}_${_DEPL_VERSION}:latest'
   - '--build-arg'
-  - 'ver=$BRANCH_NAME-$SHORT_SHA'
+  - 'ver=$TAG_NAME'
   - '-f'
   - './go/k8s/${_DEPL_SERVICE}/${_DEPL_VERSION}/Dockerfile'
   - '.'
@@ -29,6 +30,6 @@ steps:
   - 'managed'
 substitutions:
   _DEPL_SERVICE: bitonpaper
-  _DEPL_VERSION: dev
+  _DEPL_VERSION: main
 images:
  - 'gcr.io/$PROJECT_ID/${_DEPL_SERVICE}_${_DEPL_VERSION}'
