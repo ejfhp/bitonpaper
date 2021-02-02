@@ -1,5 +1,5 @@
 
-FROM gcr.io/bitcoinonpaper/flutter-build_main:latest as builder
+FROM gcr.io/bitcoinonpaper/flutter-builder_main:latest as builder
 
 ARG ver=""
 
