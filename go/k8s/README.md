@@ -6,7 +6,7 @@ From the root of the project:
 
 1 - Build the Docker image from scratch (this can take a while).
 ```
-docker build --tag=bop --build-arg ver='local' -f ./go/k8s/Dockerfile .
+docker build --tag=bop --build-arg ver='local' -f ./go/k8s/bitnonpaper/main/Dockerfile .
 ```
 
 2 - Run the generated Docker image on port 8080.
