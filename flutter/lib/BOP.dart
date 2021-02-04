@@ -5,11 +5,17 @@ import 'menuTool.dart';
 import 'paperSheet.dart';
 import 'version.dart';
 import 'conf.dart';
+import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 //Main StatefulWidget
 class BOP extends StatefulWidget {
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+  BOP(this.analytics, this.observer);
+
   @override
-  BOPState createState() => BOPState();
+  BOPState createState() => BOPState(this.analytics, this.observer);
 }
 
 //Main StatelessWidget

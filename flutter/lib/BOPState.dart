@@ -7,8 +7,12 @@ import 'paper.dart';
 import 'BOP.dart';
 import 'package:flutter/material.dart';
 import 'export.dart' if (dart.library.io) 'export_hw.dart' if (dart.library.js) 'export_web.dart';
+import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class BOPState extends State<BOP> {
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
   final Map<String, List<Art>> _arts = Map<String, List<Art>>();
   // final List<Art> _arts = List<Art>.empty(growable: true);
   final List<Wallet> _wallets = List<Wallet>.empty(growable: true);
@@ -18,7 +22,7 @@ class BOPState extends State<BOP> {
   bool _exportOnlyKeys = false;
   Art _selectedArt;
 
-  BOPState() {
+  BOPState(this.analytics, this.observer) {
     loadArts(this, "./img");
     updateWallets();
   }
@@ -29,6 +33,7 @@ class BOPState extends State<BOP> {
   }
 
   Future<void> selectArt(Art sel) async {
+    await this.analytics.logEvent(name: 'selectart', parameters: <String, dynamic>{'art': sel.name, 'flavour': sel.flavour});
     print("BOPSTATE selectArt" + sel.name);
     setState(() {
       this._selectedArt = sel;
@@ -77,6 +82,9 @@ class BOPState extends State<BOP> {
 
   Future<void> printPapers() async {
     print("BOPSTATE printPapers");
+    await this.analytics.logEvent(
+        name: 'printpapers',
+        parameters: <String, dynamic>{'wallets': this._wallets.length, 'art': this._selectedArt.name, 'flavour': this._selectedArt.flavour});
     _showAlert("", "Please be patient, unfortunately printing a PDF takes a while...");
     //PDF generation freeze the UI, better to have some time to allow the alert to be drawn.
     await Future.delayed(const Duration(milliseconds: 300), () {});
@@ -98,6 +106,9 @@ class BOPState extends State<BOP> {
 
   Future<void> savePapersToPDF() async {
     print("BOPSTATE savePapersToPDF");
+    await this.analytics.logEvent(
+        name: 'paperstopdf',
+        parameters: <String, dynamic>{'wallets': this._wallets.length, 'art': this._selectedArt.name, 'flavour': this._selectedArt.flavour});
     _showAlert("", "Please be patient, unfortunately exporting a PDF takes a while...");
     //PDF generation freeze the UI, better to have some time to allow the alert to be drawn.
     await Future.delayed(const Duration(milliseconds: 300), () {});
@@ -119,16 +130,18 @@ class BOPState extends State<BOP> {
   }
 
   Future<void> saveKeysToTXT() async {
-    print("BOPSTATE savePapersToPDF");
+    print("BOPSTATE saveKeysToTXT");
     int numWallets = this._wallets.length;
     String filename = "bop_keys-addr.json";
     String exportText = "";
     if (this._exportOnlyKeys) {
+      await this.analytics.logEvent(name: 'savekeystotxt', parameters: <String, dynamic>{'wallets': this._wallets.length});
       filename = "bop_keys.txt";
       for (int i = 0; i < numWallets; i++) {
         exportText += this._wallets[i].privateKey + " ";
       }
     } else {
+      await this.analytics.logEvent(name: 'savekeystojson', parameters: <String, dynamic>{'wallets': this._wallets.length});
       exportText += "{";
       for (int i = 0; i < numWallets; i++) {
         exportText += "\"" + this._wallets[i].publicAddress + "\": \"" + this._wallets[i].privateKey + "\"";
