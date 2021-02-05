@@ -10,7 +10,12 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 //flutter packages pub outdated --mode=null-safety
 
 void main() async {
-  // var initialPage = PaperPage();
+  // If you're running an application and need to access the binary messenger before `runApp()`
+  // has been called (for example, during plugin initialization), then you need to explicitly
+  // call the `WidgetsFlutterBinding.ensureInitialized()` first.
+  // If you're running a test, you can call the `TestWidgetsFlutterBinding.ensureInitialized()`
+  // as the first line in your test's `main()` method to initialize the binding.
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(BOPApp());
 }
