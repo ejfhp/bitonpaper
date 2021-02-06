@@ -90,7 +90,6 @@ class _ArtButtonState extends State<ArtButton> {
     if (widget.arts.isEmpty) {
       return 0;
     }
-    print("getLastFlavourIndex: " + (widget.arts.length - 1).toString());
     return widget.arts.length - 1;
   }
 

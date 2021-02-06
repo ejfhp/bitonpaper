@@ -18,7 +18,6 @@ class Rasterizer {
     final canvas = Canvas(rec, Rect.fromLTRB(0, 0, art.width.toDouble(), art.height.toDouble()));
     //TODO to test/check in the future
     // paintImage(canvas: canvas, image: image, rect: Rect.fromLTRB(0, 0, art.width, art.height));
-    print("WALLETPAINTER Rasterizing privKey: " + wallet.publicAddress);
     if (art.pkQr.visible) {
       _paintQr(canvas, wallet.privateKey, art.pkQr);
     }
