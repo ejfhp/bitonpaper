@@ -1,21 +1,20 @@
 {
-    "name": "Kurt",
-    "file": "art_kurt.png",
+    "name": "Pegacrick",
     "height": 860,
     "width": 1600,
     "privkey_qr": {
         "visible": true,
-        "top": 220,
-        "left": 1180,
-        "width": 380,
-        "height": 380,
-        "size": 380,
+        "top": 400,
+        "left": 1160,
+        "width": 360,
+        "height": 360,
+        "size": 360,
         "rotation": 0
     },
     "privkey": {
         "visible": true,
         "top": 740,
-        "left": 1130,
+        "left": 1100,
         "width": 800,
         "height": 40,
         "size": 20,
@@ -23,7 +22,7 @@
     },
     "address_qr": {
         "visible": true,
-        "top": 80,
+        "top": 400,
         "left": 40,
         "width": 360,
         "height": 360,
@@ -33,7 +32,7 @@
     "address": {
         "visible": true,
         "top": 740,
-        "left": 460,
+        "left": 480,
         "width": 800,
         "height": 40,
         "size": 30,

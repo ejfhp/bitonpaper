@@ -1,7 +1,6 @@
 {
     "name": "Bitcoin",
-    "flavour": "Fire",
-    "file": "art_bitcoin-fire.png",
+    "subname": "Fire",
     "height": 860,
     "width": 1600,
     "privkey_qr": {

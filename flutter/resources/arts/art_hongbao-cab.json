@@ -1,0 +1,50 @@
+{
+    "name": "Hongbao",
+    "subname": "Chaotiny",
+    "height": 889,
+    "width": 1634,
+    "privkey_qr": {
+        "visible": true,
+        "top": 200,
+        "left": 1170,
+        "width": 370,
+        "height": 370,
+        "size": 370,
+        "bgcolor": "fff7e757",
+        "fgcolor": "ff250075",
+        "rotation": 0
+    },
+    "privkey": {
+        "visible": true,
+        "top": 560,
+        "left": 1140,
+        "width": 400,
+        "height": 20,
+        "size": 12,
+        "fgcolor": "fff7e757",
+        "bgcolor": "ff250075",
+        "rotation": -90
+    },
+    "address_qr": {
+        "visible": true,
+        "top": 270,
+        "left": 80,
+        "width": 320,
+        "height": 320,
+        "size": 320,
+        "bgcolor": "fff7e757",
+        "fgcolor": "ff250075",
+        "rotation": 0
+    },
+    "address": {
+        "visible": true,
+        "top": 560,
+        "left": 50,
+        "width": 400,
+        "height": 40,
+        "size": 14,
+        "fgcolor": "fff7e757",
+        "bgcolor": "ff250075",
+        "rotation": -90
+    }
+}

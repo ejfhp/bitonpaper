@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 //Main StatelessWidget
 class Intro extends StatelessWidget {
@@ -55,13 +56,9 @@ class Intro extends StatelessWidget {
           child: presentationText(context),
         ),
         Container(
-          child: RaisedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, "/wallet");
-            },
-            color: Colors.blueGrey,
-            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-            child: const Text('Continue', style: TextStyle(fontSize: 30, color: Colors.amber)),
+          child: ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, "/arts"),
+            child: Text(AppLocalizations.of(context).intro_continue, style: TextStyle(fontSize: 30, color: Colors.amber)),
           ),
           padding: EdgeInsets.fromLTRB(10, 50, 10, 50),
         ),
@@ -71,43 +68,47 @@ class Intro extends StatelessWidget {
   }
 
   Widget presentationText(context) {
+    TextStyle bold20 = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
+    TextStyle bold18amber = TextStyle(fontWeight: FontWeight.bold, color: Colors.amber, fontSize: 18);
+    TextStyle normal = TextStyle(fontSize: 12, color: Colors.white);
+    TextStyle boldAmber = TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.amber);
+    TextStyle bold = TextStyle(fontSize: 12, fontWeight: FontWeight.bold);
+
     return RichText(
-      text: TextSpan(style: TextStyle(fontSize: 12, fontFamily: "Roboto", color: Colors.white), children: <TextSpan>[
+      text: TextSpan(style: normal, children: <TextSpan>[
         TextSpan(children: <TextSpan>[
-          TextSpan(text: 'BOP ', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber, fontSize: 18)),
-          TextSpan(text: 'let you build Paper Wallets for '),
-          TextSpan(text: 'Bitcoin (BSV)', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber)),
+          TextSpan(text: 'BOP ', style: bold18amber),
+          TextSpan(text: AppLocalizations.of(context).intro_a),
+          TextSpan(text: ' Bitcoin (BSV)', style: boldAmber),
           TextSpan(text: '.\n'),
           TextSpan(text: '\n'),
         ]),
         TextSpan(children: <TextSpan>[
-          TextSpan(
-              text:
-                  'Keys, addresses, QR-codes, everything is generated locally in your browser, nothing is sent over the Internet, your keys are safe, they never leave your browser... just take care no one is watching your screen!\n'),
+          TextSpan(text: AppLocalizations.of(context).intro_b),
+          TextSpan(text: '\n\n'),
+        ]),
+        TextSpan(children: <TextSpan>[
+          TextSpan(text: AppLocalizations.of(context).intro_1 + ' - ', style: bold20),
+          TextSpan(text: AppLocalizations.of(context).intro_c + '\n'),
+          TextSpan(text: AppLocalizations.of(context).intro_2 + ' - ', style: bold20),
+          TextSpan(text: AppLocalizations.of(context).intro_d + '\n'),
+          TextSpan(text: AppLocalizations.of(context).intro_3 + ' - ', style: bold20),
+          TextSpan(text: AppLocalizations.of(context).intro_e + '\n'),
           TextSpan(text: '\n'),
         ]),
         TextSpan(children: <TextSpan>[
-          TextSpan(text: '1 - ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-          TextSpan(text: 'Click "Continue" at the bottom of this page.\n'),
-          TextSpan(text: '2 - ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-          TextSpan(text: 'Select an art from the right menu.\n'),
-          TextSpan(text: '3 - ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-          TextSpan(text: 'Export a PDF or print as many wallets as you want from the right menu.\n'),
+          TextSpan(text: AppLocalizations.of(context).intro_f),
+          TextSpan(text: 'BOP ', style: bold18amber),
+          TextSpan(text: AppLocalizations.of(context).intro_g),
+          TextSpan(text: AppLocalizations.of(context).intro_h, style: bold),
+          TextSpan(text: AppLocalizations.of(context).intro_i),
+          TextSpan(text: AppLocalizations.of(context).intro_j, style: bold),
+          TextSpan(text: AppLocalizations.of(context).intro_k),
+          TextSpan(text: AppLocalizations.of(context).intro_l + '\n', style: bold),
           TextSpan(text: '\n'),
         ]),
         TextSpan(children: <TextSpan>[
-          TextSpan(text: 'Be aware that '),
-          TextSpan(text: 'BOP ', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber, fontSize: 18)),
-          TextSpan(text: 'is a free application and comes '),
-          TextSpan(text: 'without ', style: TextStyle(fontWeight: FontWeight.bold)),
-          TextSpan(text: 'any kind of '),
-          TextSpan(text: 'guarantee', style: TextStyle(fontWeight: FontWeight.bold)),
-          TextSpan(text: '. It could have malfunctions. Paper wallets can be lost or become unreadable.\n'),
-          TextSpan(text: 'Use it at your own risk.\n', style: TextStyle(fontWeight: FontWeight.bold)),
-          TextSpan(text: '\n'),
-        ]),
-        TextSpan(children: <TextSpan>[
-          TextSpan(text: 'All the code is available here: '),
+          TextSpan(text: AppLocalizations.of(context).intro_m),
           TextSpan(
             text: "https://github.com/ejfhp/bitonpaper.",
             style: TextStyle(fontStyle: FontStyle.italic, decoration: TextDecoration.underline),
@@ -117,12 +118,11 @@ class Intro extends StatelessWidget {
               },
           ),
         ]),
-        TextSpan(text: '\n'),
-        TextSpan(text: '\n'),
+        TextSpan(text: '\n\n'),
         TextSpan(children: <TextSpan>[
-          TextSpan(text: 'Follow '),
-          TextSpan(text: 'BOP ', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber, fontSize: 18)),
-          TextSpan(text: 'on Twitter: '),
+          TextSpan(text: AppLocalizations.of(context).intro_n),
+          TextSpan(text: 'BOP ', style: bold18amber),
+          TextSpan(text: AppLocalizations.of(context).intro_o),
           TextSpan(
             text: "https://twitter.com/boprun",
             style: TextStyle(fontStyle: FontStyle.italic, decoration: TextDecoration.underline),
@@ -134,10 +134,8 @@ class Intro extends StatelessWidget {
           TextSpan(text: '.\n\n'),
         ]),
         TextSpan(children: <TextSpan>[
-          TextSpan(text: 'We think that the original Bitcoin white paper, together with the genesis block, is what really defines Bitcoin.\n'),
-          TextSpan(
-              text:
-                  'We host the bitcoin.pdf here to underline the fact that the only Blockchain that fully respects Satoshi\'s work and that should be called "Bitcoin" is BitcoinSV (BSV): '),
+          TextSpan(text: AppLocalizations.of(context).intro_p + '\n'),
+          TextSpan(text: AppLocalizations.of(context).intro_q),
           TextSpan(
             text: "https://bop.run/bitcoin.pdf",
             style: TextStyle(fontStyle: FontStyle.italic, decoration: TextDecoration.underline),
@@ -149,7 +147,7 @@ class Intro extends StatelessWidget {
           TextSpan(text: '.'),
         ]),
         TextSpan(children: <TextSpan>[
-          TextSpan(text: '\n\nThis website uses only basic Google Analytics cookies. No information is shared with any other third party service.\n'),
+          TextSpan(text: '\n\n' + AppLocalizations.of(context).intro_r + '\n'),
         ]),
       ]),
     );

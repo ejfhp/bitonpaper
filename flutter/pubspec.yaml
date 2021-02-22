@@ -31,6 +31,9 @@ dependencies:
   firebase_analytics: ^7.0.1
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter         
+  intl: any    # Add this line
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -85,3 +88,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+  #Added for localization
+  generate: true    

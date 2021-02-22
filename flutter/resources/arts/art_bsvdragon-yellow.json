@@ -1,6 +1,6 @@
 {
-    "name": "BSV Dragon",
-    "file": "art_bsvdragon.png",
+    "name": "Bitcoin",
+    "subname": "Dragon",
     "height": 860,
     "width": 1600,
     "privkey_qr": {

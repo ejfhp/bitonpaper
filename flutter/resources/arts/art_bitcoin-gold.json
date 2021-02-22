@@ -1,7 +1,6 @@
 {
     "name": "Bitcoin",
-    "flavour": "Gold",
-    "file": "art_bitcoin-gold.png",
+    "subname": "Gold",
     "height": 860,
     "width": 1600,
     "privkey_qr": {

@@ -1,7 +1,6 @@
 {
     "name": "Hidden",
-    "flavour": "Top4 Left3",
-    "file": "art_hidden.png",
+    "subname": "Top4 Left3",
     "height": 1586,
     "width": 2030,
     "privkey_qr": {

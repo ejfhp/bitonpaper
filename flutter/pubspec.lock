@@ -169,6 +169,11 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_localizations:
+    dependency: "direct main"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -207,6 +212,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.19"
+  intl:
+    dependency: "direct main"
+    description:
+      name: intl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.17.0-nullsafety.2"
   js:
     dependency: transitive
     description:
@@ -255,7 +267,7 @@ packages:
       name: pedantic
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.10.0"
+    version: "1.9.2"
   petitparser:
     dependency: transitive
     description:
@@ -414,7 +426,7 @@ packages:
       name: url_launcher_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.5+3"
+    version: "0.1.5+1"
   url_launcher_windows:
     dependency: transitive
     description:
@@ -438,4 +450,4 @@ packages:
     version: "4.5.1"
 sdks:
   dart: ">=2.12.0-0.0 <3.0.0"
-  flutter: ">=1.22.0 <2.0.0"
+  flutter: ">=1.22.0"

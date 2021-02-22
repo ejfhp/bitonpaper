@@ -1,0 +1,50 @@
+{
+    "name": "Hongbao",
+    "subname": "Ox",
+    "height": 836,
+    "width": 1712,
+    "privkey_qr": {
+        "visible": true,
+        "top": 400,
+        "left": 1280,
+        "width": 400,
+        "height": 400,
+        "size": 400,
+        "fgcolor": "ff6c0204",
+        "bgcolor": "fffefefe",
+        "rotation": 0
+    },
+    "privkey": {
+        "visible": true,
+        "top": 800,
+        "left": 1250,
+        "width": 800,
+        "height": 20,
+        "size": 15,
+        "fgcolor": "fff9ccaf",
+        "bgcolor": "00ffffff",
+        "rotation": -90
+    },
+    "address_qr": {
+        "visible": true,
+        "top": 30,
+        "left": 1380,
+        "width": 300,
+        "height": 300,
+        "size": 300,
+        "fgcolor": "ff6c0204",
+        "bgcolor": "fffefefe",
+        "rotation": 0
+    },
+    "address": {
+        "visible": true,
+        "top": 330,
+        "left": 1350,
+        "width": 400,
+        "height": 40,
+        "size": 14,
+        "fgcolor": "fff9ccaf",
+        "bgcolor": "00ffffff",
+        "rotation": -90
+    }
+}

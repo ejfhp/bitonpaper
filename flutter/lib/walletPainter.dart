@@ -3,8 +3,8 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/painting.dart';
-import 'art.dart';
-import 'wallet.dart';
+import 'package:bitonpaper/arts.dart';
+import 'package:bitonpaper/wallets.dart';
 
 class Rasterizer {
   Future<Uint8List> rasterize({Wallet wallet, Art art}) async {
@@ -52,11 +52,13 @@ class Rasterizer {
     Paint p = Paint();
     p.color = artE.bgcolor;
     double rad = (artE.rotation / 180) * math.pi;
+    double margin = artE.size / 30;
     canvas.save();
     canvas.translate(artE.left.toDouble(), artE.top.toDouble());
     canvas.rotate(rad);
     canvas.drawRect(Rect.fromLTRB(0, 0, artE.width.toDouble(), artE.height.toDouble()), p);
-    qr.paint(canvas, Size(artE.size.toDouble(), artE.size.toDouble()));
+    canvas.translate(margin, margin);
+    qr.paint(canvas, Size(artE.size.toDouble() - (2 * margin), artE.size.toDouble() - (2 * margin)));
 
     canvas.restore();
   }

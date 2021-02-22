@@ -7,3 +7,4 @@ const String DEFAULT_ART = "Bitcoin";
 const String DEFAULT_FLAVOUR = "Gold";
 
 const APPLICATION_TITLE = "BOP - Bitcoin On Paper";
+const String ART_FOLDER = "resources/arts";
