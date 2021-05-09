@@ -10,7 +10,7 @@ import (
 
 func TestPage(t *testing.T) {
 	router := httprouter.New()
-	router.GET("/*file", NewPageHandler("/", "./").LocalFile)
+	router.GET("/*file", NewPageHandler("/", "./", "index.html").LocalFile)
 	req, _ := http.NewRequest("GET", "/testdata/test.txt", nil)
 	rr := httptest.NewRecorder()
 
@@ -25,7 +25,7 @@ func TestPage(t *testing.T) {
 
 func TestAlias(t *testing.T) {
 	router := httprouter.New()
-	router.GET("/*file", NewPageHandler("/alias", "./testdata").LocalFile)
+	router.GET("/*file", NewPageHandler("/alias", "./testdata", "index.html").LocalFile)
 	req, _ := http.NewRequest("GET", "/alias/test.txt", nil)
 	rr := httptest.NewRecorder()
 
