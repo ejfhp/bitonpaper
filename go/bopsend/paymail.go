@@ -1,14 +1,17 @@
 package bopsend
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net"
+	"net/http"
 	"time"
 
 	"github.com/bitcoinsv/bsvutil"
 	log "github.com/ejfhp/trail"
 	"github.com/ejfhp/trail/trace"
-	"github.com/libsv/go-bt"
+	bt "github.com/libsv/go-bt"
 	paymail "github.com/tonicpow/go-paymail"
 )
 
@@ -56,7 +59,7 @@ func GetAddress(address string) (string, error) {
 	return resolution.Address, err
 }
 
-func CreateTX(string address) {
+func CreateTX(address string) {
 	tx := bt.NewTx()
 
 	_ = tx.From(
@@ -71,9 +74,64 @@ func CreateTX(string address) {
 
 	inputsSigned, err := tx.SignAuto(&bt.InternalSigner{PrivateKey: wif.PrivKey, SigHashFlag: 0})
 	if err != nil && len(inputsSigned) > 0 {
-		log.Fatal(err.Error())
+		fmt.Println(err.Error())
 	}
-	log.Println("tx: ", tx.ToString())
+	fmt.Println("tx: ", tx.ToString())
+}
+
+type WTx struct {
+	Height int    `json:"height"`
+	TxPos  int    `json:"tx_pos"`
+	TxHash string `json:"tx_hash"`
+	Value  int    `jsn:"value"`
+}
+
+func GetUnspent(net string, address string) ([]*WTx, error) {
+	t := trace.New().Source("main.go", "", "GetAddress")
+	url := fmt.Sprintf("https://api.whatsonchain.com/v1/bsv/%s/address/%s/unspent", net, address)
+	log.Println(trace.Debug("get unspent").UTC().Add("address", address).Add("net", net).Add("url", url).Append(t))
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Println(trace.Alert("error while getting unspent").UTC().Add("address", address).Add("net", net).Add("url", url).Error(err).Append(t))
+		return nil, err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(trace.Alert("error while reading response").UTC().Add("address", address).Add("net", net).Add("url", url).Error(err).Append(t))
+		return nil, err
+	}
+	txs := []*WTx{}
+	err = json.Unmarshal(body, &txs)
+	if err != nil {
+		log.Println(trace.Alert("error while unmarshalling").UTC().Add("address", address).Add("net", net).Add("url", url).Error(err).Append(t))
+		return nil, err
+	}
+	return txs, nil
+}
+func GetTX(net string, hash string) (*WTx, error) {
+	t := trace.New().Source("main.go", "", "GetAddress")
+	url := fmt.Sprintf("https://api.whatsonchain.com/v1/bsv/%s/tx/hash/%s", net, hash)
+	log.Println(trace.Debug("get tx").UTC().Add("hash", hash).Add("net", net).Add("url", url).Append(t))
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Println(trace.Alert("error while getting unspent").UTC().Add("hash", hash).Add("net", net).Add("url", url).Error(err).Append(t))
+		return nil, err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(trace.Alert("error while reading response").UTC().Add("hash", hash).Add("net", net).Add("url", url).Error(err).Append(t))
+		return nil, err
+	}
+	fmt.Printf("\n\n %s \n\n", string(body))
+	tx := WTx{}
+	err = json.Unmarshal(body, &tx)
+	if err != nil {
+		log.Println(trace.Alert("error while unmarshalling").UTC().Add("hash", hash).Add("net", net).Add("url", url).Error(err).Append(t))
+		return nil, err
+	}
+	return &tx, nil
 }
 
 // diego  ~  curl https://api.whatsonchain.com/v1/bsv/main/chain/info
