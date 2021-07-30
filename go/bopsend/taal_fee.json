@@ -1,0 +1,7 @@
+{
+    "payload": "{\"apiVersion\":\"1.1.0\",\"timestamp\":\"2021-05-18T06:35:07.374Z\",\"expiryTime\":\"2021-05-18T06:45:07.374Z\",\"minerId\":\"03e92d3e5c3f7bd945dfbf48e7a99393b1bfb3f11f380ae30d286e7ff2aec5a270\",\"currentHighestBlockHash\":\"0000000000000000014abcb10169a8e10b2faad5742d19640f36dad2d4d375b0\",\"currentHighestBlockHeight\":687738,\"minerReputation\":null,\"fees\":[{\"id\":1,\"feeType\":\"standard\",\"miningFee\":{\"satoshis\":500,\"bytes\":1000},\"relayFee\":{\"satoshis\":250,\"bytes\":1000}},{\"id\":2,\"feeType\":\"data\",\"miningFee\":{\"satoshis\":500,\"bytes\":1000},\"relayFee\":{\"satoshis\":250,\"bytes\":1000}}]}",
+    "signature": "3045022100eac9577a223d6299ac6f8c6db71ec45c699a1a0d5da2140f804158dd4b5f69c70220784a62b32b0fcf7bab00d485474858943cd2604f9742a7887aa5996d57b28b2e",
+    "publicKey": "03e92d3e5c3f7bd945dfbf48e7a99393b1bfb3f11f380ae30d286e7ff2aec5a270",
+    "encoding": "UTF-8",
+    "mimetype": "application/json"
+}

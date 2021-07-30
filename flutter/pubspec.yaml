@@ -1,4 +1,4 @@
-name: bitonpaper
+name: bop
 description: Bitcoin On Paper - Web App to generate Bitcoin paper wallet.
 
 # The following line prevents the package from being accidentally published to
@@ -15,34 +15,39 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.1
+version: 1.0.3+3
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  pdf: ^2.0.0
-  printing: ^4.0.0
-  url_launcher: ^5.7.10
+  pdf: ^3.0.1
+  printing: ^5.0.2
+  url_launcher: ^6.0.2
   dartsv: 
     git: https://github.com/ejfhp/dartsv.git
   http: any
-  qr_flutter: ^3.1.0
-  firebase_analytics: ^7.0.1
+  qr: ^2.0.0
+  barcode_scan: any
+  firebase_analytics: ^7.1.1
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter         
-  intl: any    # Add this line
+  intl: any
+  file_picker: ^3.0.0
+  archive: ^3.1.2
+  crypto: ^3.0.1
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.1
+  # cupertino_icons: ^1.0.1
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  test: ^1.16.8
+  # flutter_test:
+  #   sdk: flutter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

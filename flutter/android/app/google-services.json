@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1030861043983",
+    "project_id": "bitcoinonpaper",
+    "storage_bucket": "bitcoinonpaper.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030861043983:android:4743201de850464f1f267a",
+        "android_client_info": {
+          "package_name": "com.ejfhp.bitonpaper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1030861043983-3rtdqumova9etfk1hqthck2f5c21es01.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIJyELoxoIqjCyZTdUth8gO8L8YZhiuEM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1030861043983-3rtdqumova9etfk1hqthck2f5c21es01.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
